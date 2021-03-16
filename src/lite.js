@@ -1,5 +1,40 @@
 "use strict";
 
+
+// DOM_HEAD
+var DOM_head = document.DOM_head;
+var google_fonts = document.createElement("link");
+google_fonts.rel = "preconnect"; 
+google_fonts.href = "https://fonts.gstatic.com";
+DOM_head.append(google_fonts);
+
+function load_google_font(name, url) {
+    
+    var font = document.createElement("link");
+    font.rel = "stylesheet";
+    font.type= "text/css";
+    font.href = url;
+    DOM_head.append(font);
+    return name;
+
+}
+
+function load_server_font() {}
+
+function create_meta() {}
+
+
+
+// DOM_BODY
+var DOM_body = document.DOM_body;
+DOM_body.style.margin = "0px";
+DOM_body.style.height = "1000px";
+DOM_body.style.left = "0px";
+DOM_body.style.top = "0px";
+var window_width = window.innerWidth;
+var window_height = window.innerHeight;
+
+
 var element_count = 0;
 var element_id = [];
 
@@ -18,78 +53,44 @@ var element_shadow_y = [];
 var element_shadow_blur = [];
 var element_border_radius = [];
 
+// ELEMENT
+function create_element(type) {
 
-// HEAD SETUP
-var head = document.head;
-var google_fonts = document.createElement("link");
-google_fonts.rel = "preconnect"; 
-google_fonts.href = "https://fonts.gstatic.com";
-head.append(google_fonts);
-
-function load_font(name, url) {
+    if (type != "body"){
+        var fragment = document.createDocumentFragment();
+        var element = document.createElement(type);
     
-    var font = document.createElement("link");
-    font.rel = "stylesheet";
-    font.href = url;
-    head.append(font);
-    return name;
+        // DOM
+        element.style.position = "absolute";
+        element.style.margin = "0px";
+        element.style.padding = "0px";
+        element.style.border = "none";
 
-}
+        element.style.left = "0px";
+        element.style.top = "0px";
+        element.style.zIndex = "0px";
 
-function add_meta() {
-    return;
-}
+        element.style.width = "0px";
+        element.style.height = "0px";
 
-var font_1 = load_font("Roboto Condesed", "https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap");
+        element.style.backgroundColor = "white";
 
-
-// BODY SETUP
-var body = document.body;
-body.style.margin = "0px";
-body.style.height = "1000px";
-var window_width = window.innerWidth;
-var window_height = window.innerHeight;
-
-
-function create_element(type, text) {
-    
-    var fragment = document.createDocumentFragment();
-    var element = document.createElement(type);
-    
-    if (text == null) {}
-    else { 
-        var element_text = document.createTextNode(text);
-        element.append(element_text);
+        fragment.append(element);
+        DOM_body.append(fragment);
     }
-
-    // DOM
-    element.style.position = "absolute";
-    element.style.margin = "0px";
-    element.style.padding = "0px";
-    element.style.border = "none";
-
-    element.style.left = "0px";
-    element.style.top = "0px";
-    element.style.zIndex = "0px";
-
-    element.style.width = "0px";
-    element.style.height = "0px";
-
-
-    fragment.append(element);
-    body.append(fragment);
+    else {}
 
     // JS
     var id = element_count;
     element_id.push(id);
-    var dom_id = id + "";
-    element.id = dom_id;
+    var DOM_id = id + "";
+    element.id = DOM_id;
 
     element_x.push(0);
     element_y.push(0);
     element_z_index.push(0);
-    element_width.push(100);
-    element_height.push(100);
+    element_width.push(0);
+    element_height.push(0);
 
     element_count += 1;
     return id;
@@ -98,23 +99,22 @@ function create_element(type, text) {
 
 
 
-function append() {
-    // changed element/text position type to relative.
-}
 
 
 // POSITION
-function set_x(id, x) {
+function set_x(id, x, origin) {
     var element = document.getElementById(id + "");
-    element.style.left = x + "px";
-    element_x[id] = x;
+    var new_x = element_x[origin] + x;
+    element.style.left = new_x + "px";
+    element_x[id] = new_x;
     return;
 }
 
-function set_y(id, y) {
+function set_y(id, y, origin) {
     var element = document.getElementById(id + "");
-    element.style.top = y + "px";
-    element_y[id] = y;
+    var new_y = element_y[origin] + y;
+    element.style.top = new_y + "px";
+    element_y[id] = new_y;
     return;
 }
 
@@ -159,32 +159,100 @@ function set_border_radius(id, radius) {
 }
 
 // TEXT
-function set_text_font() {}
+function create_text() { // wrap text in a div
+     // TEXT
+     element.style.textAlign = "center";
+     element.style.wordWrap = "break-word";
+     element.style.wordBreak = "keep-all";
+}
+
+
+
+function set_text_origin(origin) {
+    if (origin == "left") {}
+    else if (origin == "center") {}
+    else if (origin == "right") {}
+    else {}
+    return;
+}
+
+
+function set_text_font(id, font) {
+    var element = document.getElementById(id + "");
+    element.style.fontFamily = font;
+    return;
+}
+
+
+
+
+
 function set_text_size() {}
 function set_text_color() {}
 function set_text_style() {}
 
 
 
+/*
+function place_at_origin(id, target) {}
+function place_at_center(id, target) {}
+function place_at_bottom(id, target) {}
+function place_at_top(id, target) {}
+*/
+
+
+
+
+
+
+
+
+// APP 
+var font_1 = load_google_font(
+    "Roboto", "https://fonts.googleapis.com/css2?family=Roboto&display=swap"
+    );
+var font_2 = load_google_font(
+    "Lato", "http://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext"
+    );
+
+
+body = create_element("body");
 
 // header
-var header = create_element("div", null);
+var header = create_element("div");
 set_width(header, window_width);
 set_height(header, 75);
 set_shadow(header, 0.1, 0.1, 5, "lightgray");
 
-var header_home = create_element("button", "HOME");
-set_x(header_home, 50);
-set_y(header_home, 25);
-var header_about = create_element("button", "ABOUT");
-set_x(header_about, 100);
-set_y(header_about, 25);
-var header_news = create_element("button", "NEWS");
-set_x(header_news, 150);
-set_y(header_news, 25);
+var header_home = create_element("button");
+set_x(header_home, 100, body);
+set_y(header_home, 25, body);
+set_width(header_home, 75);
+set_height(header_home, 25);
+set_shadow(header_home, 0.1, 0.1, 3, "lightgray");
+set_border_radius(header_home, 5);
+//set_text_font(header_home, font_1);
+
+var DOM_header_about = create_element("button");
+set_x(DOM_header_about, 200);
+set_y(DOM_header_about, 25);
+set_width(DOM_header_about, 75);
+set_height(DOM_header_about, 25);
+set_shadow(DOM_header_about, 0.1, 0.1, 3, "lightgray");
+set_border_radius(DOM_header_about, 5);
+//set_text_font(DOM_header_about, font_1);
+
+var DOM_header_news = create_element("button");
+set_x(DOM_header_news, 300);
+set_y(DOM_header_news, 25);
+set_width(DOM_header_news, 75);
+set_height(DOM_header_news, 25);
+set_shadow(DOM_header_news, 0.1, 0.1, 3, "lightgray");
+set_border_radius(DOM_header_news, 5);
+//set_text_font(DOM_header_news, font_1);
 
 // boxes
-var box_1 = create_element("div", null);
+var box_1 = create_element("div");
 set_x(box_1, 50); 
 set_y(box_1, 125);
 set_width(box_1, 200);
@@ -192,7 +260,7 @@ set_height(box_1, 300);
 set_border_radius(box_1, 5);
 set_shadow(box_1, 0.1, 0.1, 3, "lightgray");
 
-var box_2 = create_element("div", "Hello World!");
+var box_2 = create_element("div");
 set_x(box_2, 300); 
 set_y(box_2, 125);
 set_width(box_2, 200);
@@ -208,7 +276,7 @@ function main() {
 
     //console.log(window_width);
 
-    set_width(header, window_width);
+    set_width(DOM_header, window_width);
 
     return window.requestAnimationFrame(main);
 }
