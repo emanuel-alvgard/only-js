@@ -2,11 +2,11 @@
 
 
 // DOM_HEAD
-var DOM_head = document.DOM_head;
+var head = document.head;
 var google_fonts = document.createElement("link");
 google_fonts.rel = "preconnect"; 
 google_fonts.href = "https://fonts.gstatic.com";
-DOM_head.append(google_fonts);
+head.append(google_fonts);
 
 function load_google_font(name, url) {
     
@@ -25,17 +25,17 @@ function create_meta() {}
 
 
 
-// DOM_BODY
-var DOM_body = document.DOM_body;
-DOM_body.style.margin = "0px";
-DOM_body.style.height = "1000px";
-DOM_body.style.left = "0px";
-DOM_body.style.top = "0px";
+// BODY
+var body = document.body;
+body.style.margin = "0px";
+body.style.height = "1000px";
+body.style.left = "0px";
+body.style.top = "0px";
 var window_width = window.innerWidth;
 var window_height = window.innerHeight;
 
-
-var element_count = 0;
+// v stands for virtual
+var v_element_count = 0;
 var element_id = [];
 
 // POSITION
@@ -56,32 +56,29 @@ var element_border_radius = [];
 // ELEMENT
 function create_element(type) {
 
-    if (type != "body"){
-        var fragment = document.createDocumentFragment();
-        var element = document.createElement(type);
-    
-        // DOM
-        element.style.position = "absolute";
-        element.style.margin = "0px";
-        element.style.padding = "0px";
-        element.style.border = "none";
+    var fragment = document.createDocumentFragment();
+    var element = document.createElement(type);
 
-        element.style.left = "0px";
-        element.style.top = "0px";
-        element.style.zIndex = "0px";
+    // DOM
+    element.style.position = "absolute";
+    element.style.margin = "0px";
+    element.style.padding = "0px";
+    element.style.border = "none";
 
-        element.style.width = "0px";
-        element.style.height = "0px";
+    element.style.left = "0px";
+    element.style.top = "0px";
+    element.style.zIndex = "0px";
 
-        element.style.backgroundColor = "white";
+    element.style.width = "0px";
+    element.style.height = "0px";
 
-        fragment.append(element);
-        DOM_body.append(fragment);
-    }
-    else {}
+    element.style.backgroundColor = "white";
+
+    fragment.append(element);
+    body.append(fragment);
 
     // JS
-    var id = element_count;
+    var id = v_element_count;
     element_id.push(id);
     var DOM_id = id + "";
     element.id = DOM_id;
@@ -92,7 +89,7 @@ function create_element(type) {
     element_width.push(0);
     element_height.push(0);
 
-    element_count += 1;
+    v_element_count += 1;
     return id;
 }
 
@@ -216,11 +213,9 @@ var font_2 = load_google_font(
     );
 
 
-body = create_element("body");
-
 // header
 var header = create_element("div");
-set_width(header, window_width);
+set_width(header, DOM_width);
 set_height(header, 75);
 set_shadow(header, 0.1, 0.1, 5, "lightgray");
 
@@ -233,36 +228,36 @@ set_shadow(header_home, 0.1, 0.1, 3, "lightgray");
 set_border_radius(header_home, 5);
 //set_text_font(header_home, font_1);
 
-var DOM_header_about = create_element("button");
-set_x(DOM_header_about, 200);
-set_y(DOM_header_about, 25);
-set_width(DOM_header_about, 75);
-set_height(DOM_header_about, 25);
-set_shadow(DOM_header_about, 0.1, 0.1, 3, "lightgray");
-set_border_radius(DOM_header_about, 5);
+var header_about = create_element("button");
+set_x(header_about, 200, body);
+set_y(header_about, 25, body);
+set_width(header_about, 75);
+set_height(header_about, 25);
+set_shadow(header_about, 0.1, 0.1, 3, "lightgray");
+set_border_radius(header_about, 5);
 //set_text_font(DOM_header_about, font_1);
 
-var DOM_header_news = create_element("button");
-set_x(DOM_header_news, 300);
-set_y(DOM_header_news, 25);
-set_width(DOM_header_news, 75);
-set_height(DOM_header_news, 25);
-set_shadow(DOM_header_news, 0.1, 0.1, 3, "lightgray");
-set_border_radius(DOM_header_news, 5);
+var header_news = create_element("button");
+set_x(header_news, 300, body);
+set_y(header_news, 25, body);
+set_width(header_news, 75);
+set_height(header_news, 25);
+set_shadow(header_news, 0.1, 0.1, 3, "lightgray");
+set_border_radius(header_news, 5);
 //set_text_font(DOM_header_news, font_1);
 
 // boxes
 var box_1 = create_element("div");
-set_x(box_1, 50); 
-set_y(box_1, 125);
+set_x(box_1, 50, body); 
+set_y(box_1, 125, body);
 set_width(box_1, 200);
 set_height(box_1, 300);
 set_border_radius(box_1, 5);
 set_shadow(box_1, 0.1, 0.1, 3, "lightgray");
 
 var box_2 = create_element("div");
-set_x(box_2, 300); 
-set_y(box_2, 125);
+set_x(box_2, 300, body); 
+set_y(box_2, 125, body);
 set_width(box_2, 200);
 set_height(box_2, 300);
 set_border_radius(box_2, 5);
@@ -271,12 +266,12 @@ set_shadow(box_2, 0.1, 0.1, 3, "lightgray");
 
 
 function main() {
-    var window_width = window.innerWidth;
-    var window_height = window.innerHeight;
+    var DOM_width = window.innerWidth;
+    var DOM_height = window.innerHeight;
 
-    //console.log(window_width);
+    //console.log(DOM_width);
 
-    set_width(DOM_header, window_width);
+    set_width(DOM_header, DOM_width);
 
     return window.requestAnimationFrame(main);
 }
