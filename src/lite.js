@@ -19,7 +19,31 @@ var element_shadow_blur = [];
 var element_border_radius = [];
 
 
-// SETUP
+// HEAD SETUP
+var head = document.head;
+var google_fonts = document.createElement("link");
+google_fonts.rel = "preconnect"; 
+google_fonts.href = "https://fonts.gstatic.com";
+head.append(google_fonts);
+
+function load_font(name, url) {
+    
+    var font = document.createElement("link");
+    font.rel = "stylesheet";
+    font.href = url;
+    head.append(font);
+    return name;
+
+}
+
+function add_meta() {
+    return;
+}
+
+var font_1 = load_font("Roboto Condesed", "https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap");
+
+
+// BODY SETUP
 var body = document.body;
 body.style.margin = "0px";
 body.style.height = "1000px";
@@ -182,7 +206,7 @@ function main() {
     var window_width = window.innerWidth;
     var window_height = window.innerHeight;
 
-    console.log(window_width);
+    //console.log(window_width);
 
     set_width(header, window_width);
 
