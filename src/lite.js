@@ -1,5 +1,10 @@
 "use strict";
 
+
+// TODO
+// setup event listeners on root??
+// setup set_text function and other text functions
+
 var window_width = window.innerWidth;
 var window_height = window.innerHeight;
 
@@ -57,10 +62,15 @@ var DOM_element = [DOM_root];
 var element_x = [0];
 var element_y = [0];
 var element_z_index = [0];
+var element_rotation = [0];
 
 // Dimension
 var element_width = [0];
 var element_height = [0];
+var element_scale_x = [1];
+var element_scale_y = [1];
+var element_skew_x = [0];
+var element_skew_y = [0];
 
 // Style
 var element_shadow_x = [0];
@@ -69,6 +79,7 @@ var element_shadow_blur = [0];
 var element_shadow_color = ["black"];
 
 var element_background_color = ["white"];
+var element_border_style = ["none"];
 var element_border_radius = [0];
 
 var root = 0;
@@ -79,43 +90,44 @@ function create_element(type) {
     var fragment = document.createDocumentFragment();
     var element = document.createElement(type);
 
-    // Dom
+    // DOM
     element.style.position = "absolute";
     element.style.margin = "0px";
     element.style.padding = "0px";
-    element.style.border = "none";
-
-    element.style.left = "0px";
-    element.style.top = "0px";
-    element.style.zIndex = "0";
-
-    element.style.width = "0px";
-    element.style.height = "0px";
-
-    element.style.boxShadow = "0px 0px 0px lightgray";
-    element.style.backgroundColor = "white";
-
+    
     fragment.append(element);
     DOM_root.append(fragment);
     
-    // Virtual
+    // VIRTUAL
+    // Element
     DOM_element.push(element);
     var id = element_count;
     element_id.push(id);
     var DOM_id = id + "";
     element.id = DOM_id;
+    element_update.push(1);
 
-    element_update.push(0);
+    // Position
     element_x.push(0);
     element_y.push(0);
     element_z_index.push(0);
+    element_rotation.push(0);
+
+    // Dimensions
     element_width.push(0);
     element_height.push(0);
+    element_scale_x.push(1);
+    element_scale_y.push(1);
+    element_skew_x.push(0);
+    element_skew_y.push(0);
+    
+    // Style
     element_shadow_x.push(0);
     element_shadow_y.push(0);
     element_shadow_blur.push(0);
     element_shadow_color.push("lightgray");
     element_background_color.push("white");
+    element_border_style.push("solid");
     element_border_radius.push(0);
 
     element_count += 1;
@@ -124,8 +136,13 @@ function create_element(type) {
 
 
 function update_element(id) {
-    DOM_element[id].style.left = element_x[id] + "px";
-    DOM_element[id].style.top = element_y[id] + "px";
+    DOM_element[id].style.transform = "matrix("
+        + (element_scale_x[id] + ", ")
+        + (element_skew_x[id] + ", ") 
+        + (element_skew_y[id] + ", ") 
+        + (element_scale_y[id] + ", ")  
+        + (element_x[id] + ", ") 
+        + element_y[id] + ")";
     DOM_element[id].style.zIndex = element_z_index[id] + "px";
     DOM_element[id].style.width = element_width[id] + "px";
     DOM_element[id].style.height = element_height[id] + "px";
@@ -134,6 +151,7 @@ function update_element(id) {
         + (element_shadow_blur[id] + "px ") 
         + element_shadow_color[id];
     DOM_element[id].style.backgroundColor = element_background_color[id];
+    DOM_element[id].style.border = element_border_style[id];
     DOM_element[id].style.borderRadius = element_border_radius[id] + "px";
     return;
 }
@@ -176,6 +194,8 @@ function set_z_index(id, z_index) {
     return;
 }
 
+function set_rotation(id, degrees) {}
+
 // Dimensions
 function set_width(id, width) {
     element_width[id] = width;
@@ -189,8 +209,15 @@ function set_height(id, height) {
     return;
 }
 
+function set_scale_x(id, scale) {}
+function set_scale_y(id, scale) {}
+function set_skew_x(id, scale) {}
+function set_skew_y(id, scale) {}
+
 
 // Style
+function set_opacity() {}
+
 function set_shadow(id, x, y, blur, color) {
     element_shadow_x[id] = x;
     element_shadow_y[id] = y;
@@ -199,6 +226,8 @@ function set_shadow(id, x, y, blur, color) {
     element_update[id] = 1;
     return;
 }
+
+function set_border_style() {}
 
 function set_border_radius(id, radius) {
     element_border_radius[id] = radius;
