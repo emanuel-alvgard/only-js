@@ -65,6 +65,9 @@ var element_height = [0];
 var element_shadow_x = [0];
 var element_shadow_y = [0];
 var element_shadow_blur = [0];
+var element_shadow_color = ["black"];
+
+var element_background_color = ["white"];
 var element_border_radius = [0];
 
 var root = 0;
@@ -88,6 +91,7 @@ function create_element(type) {
     element.style.width = "0px";
     element.style.height = "0px";
 
+    element.style.boxShadow = "0px 0px 0px lightgray";
     element.style.backgroundColor = "white";
 
     fragment.append(element);
@@ -108,43 +112,55 @@ function create_element(type) {
     element_shadow_x.push(0);
     element_shadow_y.push(0);
     element_shadow_blur.push(0);
+    element_shadow_color.push("lightgray");
+    element_background_color.push("white");
     element_border_radius.push(0);
 
     element_count += 1;
     return id;
 }
 
+
+function update_element(id) {
+    DOM_element[id].style.left = element_x[id] + "px";
+    DOM_element[id].style.top = element_y[id] + "px";
+    DOM_element[id].style.zIndex = element_z_index[id] + "px";
+    DOM_element[id].style.width = element_width[id] + "px";
+    DOM_element[id].style.height = element_height[id] + "px";
+    DOM_element[id].style.boxShadow = (element_shadow_x[id] + "px ") 
+        + (element_shadow_y[id] + "px ") 
+        + (element_shadow_blur[id] + "px ") 
+        + element_shadow_color[id];
+    DOM_element[id].style.backgroundColor = element_background_color[id];
+    DOM_element[id].style.borderRadius = element_border_radius[id] + "px";
+    return;
+}
+
+
 // PROPERTY WRAPPER
 // Position
 function set_x(id, origin, x) {
-    var new_x = element_x[origin] + x;
-    DOM_element[id].style.left = new_x + "px";
-    element_x[id] = new_x;
+    element_x[id] = element_x[origin] + x;
     return;
 }
 
 function set_y(id, origin, y) {
-    var new_y = element_y[origin] + y;
-    DOM_element[id].style.top = new_y + "px";
-    element_y[id] = new_y;
+    element_y[id] = element_y[origin] + y;
     return;
 }
 
 function set_z_index(id, z_index) {
-    DOM_element[id].style.zIndex = z_index + "";
     element_z_index[id] = z_index;
     return;
 }
 
 // Dimensions
 function set_width(id, width) {
-    DOM_element[id].style.width = width + "px";
     element_width[id] = width;
     return;
 }
 
 function set_height(id, height) {
-    DOM_element[id].style.height = height + "px";
     element_height[id] = height;
     return;
 }
@@ -152,15 +168,14 @@ function set_height(id, height) {
 
 // Style
 function set_shadow(id, x, y, blur, color) {
-    var shadow_x = x + "px ";
-    var shadow_y = y + "px ";
-    var shadow_blur = blur + "px ";
-    DOM_element[id].style.boxShadow = shadow_x + shadow_y + shadow_blur + color;
+    element_shadow_x[id] = x;
+    element_shadow_y[id] = y;
+    element_shadow_blur[id] = blur;
+    element_shadow_color[id] = color;
     return;
 }
 
 function set_border_radius(id, radius) {
-    DOM_element[id].style.borderRadius = radius + "px";
     element_border_radius[id] = radius;
     return;
 }
@@ -266,6 +281,13 @@ function main() {
     set_width(header, element_width[root]);
     center_to_center(header_news, root);
     set_z_index(header_news, 1);
+
+    update_element(header);
+    update_element(header_home);
+    update_element(header_about);
+    update_element(header_news);
+    update_element(box_1);
+    update_element(box_2);
 
     return window.requestAnimationFrame(main);
 }
