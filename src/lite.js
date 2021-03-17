@@ -1,7 +1,9 @@
 "use strict";
 
+var window_width = window.innerWidth;
+var window_height = window.innerHeight;
 
-// DOM_HEAD
+// HEAD
 var head = document.head;
 var google_fonts = document.createElement("link");
 google_fonts.rel = "preconnect"; 
@@ -14,7 +16,7 @@ function load_google_font(name, url) {
     font.rel = "stylesheet";
     font.type= "text/css";
     font.href = url;
-    DOM_head.append(font);
+    head.append(font);
     return name;
 
 }
@@ -28,38 +30,52 @@ function create_meta() {}
 // BODY
 var body = document.body;
 body.style.margin = "0px";
-body.style.height = "1000px";
 body.style.left = "0px";
 body.style.top = "0px";
-var window_width = window.innerWidth;
-var window_height = window.innerHeight;
 
-// v stands for virtual
-var v_element_count = 0;
-var element_id = [];
+// ROOT
+var DOM_root = document.createElement("div");
+DOM_root.id = "0";
+DOM_root.style.position = "absolute";
+DOM_root.style.margin = "0px";
+DOM_root.style.padding = "0px";
+DOM_root.style.border = "none";
+DOM_root.style.left = "0px";
+DOM_root.style.top = "0px";
+DOM_root.style.zIndex = "0";
+DOM_root.style.backgroundColor = "white";
+body.append(DOM_root);
 
-// POSITION
-var element_x = [];
-var element_y = [];
-var element_z_index = [];
+// VIRTUAL DOM
+// Elements
+var element_count = 1;
+var element_id = [0];
+var DOM_element = [DOM_root];
 
-// DIMENSIONS
-var element_width = [];
-var element_height = [];
+// Position
+var element_x = [0];
+var element_y = [0];
+var element_z_index = [0];
 
-// STYLE
-var element_shadow_x = [];
-var element_shadow_y = [];
-var element_shadow_blur = [];
-var element_border_radius = [];
+// Dimension
+var element_width = [0];
+var element_height = [0];
 
-// ELEMENT
+// Style
+var element_shadow_x = [0];
+var element_shadow_y = [0];
+var element_shadow_blur = [0];
+var element_border_radius = [0];
+
+var root = 0;
+
+// Element
 function create_element(type) {
 
     var fragment = document.createDocumentFragment();
     var element = document.createElement(type);
 
-    // DOM
+    // Dom
     element.style.position = "absolute";
     element.style.margin = "0px";
     element.style.padding = "0px";
@@ -67,7 +83,7 @@ function create_element(type) {
 
     element.style.left = "0px";
     element.style.top = "0px";
-    element.style.zIndex = "0px";
+    element.style.zIndex = "0";
 
     element.style.width = "0px";
     element.style.height = "0px";
@@ -75,10 +91,11 @@ function create_element(type) {
     element.style.backgroundColor = "white";
 
     fragment.append(element);
-    body.append(fragment);
-
-    // JS
-    var id = v_element_count;
+    DOM_root.append(fragment);
+    
+    // Virtual
+    DOM_element.push(element);
+    var id = element_count;
     element_id.push(id);
     var DOM_id = id + "";
     element.id = DOM_id;
@@ -88,115 +105,90 @@ function create_element(type) {
     element_z_index.push(0);
     element_width.push(0);
     element_height.push(0);
+    element_shadow_x.push(0);
+    element_shadow_y.push(0);
+    element_shadow_blur.push(0);
+    element_border_radius.push(0);
 
-    v_element_count += 1;
+    element_count += 1;
     return id;
 }
 
-
-
-
-
-
-// POSITION
-function set_x(id, x, origin) {
-    var element = document.getElementById(id + "");
+// PROPERTY WRAPPER
+// Position
+function set_x(id, origin, x) {
     var new_x = element_x[origin] + x;
-    element.style.left = new_x + "px";
+    DOM_element[id].style.left = new_x + "px";
     element_x[id] = new_x;
     return;
 }
 
-function set_y(id, y, origin) {
-    var element = document.getElementById(id + "");
+function set_y(id, origin, y) {
     var new_y = element_y[origin] + y;
-    element.style.top = new_y + "px";
+    DOM_element[id].style.top = new_y + "px";
     element_y[id] = new_y;
     return;
 }
 
 function set_z_index(id, z_index) {
-    var element = document.getElementById(id + "");
-    element.style.zIndex = z_index + "";
+    DOM_element[id].style.zIndex = z_index + "";
     element_z_index[id] = z_index;
     return;
 }
 
-// DIMENSIONS
+// Dimensions
 function set_width(id, width) {
-    var element = document.getElementById(id + "");
-    element.style.width = width + "px";
+    DOM_element[id].style.width = width + "px";
     element_width[id] = width;
     return;
 }
 
 function set_height(id, height) {
-    var element = document.getElementById(id + "");
-    element.style.height = height + "px";
+    DOM_element[id].style.height = height + "px";
     element_height[id] = height;
     return;
 }
 
 
-// STYLE
+// Style
 function set_shadow(id, x, y, blur, color) {
-    var element = document.getElementById(id + "");
     var shadow_x = x + "px ";
     var shadow_y = y + "px ";
     var shadow_blur = blur + "px ";
-    element.style.boxShadow = shadow_x + shadow_y + shadow_blur + color;
+    DOM_element[id].style.boxShadow = shadow_x + shadow_y + shadow_blur + color;
     return;
 }
 
 function set_border_radius(id, radius) {
-    var element = document.getElementById(id + "");
-    element.style.borderRadius = radius + "px";
+    DOM_element[id].style.borderRadius = radius + "px";
     element_border_radius[id] = radius;
     return;
 }
 
-// TEXT
-function create_text() { // wrap text in a div
-     // TEXT
-     element.style.textAlign = "center";
-     element.style.wordWrap = "break-word";
-     element.style.wordBreak = "keep-all";
-}
+
+function set_text() {}
 
 
 
-function set_text_origin(origin) {
-    if (origin == "left") {}
-    else if (origin == "center") {}
-    else if (origin == "right") {}
-    else {}
+
+
+
+
+
+// UTILITY FUNCTIONS
+// Position
+function center_to_center(id, ref) {
+    var ref_center_x = element_x[ref] + (element_width[ref] / 2);
+    var ref_center_y = element_y[ref] + (element_height[ref] / 2);
+    var new_x = ref_center_x - (element_width[id] / 2);
+    var new_y = ref_center_y - (element_height[id] / 2);
+    set_x(id, root, new_x);
+    set_y(id, root, new_y);
     return;
 }
 
-
-function set_text_font(id, font) {
-    var element = document.getElementById(id + "");
-    element.style.fontFamily = font;
-    return;
-}
-
-
-
-
-
-function set_text_size() {}
-function set_text_color() {}
-function set_text_style() {}
-
-
-
-/*
-function place_at_origin(id, target) {}
-function place_at_center(id, target) {}
-function place_at_bottom(id, target) {}
-function place_at_top(id, target) {}
-*/
-
+function infront() {}
+function behind() {}
 
 
 
@@ -213,15 +205,16 @@ var font_2 = load_google_font(
     );
 
 
+
 // header
 var header = create_element("div");
-set_width(header, DOM_width);
+set_width(header, window_width);
 set_height(header, 75);
 set_shadow(header, 0.1, 0.1, 5, "lightgray");
 
 var header_home = create_element("button");
-set_x(header_home, 100, body);
-set_y(header_home, 25, body);
+set_x(header_home, root, 100);
+set_y(header_home, root, 25);
 set_width(header_home, 75);
 set_height(header_home, 25);
 set_shadow(header_home, 0.1, 0.1, 3, "lightgray");
@@ -229,51 +222,89 @@ set_border_radius(header_home, 5);
 //set_text_font(header_home, font_1);
 
 var header_about = create_element("button");
-set_x(header_about, 200, body);
-set_y(header_about, 25, body);
+set_x(header_about, root, 200);
+set_y(header_about, root, 25);
 set_width(header_about, 75);
 set_height(header_about, 25);
 set_shadow(header_about, 0.1, 0.1, 3, "lightgray");
 set_border_radius(header_about, 5);
-//set_text_font(DOM_header_about, font_1);
+//set_text_font(header_about, font_1);
 
 var header_news = create_element("button");
-set_x(header_news, 300, body);
-set_y(header_news, 25, body);
+set_x(header_news, root, 300);
+set_y(header_news, root, 25);
 set_width(header_news, 75);
 set_height(header_news, 25);
 set_shadow(header_news, 0.1, 0.1, 3, "lightgray");
 set_border_radius(header_news, 5);
-//set_text_font(DOM_header_news, font_1);
+//set_text_font(header_news, font_1);
 
 // boxes
 var box_1 = create_element("div");
-set_x(box_1, 50, body); 
-set_y(box_1, 125, body);
+set_x(box_1, root, 50); 
+set_y(box_1, root, 125);
 set_width(box_1, 200);
 set_height(box_1, 300);
 set_border_radius(box_1, 5);
 set_shadow(box_1, 0.1, 0.1, 3, "lightgray");
 
 var box_2 = create_element("div");
-set_x(box_2, 300, body); 
-set_y(box_2, 125, body);
+set_x(box_2, root, 300); 
+set_y(box_2, root, 125);
 set_width(box_2, 200);
 set_height(box_2, 300);
 set_border_radius(box_2, 5);
 set_shadow(box_2, 0.1, 0.1, 3, "lightgray");
 
 
+var delta;
 
 function main() {
-    var DOM_width = window.innerWidth;
-    var DOM_height = window.innerHeight;
+    element_width[root] = window.innerWidth;
+    element_height[root] = window.innerHeight;
 
-    //console.log(DOM_width);
-
-    set_width(DOM_header, DOM_width);
+    set_width(header, element_width[root]);
+    center_to_center(header_news, root);
+    set_z_index(header_news, 1);
 
     return window.requestAnimationFrame(main);
 }
 
 window.requestAnimationFrame(main);
+
+
+
+
+
+
+
+/*
+function create_text() { // wrap text in a div
+     // TEXT
+     element.style.textAlign = "center";
+     element.style.wordWrap = "break-word";
+     element.style.wordBreak = "keep-all";
+}
+
+function set_text_origin(origin) {
+    if (origin == "left") {}
+    else if (origin == "center") {}
+    else if (origin == "right") {}
+    else {}
+    return;
+}
+function set_text_font(id, font) {
+    var element = document.getElementById(id + "");
+    element.style.fontFamily = font;
+    return;
+}
+
+function set_text_size() {}
+function set_text_color() {}
+function set_text_style() {}
+
+function place_at_origin(id, target) {}
+function place_at_center(id, target) {}
+function place_at_bottom(id, target) {}
+function place_at_top(id, target) {}
+*/
