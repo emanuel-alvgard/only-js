@@ -4,6 +4,7 @@
 // TODO
 // setup event listeners on root??
 // setup set_text function and other text functions
+// use will-change property
 
 var window_width = window.innerWidth;
 var window_height = window.innerHeight;
