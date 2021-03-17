@@ -50,6 +50,7 @@ body.append(DOM_root);
 // Elements
 var element_count = 1;
 var element_id = [0];
+var element_update = [0];
 var DOM_element = [DOM_root];
 
 // Position
@@ -104,6 +105,7 @@ function create_element(type) {
     var DOM_id = id + "";
     element.id = DOM_id;
 
+    element_update.push(0);
     element_x.push(0);
     element_y.push(0);
     element_z_index.push(0);
@@ -137,31 +139,53 @@ function update_element(id) {
 }
 
 
+function update() {
+
+    var i;
+    var length = element_update.length;
+
+    for (i = 0; i < length; i ++) {
+        if (element_update[i] == 0) {}
+        else { 
+            update_element(i);
+            element_update[i] = 0; 
+        }
+    }
+    return;
+}
+
+
+
 // PROPERTY WRAPPER
 // Position
 function set_x(id, origin, x) {
     element_x[id] = element_x[origin] + x;
+    element_update[id] = 1;
     return;
 }
 
 function set_y(id, origin, y) {
     element_y[id] = element_y[origin] + y;
+    element_update[id] = 1;
     return;
 }
 
 function set_z_index(id, z_index) {
     element_z_index[id] = z_index;
+    element_update[id] = 1;
     return;
 }
 
 // Dimensions
 function set_width(id, width) {
     element_width[id] = width;
+    element_update[id] = 1;
     return;
 }
 
 function set_height(id, height) {
     element_height[id] = height;
+    element_update[id] = 1;
     return;
 }
 
@@ -172,11 +196,13 @@ function set_shadow(id, x, y, blur, color) {
     element_shadow_y[id] = y;
     element_shadow_blur[id] = blur;
     element_shadow_color[id] = color;
+    element_update[id] = 1;
     return;
 }
 
 function set_border_radius(id, radius) {
     element_border_radius[id] = radius;
+    element_update[id] = 1;
     return;
 }
 
@@ -209,6 +235,19 @@ function behind() {}
 
 
 
+// ANIMATION FUNCTIONS
+// Position
+
+const CURVE_LINEAR = [0.0, 1.0, 2.0, 3.0, 4.0];
+
+function move_interpolated() {}
+
+function animation_pop_out(delta, id, duration, curve) {
+    
+}
+
+
+
 
 
 // APP 
@@ -218,10 +257,6 @@ var font_1 = load_google_font(
 var font_2 = load_google_font(
     "Lato", "http://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext"
     );
-
-
-
-
 
 // header
 var header = create_element("div");
@@ -274,9 +309,17 @@ set_border_radius(box_2, 5);
 set_shadow(box_2, 0.1, 0.1, 3, "lightgray");
 
 
-var delta;
+
+
+var time = Date.now()
+var delta = 0.0
 
 function main() {
+    
+    delta = time - Date.now();
+    time = Date.now();
+    //console.log(delta);
+
     element_width[root] = window.innerWidth;
     element_height[root] = window.innerHeight;
 
@@ -284,22 +327,22 @@ function main() {
     center_to_center(header_news, root);
     set_z_index(header_news, 1);
 
-    update_element(header);
-    update_element(header_home);
-    update_element(header_about);
-    update_element(header_news);
-    update_element(box_1);
-    update_element(box_2);
-
+    update();
+    
     return window.requestAnimationFrame(main);
 }
 
 window.requestAnimationFrame(main);
 
 
+/* ADD THIS LATER
+export {
+    create_element,
+    update_element
+};
 
-
-
+and indert type="module" in the html script tag
+*/
 
 
 /*
