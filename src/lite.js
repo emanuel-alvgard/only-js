@@ -145,7 +145,7 @@ function update() {
     var length = element_update.length;
 
     for (i = 0; i < length; i ++) {
-        if (element_update[i] == 0) {}
+        if (element_update[i] === 0) {}
         else { 
             update_element(i);
             element_update[i] = 0; 
@@ -354,9 +354,9 @@ function create_text() { // wrap text in a div
 }
 
 function set_text_origin(origin) {
-    if (origin == "left") {}
-    else if (origin == "center") {}
-    else if (origin == "right") {}
+    if (origin === "left") {}
+    else if (origin === "center") {}
+    else if (origin === "right") {}
     else {}
     return;
 }
