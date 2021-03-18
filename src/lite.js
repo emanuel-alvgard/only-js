@@ -1,19 +1,18 @@
 "use strict";
 
 // TODO
-// change all let to let
 // setup set_text function and other text functions
-// change all arrays to TypedArray
 
-let window_width = window.innerWidth;
-let window_height = window.innerHeight;
+
+let DOM_window_width = window.innerWidth;
+let DOM_window_height = window.innerHeight;
 
 // DOM HEAD
-let head = document.head;
+let DOM_head = document.head;
 let google_fonts = document.createElement("link");
 google_fonts.rel = "preconnect"; 
 google_fonts.href = "https://fonts.gstatic.com";
-head.append(google_fonts);
+DOM_head.append(google_fonts);
 
 function load_google_font(name, url) {
     
@@ -21,7 +20,7 @@ function load_google_font(name, url) {
     font.rel = "stylesheet";
     font.type= "text/css";
     font.href = url;
-    head.append(font);
+    DOM_head.append(font);
     return name;
 
 }
@@ -33,10 +32,10 @@ function create_meta() {} // ??
 
 
 // DOM BODY
-let body = document.body;
-body.style.margin = "0px";
-body.style.left = "0px";
-body.style.top = "0px";
+let DOM_body = document.body;
+DOM_body.style.margin = "0px";
+DOM_body.style.left = "0px";
+DOM_body.style.top = "0px";
 
 // DOM ROOT
 let DOM_root = document.createElement("div");
@@ -49,12 +48,13 @@ DOM_root.style.left = "0px";
 DOM_root.style.top = "0px";
 DOM_root.style.zIndex = "0";
 DOM_root.style.backgroundColor = "white";
-body.append(DOM_root);
+DOM_body.append(DOM_root);
 
 // DEFINE VIRTUAL
 
 // Static Arrays
 // Elements
+let root = 0;
 let element_count = 1;
 let element_id;
 
@@ -79,15 +79,15 @@ let element_shadow_blur;
 let element_border_radius;
 
 // Update
-let element_update;
-let element_transform_update;
-let element_z_index_update;
-let element_width_update;
-let element_height_update;
-let element_shadow_update;
-let element_background_color_update;
-let element_border_style_update;
-let element_border_radius_update;
+let DOM_element_update;
+let DOM_element_transform_update;
+let DOM_element_z_index_update;
+let DOM_element_width_update;
+let DOM_element_height_update;
+let DOM_element_shadow_update;
+let DOM_element_background_color_update;
+let DOM_element_border_style_update;
+let DOM_element_border_radius_update;
 
 // Events
 let element_mousedown;
@@ -104,6 +104,7 @@ function create_virtual(elements) {
 
     // Static arrays
     element_id = new Uint8Array(elements);
+    element_x = new Float32Array(elements);
     element_y = new Float32Array(elements);
     element_z_index = new Float32Array(elements);
     element_rotation = new Int16Array(elements);
@@ -123,15 +124,15 @@ function create_virtual(elements) {
     element_border_radius = new Float32Array(elements);
 
     // Update
-    element_update = new Uint8Array(elements);
-    element_transform_update = new Uint8Array(elements);
-    element_z_index_update = new Uint8Array(elements);
-    element_width_update = new Uint8Array(elements);
-    element_height_update = new Uint8Array(elements);
-    element_shadow_update = new Uint8Array(elements);
-    element_background_color_update = new Uint8Array(elements);
-    element_border_style_update = new Uint8Array(elements);
-    element_border_radius_update = new Uint8Array(elements);
+    DOM_element_update = new Uint8Array(elements);
+    DOM_element_transform_update = new Uint8Array(elements);
+    DOM_element_z_index_update = new Uint8Array(elements);
+    DOM_element_width_update = new Uint8Array(elements);
+    DOM_element_height_update = new Uint8Array(elements);
+    DOM_element_shadow_update = new Uint8Array(elements);
+    DOM_element_background_color_update = new Uint8Array(elements);
+    DOM_element_border_style_update = new Uint8Array(elements);
+    DOM_element_border_radius_update = new Uint8Array(elements);
 
     // Events
     element_mousedown = new Uint8Array(elements);
@@ -144,11 +145,6 @@ function create_virtual(elements) {
 
     return;
 }
-
-// Events
-let element_mousedown = [0];
-
-let root = 0;
 
 // Element
 function create_element(type) {
@@ -169,58 +165,36 @@ function create_element(type) {
     DOM_element.push(element);
     let id = element_count;
     element_id[id] = id;
-    let DOM_id = id + "";
-    element.id = DOM_id;
-
-    
-
-    /*
-    element_x.push(0);
-    element_y.push(0);
-    element_z_index.push(0);
-    element_rotation.push(0);
+    let id_string = id + "";
+    element.id = id_string;
 
     // Dimensions
-    element_width.push(0);
-    element_height.push(0);
-    element_scale_x.push(1);
-    element_scale_y.push(1);
-    element_skew_x.push(0);
-    element_skew_y.push(0);
+    element_scale_x[id] = 1;
+    element_scale_y[id] = 1;
     
-    // Style
-    element_shadow_x.push(0);
-    element_shadow_y.push(0);
-    element_shadow_blur.push(0);
-    
+    // Dynamic Arrays
     element_shadow_color.push("lightgray");
     element_background_color.push("white");
     element_border_style.push("solid");
-    element_border_radius.push(0);
 
     // Update
-    element_update.push(1)
-    element_transform_update.push(1)
-    element_z_index_update.push(1)
-    element_width_update.push(1)
-    element_height_update.push(1)
-    element_shadow_update.push(1)
-    element_background_color_update.push(1)
-    element_border_style_update.push(1)
-    element_border_radius_update.push(1)
-
-
-    // Events
-    element_mousedown.push(0);
-    */
+    DOM_element_update[id] = 1;
+    DOM_element_transform_update[id] = 1;
+    DOM_element_z_index_update[id] = 1;
+    DOM_element_width_update[id] = 1;
+    DOM_element_height_update[id] = 1;
+    DOM_element_shadow_update[id] = 1;
+    DOM_element_background_color_update[id] = 1;
+    DOM_element_border_style_update[id] = 1;
+    DOM_element_border_radius_update[id] = 1;
 
     element_count += 1;
     return id;
 }
 
 
-function update_element(id) {
-    if (element_transform_update[id] === 1) {
+function update_DOM_element(id) {
+    if (DOM_element_transform_update[id] === 1) {
         DOM_element[id].style.transform = "matrix("
             + (element_scale_x[id] + ", ")
             + (element_skew_x[id] + ", ") 
@@ -228,53 +202,51 @@ function update_element(id) {
             + (element_scale_y[id] + ", ")  
             + (element_x[id] + ", ") 
             + element_y[id] + ")";
-        element_transform_update[id] = 0;
+        DOM_element_transform_update[id] = 0;
     }
-    if (element_z_index_update[id] === 1) {
+    if (DOM_element_z_index_update[id] === 1) {
         DOM_element[id].style.zIndex = element_z_index[id] + "px";
-        element_z_index_update[id] = 0;
+        DOM_element_z_index_update[id] = 0;
     }
-    if (element_width_update[id] === 1) {
+    if (DOM_element_width_update[id] === 1) {
         DOM_element[id].style.width = element_width[id] + "px";
-        element_width_update[id] = 0;
+        DOM_element_width_update[id] = 0;
     }
-    if (element_height_update[id] === 1) {
+    if (DOM_element_height_update[id] === 1) {
         DOM_element[id].style.height = element_height[id] + "px";
-        element_height_update[id] = 0;
+        DOM_element_height_update[id] = 0;
     }
-    if (element_shadow_update[id] === 1) {
+    if (DOM_element_shadow_update[id] === 1) {
         DOM_element[id].style.boxShadow = (element_shadow_x[id] + "px ") 
             + (element_shadow_y[id] + "px ") 
             + (element_shadow_blur[id] + "px ") 
             + element_shadow_color[id];
-        element_shadow_update[id] = 0;
+        DOM_element_shadow_update[id] = 0;
     }
-    if (element_background_color_update[id] === 1) {
+    if (DOM_element_background_color_update[id] === 1) {
         DOM_element[id].style.backgroundColor = element_background_color[id];
-        element_background_color_update[id] = 0;
+        DOM_element_background_color_update[id] = 0;
     }
-    if (element_border_style_update[id] === 1) {
+    if (DOM_element_border_style_update[id] === 1) {
         DOM_element[id].style.border = element_border_style[id];
-        element_border_style_update[id] = 0;
+        DOM_element_border_style_update[id] = 0;
     }
-    if (element_border_radius_update[id] === 1) {
+    if (DOM_element_border_radius_update[id] === 1) {
         DOM_element[id].style.borderRadius = element_border_radius[id] + "px";
-        element_border_radius_update[id] = 0;
+        DOM_element_border_radius_update[id] = 0;
     }
     return;
 }
 
 
-function update() {
+function update_DOM() {
 
     let i;
-    let length = element_update.length;
-
-    for (i = 0; i < length; i ++) {
-        if (element_update[i] === 0) {}
+    for (i = 0; i < element_count; i ++) {
+        if (DOM_element_update[i] === 0) {}
         else { 
-            update_element(i);
-            element_update[i] = 0; 
+            update_DOM_element(i);
+            DOM_element_update[i] = 0; 
         }
     }
     return;
@@ -286,55 +258,55 @@ function update() {
 // Position
 function set_x(id, origin, x) {
     element_x[id] = element_x[origin] + x;
-    element_transform_update[id] = 1;
-    element_update[id] = 1;
+    DOM_element_transform_update[id] = 1;
+    DOM_element_update[id] = 1;
     return;
 }
 
 function set_y(id, origin, y) {
     element_y[id] = element_y[origin] + y;
-    element_transform_update[id] = 1;
-    element_update[id] = 1;
+    DOM_element_transform_update[id] = 1;
+    DOM_element_update[id] = 1;
     return;
 }
 
 function set_z_index(id, z_index) {
     element_z_index[id] = z_index;
-    element_z_index_update[id] = 1;
-    element_update[id] = 1;
+    DOM_element_z_index_update[id] = 1;
+    DOM_element_update[id] = 1;
     return;
 }
 
 function set_rotation(id, degrees) {
-    element_transform_update[id] = 1;
+    DOM_element_transform_update[id] = 1;
 }
 
 // Dimensions
 function set_width(id, width) {
     element_width[id] = width;
-    element_width_update[id] = 1;
-    element_update[id] = 1;
+    DOM_element_width_update[id] = 1;
+    DOM_element_update[id] = 1;
     return;
 }
 
 function set_height(id, height) {
     element_height[id] = height;
-    element_height_update[id] = 1;
-    element_update[id] = 1;
+    DOM_element_height_update[id] = 1;
+    DOM_element_update[id] = 1;
     return;
 }
 
 function set_scale_x(id, scale) {
-    element_transform_update[id] = 1;
+    DOM_element_transform_update[id] = 1;
 }
 function set_scale_y(id, scale) {
-    element_transform_update[id] = 1;
+    DOM_element_transform_update[id] = 1;
 }
 function set_skew_x(id, scale) {
-    element_transform_update[id] = 1;
+    DOM_element_transform_update[id] = 1;
 }
 function set_skew_y(id, scale) {
-    element_transform_update[id] = 1;
+    DOM_element_transform_update[id] = 1;
 }
 
 
@@ -346,19 +318,19 @@ function set_shadow(id, x, y, blur, color) {
     element_shadow_y[id] = y;
     element_shadow_blur[id] = blur;
     element_shadow_color[id] = color;
-    element_shadow_update[id] = 1;
-    element_update[id] = 1;
+    DOM_element_shadow_update[id] = 1;
+    DOM_element_update[id] = 1;
     return;
 }
 
 function set_border_style() {
-    element_border_style_update[id] = 1;
+    DOM_element_border_style_update[id] = 1;
 }
 
 function set_border_radius(id, radius) {
     element_border_radius[id] = radius;
-    element_border_radius_update[id] = 1;
-    element_update[id] = 1;
+    DOM_element_border_radius_update[id] = 1;
+    DOM_element_update[id] = 1;
     return;
 }
 
@@ -429,7 +401,7 @@ create_virtual(100);
 
 // header
 let header = create_element("div");
-set_width(header, window_width);
+set_width(header, DOM_window_width);
 set_height(header, 75);
 set_shadow(header, 0.1, 0.1, 5, "lightgray");
 
@@ -484,11 +456,11 @@ add_event_mousedown(box_2);
 
 
 
-
+console.log(element_width[root]);
 
 function window_resized() {
     if (window.innerWidth !== element_width[root]) { return 1; }
-    else if (window_height.height !== element_height[root]) { return 1; }
+    else if (window.innerHeight !== element_height[root]) { return 1; }
     else { return 0; } 
 }
 
@@ -513,7 +485,7 @@ function main() {
 
     //set_x(header_home, root, (element_x[header_home] + 1));
 
-    update();
+    update_DOM();
     
     return window.requestAnimationFrame(main);
 }
