@@ -88,6 +88,7 @@ let DOM_element_shadow_update;
 let DOM_element_background_color_update;
 let DOM_element_border_style_update;
 let DOM_element_border_radius_update;
+let DOM_element_text_content_update;
 
 // Events
 let element_mousedown;
@@ -97,6 +98,7 @@ let DOM_element;
 let element_shadow_color;
 let element_background_color;
 let element_border_style;
+let element_text_content;
 
 
 // CREATE VIRTUAL
@@ -106,7 +108,7 @@ function create_virtual(elements) {
     element_id = new Uint8Array(elements);
     element_x = new Float32Array(elements);
     element_y = new Float32Array(elements);
-    element_z_index = new Float32Array(elements);
+    element_z_index = new Uint8Array(elements);
     element_rotation = new Int16Array(elements);
 
     // Dimension
@@ -133,6 +135,7 @@ function create_virtual(elements) {
     DOM_element_background_color_update = new Uint8Array(elements);
     DOM_element_border_style_update = new Uint8Array(elements);
     DOM_element_border_radius_update = new Uint8Array(elements);
+    DOM_element_text_content_update = new Uint8Array(elements);
 
     // Events
     element_mousedown = new Uint8Array(elements);
@@ -142,6 +145,7 @@ function create_virtual(elements) {
     element_shadow_color = ["black"];
     element_background_color = ["white"];
     element_border_style = ["none"];
+    element_text_content = [""];
 
     return;
 }
@@ -162,7 +166,6 @@ function create_element(type) {
     
     // VIRTUAL
     // Element
-    DOM_element.push(element);
     let id = element_count;
     element_id[id] = id;
     let id_string = id + "";
@@ -173,9 +176,11 @@ function create_element(type) {
     element_scale_y[id] = 1;
     
     // Dynamic Arrays
+    DOM_element.push(element);
     element_shadow_color.push("lightgray");
     element_background_color.push("white");
     element_border_style.push("solid");
+    element_text_content.push("test");
 
     // Update
     DOM_element_update[id] = 1;
@@ -187,6 +192,7 @@ function create_element(type) {
     DOM_element_background_color_update[id] = 1;
     DOM_element_border_style_update[id] = 1;
     DOM_element_border_radius_update[id] = 1;
+    DOM_element_text_content_update[id] = 1;
 
     element_count += 1;
     return id;
@@ -205,7 +211,7 @@ function update_DOM_element(id) {
         DOM_element_transform_update[id] = 0;
     }
     if (DOM_element_z_index_update[id] === 1) {
-        DOM_element[id].style.zIndex = element_z_index[id] + "px";
+        DOM_element[id].style.zIndex = element_z_index[id] + "";
         DOM_element_z_index_update[id] = 0;
     }
     if (DOM_element_width_update[id] === 1) {
@@ -234,6 +240,10 @@ function update_DOM_element(id) {
     if (DOM_element_border_radius_update[id] === 1) {
         DOM_element[id].style.borderRadius = element_border_radius[id] + "px";
         DOM_element_border_radius_update[id] = 0;
+    }
+    if (DOM_element_text_content_update[id] === 1) {
+        DOM_element[id].textContent = element_text_content[id];
+        DOM_element_text_content_update[id] = 0;
     }
     return;
 }
@@ -334,8 +344,13 @@ function set_border_radius(id, radius) {
     return;
 }
 
-
-function set_text() {}
+// Text
+function set_text(id, text) {
+    element_text_content[id] = text;
+    DOM_element_text_content_update[id] = 1;
+    DOM_element_update[id] = 1;
+    return;
+}
 
 
 
@@ -408,6 +423,7 @@ set_shadow(header, 0.1, 0.1, 5, "lightgray");
 let header_home = create_element("button");
 set_x(header_home, root, 100);
 set_y(header_home, root, 25);
+set_z_index(header_home, 1);
 set_width(header_home, 75);
 set_height(header_home, 25);
 set_shadow(header_home, 0.1, 0.1, 3, "lightgray");
@@ -417,6 +433,7 @@ set_border_radius(header_home, 5);
 let header_about = create_element("button");
 set_x(header_about, root, 200);
 set_y(header_about, root, 25);
+set_z_index(header_about, 1);
 set_width(header_about, 75);
 set_height(header_about, 25);
 set_shadow(header_about, 0.1, 0.1, 3, "lightgray");
@@ -454,10 +471,6 @@ set_shadow(box_2, 0.1, 0.1, 3, "lightgray");
 
 add_event_mousedown(box_2);
 
-
-
-console.log(element_width[root]);
-
 function window_resized() {
     if (window.innerWidth !== element_width[root]) { return 1; }
     else if (window.innerHeight !== element_height[root]) { return 1; }
@@ -481,6 +494,8 @@ function main() {
 
         set_width(header, element_width[root]);
         center_to_center(header_news, root);
+        center_to_center(header_home, box_1);
+        center_to_center(header_about, box_2);
     }
 
     //set_x(header_home, root, (element_x[header_home] + 1));
