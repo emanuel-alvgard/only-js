@@ -56,7 +56,6 @@ body.append(DOM_root);
 // Elements
 var element_count = 1;
 var element_id = [0];
-var element_update = [0];
 var DOM_element = [DOM_root];
 
 // Position
@@ -78,10 +77,21 @@ var element_shadow_x = [0];
 var element_shadow_y = [0];
 var element_shadow_blur = [0];
 var element_shadow_color = ["black"];
-
 var element_background_color = ["white"];
 var element_border_style = ["none"];
 var element_border_radius = [0];
+
+
+// VIRTUAL UPDATE
+var element_update = [0];
+var element_transform_update = [0];
+var element_z_index_update = [0];
+var element_width_update = [0];
+var element_height_update = [0];
+var element_shadow_update = [0];
+var element_background_color_update = [0];
+var element_border_style_update = [0];
+var element_border_radius_update = [0];
 
 var root = 0;
 
@@ -106,7 +116,6 @@ function create_element(type) {
     element_id.push(id);
     var DOM_id = id + "";
     element.id = DOM_id;
-    element_update.push(1);
 
     // Position
     element_x.push(0);
@@ -131,29 +140,64 @@ function create_element(type) {
     element_border_style.push("solid");
     element_border_radius.push(0);
 
+    // UPDATE
+    element_update.push(1)
+    element_transform_update.push(1)
+    element_z_index_update.push(1)
+    element_width_update.push(1)
+    element_height_update.push(1)
+    element_shadow_update.push(1)
+    element_background_color_update.push(1)
+    element_border_style_update.push(1)
+    element_border_radius_update.push(1)
+
     element_count += 1;
     return id;
 }
 
 
 function update_element(id) {
-    DOM_element[id].style.transform = "matrix("
-        + (element_scale_x[id] + ", ")
-        + (element_skew_x[id] + ", ") 
-        + (element_skew_y[id] + ", ") 
-        + (element_scale_y[id] + ", ")  
-        + (element_x[id] + ", ") 
-        + element_y[id] + ")";
-    DOM_element[id].style.zIndex = element_z_index[id] + "px";
-    DOM_element[id].style.width = element_width[id] + "px";
-    DOM_element[id].style.height = element_height[id] + "px";
-    DOM_element[id].style.boxShadow = (element_shadow_x[id] + "px ") 
-        + (element_shadow_y[id] + "px ") 
-        + (element_shadow_blur[id] + "px ") 
-        + element_shadow_color[id];
-    DOM_element[id].style.backgroundColor = element_background_color[id];
-    DOM_element[id].style.border = element_border_style[id];
-    DOM_element[id].style.borderRadius = element_border_radius[id] + "px";
+    if (element_transform_update[id] === 1) {
+        DOM_element[id].style.transform = "matrix("
+            + (element_scale_x[id] + ", ")
+            + (element_skew_x[id] + ", ") 
+            + (element_skew_y[id] + ", ") 
+            + (element_scale_y[id] + ", ")  
+            + (element_x[id] + ", ") 
+            + element_y[id] + ")";
+        element_transform_update[id] = 0;
+    }
+    if (element_z_index_update[id] === 1) {
+        DOM_element[id].style.zIndex = element_z_index[id] + "px";
+        element_z_index_update[id] = 0;
+    }
+    if (element_width_update[id] === 1) {
+        DOM_element[id].style.width = element_width[id] + "px";
+        element_width_update[id] = 0;
+    }
+    if (element_height_update[id] === 1) {
+        DOM_element[id].style.height = element_height[id] + "px";
+        element_height_update[id] = 0;
+    }
+    if (element_shadow_update[id] === 1) {
+        DOM_element[id].style.boxShadow = (element_shadow_x[id] + "px ") 
+            + (element_shadow_y[id] + "px ") 
+            + (element_shadow_blur[id] + "px ") 
+            + element_shadow_color[id];
+        element_shadow_update[id] = 0;
+    }
+    if (element_background_color_update[id] === 1) {
+        DOM_element[id].style.backgroundColor = element_background_color[id];
+        element_background_color_update[id] = 0;
+    }
+    if (element_border_style_update[id] === 1) {
+        DOM_element[id].style.border = element_border_style[id];
+        element_border_style_update[id] = 0;
+    }
+    if (element_border_radius_update[id] === 1) {
+        DOM_element[id].style.borderRadius = element_border_radius[id] + "px";
+        element_border_radius_update[id] = 0;
+    }
     return;
 }
 
@@ -179,41 +223,56 @@ function update() {
 // Position
 function set_x(id, origin, x) {
     element_x[id] = element_x[origin] + x;
+    element_transform_update[id] = 1;
     element_update[id] = 1;
     return;
 }
 
 function set_y(id, origin, y) {
     element_y[id] = element_y[origin] + y;
+    element_transform_update[id] = 1;
     element_update[id] = 1;
     return;
 }
 
 function set_z_index(id, z_index) {
     element_z_index[id] = z_index;
+    element_z_index_update[id] = 1;
     element_update[id] = 1;
     return;
 }
 
-function set_rotation(id, degrees) {}
+function set_rotation(id, degrees) {
+    element_transform_update[id] = 1;
+}
 
 // Dimensions
 function set_width(id, width) {
     element_width[id] = width;
+    element_width_update[id] = 1;
     element_update[id] = 1;
     return;
 }
 
 function set_height(id, height) {
     element_height[id] = height;
+    element_height_update[id] = 1;
     element_update[id] = 1;
     return;
 }
 
-function set_scale_x(id, scale) {}
-function set_scale_y(id, scale) {}
-function set_skew_x(id, scale) {}
-function set_skew_y(id, scale) {}
+function set_scale_x(id, scale) {
+    element_transform_update[id] = 1;
+}
+function set_scale_y(id, scale) {
+    element_transform_update[id] = 1;
+}
+function set_skew_x(id, scale) {
+    element_transform_update[id] = 1;
+}
+function set_skew_y(id, scale) {
+    element_transform_update[id] = 1;
+}
 
 
 // Style
@@ -224,14 +283,18 @@ function set_shadow(id, x, y, blur, color) {
     element_shadow_y[id] = y;
     element_shadow_blur[id] = blur;
     element_shadow_color[id] = color;
+    element_shadow_update[id] = 1;
     element_update[id] = 1;
     return;
 }
 
-function set_border_style() {}
+function set_border_style() {
+    element_border_style_update[id] = 1;
+}
 
 function set_border_radius(id, radius) {
     element_border_radius[id] = radius;
+    element_border_radius_update[id] = 1;
     element_update[id] = 1;
     return;
 }
@@ -315,6 +378,7 @@ set_border_radius(header_about, 5);
 var header_news = create_element("button");
 set_x(header_news, root, 300);
 set_y(header_news, root, 25);
+set_z_index(header_news, 1);
 set_width(header_news, 75);
 set_height(header_news, 25);
 set_shadow(header_news, 0.1, 0.1, 3, "lightgray");
@@ -339,6 +403,11 @@ set_border_radius(box_2, 5);
 set_shadow(box_2, 0.1, 0.1, 3, "lightgray");
 
 
+function window_resized() {
+    if (window.innerWidth !== element_width[root]) { return 1; }
+    else if (window_height.height !== element_height[root]) { return 1; }
+    else { return 0; } 
+}
 
 
 var time = Date.now()
@@ -350,12 +419,16 @@ function main() {
     time = Date.now();
     //console.log(delta);
 
-    element_width[root] = window.innerWidth;
-    element_height[root] = window.innerHeight;
+    // window size dependent elements
+    if (window_resized() === 1) {
+        element_width[root] = window.innerWidth;
+        element_height[root] = window.innerHeight;
 
-    set_width(header, element_width[root]);
-    center_to_center(header_news, root);
-    set_z_index(header_news, 1);
+        set_width(header, element_width[root]);
+        center_to_center(header_news, root);
+    }
+
+    //set_x(header_home, root, (element_x[header_home] + 1));
 
     update();
     
