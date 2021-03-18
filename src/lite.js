@@ -1,24 +1,23 @@
 "use strict";
 
-
 // TODO
-// setup event listeners on root??
+// change all let to let
 // setup set_text function and other text functions
-// use will-change property
+// change all arrays to TypedArray
 
-var window_width = window.innerWidth;
-var window_height = window.innerHeight;
+let window_width = window.innerWidth;
+let window_height = window.innerHeight;
 
-// HEAD
-var head = document.head;
-var google_fonts = document.createElement("link");
+// DOM HEAD
+let head = document.head;
+let google_fonts = document.createElement("link");
 google_fonts.rel = "preconnect"; 
 google_fonts.href = "https://fonts.gstatic.com";
 head.append(google_fonts);
 
 function load_google_font(name, url) {
     
-    var font = document.createElement("link");
+    let font = document.createElement("link");
     font.rel = "stylesheet";
     font.type= "text/css";
     font.href = url;
@@ -29,18 +28,18 @@ function load_google_font(name, url) {
 
 function load_server_font() {}
 
-function create_meta() {}
+function create_meta() {} // ??
 
 
 
-// BODY
-var body = document.body;
+// DOM BODY
+let body = document.body;
 body.style.margin = "0px";
 body.style.left = "0px";
 body.style.top = "0px";
 
-// ROOT
-var DOM_root = document.createElement("div");
+// DOM ROOT
+let DOM_root = document.createElement("div");
 DOM_root.id = "0";
 DOM_root.style.position = "absolute";
 DOM_root.style.margin = "0px";
@@ -52,57 +51,110 @@ DOM_root.style.zIndex = "0";
 DOM_root.style.backgroundColor = "white";
 body.append(DOM_root);
 
-// VIRTUAL DOM
+// DEFINE VIRTUAL
+
+// Static Arrays
 // Elements
-var element_count = 1;
-var element_id = [0];
-var DOM_element = [DOM_root];
+let element_count = 1;
+let element_id;
 
 // Position
-var element_x = [0];
-var element_y = [0];
-var element_z_index = [0];
-var element_rotation = [0];
+let element_x;
+let element_y;
+let element_z_index;
+let element_rotation;
 
 // Dimension
-var element_width = [0];
-var element_height = [0];
-var element_scale_x = [1];
-var element_scale_y = [1];
-var element_skew_x = [0];
-var element_skew_y = [0];
+let element_width;
+let element_height;
+let element_scale_x;
+let element_scale_y;
+let element_skew_x;
+let element_skew_y;
 
 // Style
-var element_shadow_x = [0];
-var element_shadow_y = [0];
-var element_shadow_blur = [0];
-var element_shadow_color = ["black"];
-var element_background_color = ["white"];
-var element_border_style = ["none"];
-var element_border_radius = [0];
-
+let element_shadow_x;
+let element_shadow_y;
+let element_shadow_blur;
+let element_border_radius;
 
 // Update
-var element_update = [0];
-var element_transform_update = [0];
-var element_z_index_update = [0];
-var element_width_update = [0];
-var element_height_update = [0];
-var element_shadow_update = [0];
-var element_background_color_update = [0];
-var element_border_style_update = [0];
-var element_border_radius_update = [0];
+let element_update;
+let element_transform_update;
+let element_z_index_update;
+let element_width_update;
+let element_height_update;
+let element_shadow_update;
+let element_background_color_update;
+let element_border_style_update;
+let element_border_radius_update;
 
 // Events
-var element_mousedown = [0];
+let element_mousedown;
 
-var root = 0;
+// Dynamic Arrays
+let DOM_element;
+let element_shadow_color;
+let element_background_color;
+let element_border_style;
+
+
+// CREATE VIRTUAL
+function create_virtual(elements) {
+
+    // Static arrays
+    element_id = new Uint8Array(elements);
+    element_y = new Float32Array(elements);
+    element_z_index = new Float32Array(elements);
+    element_rotation = new Int16Array(elements);
+
+    // Dimension
+    element_width = new Float32Array(elements);
+    element_height = new Float32Array(elements);
+    element_scale_x = new Float32Array(elements);
+    element_scale_y = new Float32Array(elements);
+    element_skew_x = new Float32Array(elements);
+    element_skew_y = new Float32Array(elements);
+
+    // Style
+    element_shadow_x = new Float32Array(elements);
+    element_shadow_y = new Float32Array(elements);
+    element_shadow_blur = new Float32Array(elements);
+    element_border_radius = new Float32Array(elements);
+
+    // Update
+    element_update = new Uint8Array(elements);
+    element_transform_update = new Uint8Array(elements);
+    element_z_index_update = new Uint8Array(elements);
+    element_width_update = new Uint8Array(elements);
+    element_height_update = new Uint8Array(elements);
+    element_shadow_update = new Uint8Array(elements);
+    element_background_color_update = new Uint8Array(elements);
+    element_border_style_update = new Uint8Array(elements);
+    element_border_radius_update = new Uint8Array(elements);
+
+    // Events
+    element_mousedown = new Uint8Array(elements);
+
+    // Dynamic Arrays
+    DOM_element = [DOM_root];
+    element_shadow_color = ["black"];
+    element_background_color = ["white"];
+    element_border_style = ["none"];
+
+    return;
+}
+
+// Events
+let element_mousedown = [0];
+
+let root = 0;
 
 // Element
 function create_element(type) {
 
-    var fragment = document.createDocumentFragment();
-    var element = document.createElement(type);
+    let fragment = document.createDocumentFragment();
+    let element = document.createElement(type);
 
     // DOM
     element.style.position = "absolute";
@@ -115,12 +167,14 @@ function create_element(type) {
     // VIRTUAL
     // Element
     DOM_element.push(element);
-    var id = element_count;
-    element_id.push(id);
-    var DOM_id = id + "";
+    let id = element_count;
+    element_id[id] = id;
+    let DOM_id = id + "";
     element.id = DOM_id;
 
-    // Position
+    
+
+    /*
     element_x.push(0);
     element_y.push(0);
     element_z_index.push(0);
@@ -138,6 +192,7 @@ function create_element(type) {
     element_shadow_x.push(0);
     element_shadow_y.push(0);
     element_shadow_blur.push(0);
+    
     element_shadow_color.push("lightgray");
     element_background_color.push("white");
     element_border_style.push("solid");
@@ -154,8 +209,10 @@ function create_element(type) {
     element_border_style_update.push(1)
     element_border_radius_update.push(1)
 
+
     // Events
     element_mousedown.push(0);
+    */
 
     element_count += 1;
     return id;
@@ -210,8 +267,8 @@ function update_element(id) {
 
 function update() {
 
-    var i;
-    var length = element_update.length;
+    let i;
+    let length = element_update.length;
 
     for (i = 0; i < length; i ++) {
         if (element_update[i] === 0) {}
@@ -312,7 +369,7 @@ function set_text() {}
 
 // Events
 function event_mousedown(event) {
-    var DOM_id = event["srcElement"]["id"];
+    let DOM_id = event["srcElement"]["id"];
     element_mousedown[+DOM_id] = 1;
     console.log(DOM_id);
     return;
@@ -329,10 +386,10 @@ function add_event_mousedown(id) {
 // UTILITY FUNCTIONS
 // Position
 function center_to_center(id, ref) {
-    var ref_center_x = element_x[ref] + (element_width[ref] / 2);
-    var ref_center_y = element_y[ref] + (element_height[ref] / 2);
-    var new_x = ref_center_x - (element_width[id] / 2);
-    var new_y = ref_center_y - (element_height[id] / 2);
+    let ref_center_x = element_x[ref] + (element_width[ref] / 2);
+    let ref_center_y = element_y[ref] + (element_height[ref] / 2);
+    let new_x = ref_center_x - (element_width[id] / 2);
+    let new_y = ref_center_y - (element_height[id] / 2);
     set_x(id, root, new_x);
     set_y(id, root, new_y);
     return;
@@ -361,20 +418,22 @@ function animation_pop_out(delta, id, duration, curve) {
 
 
 // APP 
-var font_1 = load_google_font(
+let font_1 = load_google_font(
     "Roboto", "https://fonts.googleapis.com/css2?family=Roboto&display=swap"
     );
-var font_2 = load_google_font(
+let font_2 = load_google_font(
     "Lato", "http://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext"
     );
 
+create_virtual(100);    
+
 // header
-var header = create_element("div");
+let header = create_element("div");
 set_width(header, window_width);
 set_height(header, 75);
 set_shadow(header, 0.1, 0.1, 5, "lightgray");
 
-var header_home = create_element("button");
+let header_home = create_element("button");
 set_x(header_home, root, 100);
 set_y(header_home, root, 25);
 set_width(header_home, 75);
@@ -383,7 +442,7 @@ set_shadow(header_home, 0.1, 0.1, 3, "lightgray");
 set_border_radius(header_home, 5);
 //set_text_font(header_home, font_1);
 
-var header_about = create_element("button");
+let header_about = create_element("button");
 set_x(header_about, root, 200);
 set_y(header_about, root, 25);
 set_width(header_about, 75);
@@ -392,7 +451,7 @@ set_shadow(header_about, 0.1, 0.1, 3, "lightgray");
 set_border_radius(header_about, 5);
 //set_text_font(header_about, font_1);
 
-var header_news = create_element("button");
+let header_news = create_element("button");
 set_x(header_news, root, 300);
 set_y(header_news, root, 25);
 set_z_index(header_news, 1);
@@ -403,7 +462,7 @@ set_border_radius(header_news, 5);
 //set_text_font(header_news, font_1);
 
 // boxes
-var box_1 = create_element("div");
+let box_1 = create_element("div");
 set_x(box_1, root, 50); 
 set_y(box_1, root, 125);
 set_width(box_1, 200);
@@ -413,7 +472,7 @@ set_shadow(box_1, 0.1, 0.1, 3, "lightgray");
 
 add_event_mousedown(box_1);
 
-var box_2 = create_element("div");
+let box_2 = create_element("div");
 set_x(box_2, root, 300); 
 set_y(box_2, root, 125);
 set_width(box_2, 200);
@@ -434,8 +493,8 @@ function window_resized() {
 }
 
 
-var time = Date.now()
-var delta = 0.0
+let time = Date.now()
+let delta = 0.0
 
 function main() {
     
@@ -488,7 +547,7 @@ function set_text_origin(origin) {
     return;
 }
 function set_text_font(id, font) {
-    var element = document.getElementById(id + "");
+    let element = document.getElementById(id + "");
     element.style.fontFamily = font;
     return;
 }
