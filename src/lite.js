@@ -82,7 +82,7 @@ var element_border_style = ["none"];
 var element_border_radius = [0];
 
 
-// VIRTUAL UPDATE
+// Update
 var element_update = [0];
 var element_transform_update = [0];
 var element_z_index_update = [0];
@@ -92,6 +92,9 @@ var element_shadow_update = [0];
 var element_background_color_update = [0];
 var element_border_style_update = [0];
 var element_border_radius_update = [0];
+
+// Events
+var element_mousedown = [0];
 
 var root = 0;
 
@@ -140,7 +143,7 @@ function create_element(type) {
     element_border_style.push("solid");
     element_border_radius.push(0);
 
-    // UPDATE
+    // Update
     element_update.push(1)
     element_transform_update.push(1)
     element_z_index_update.push(1)
@@ -150,6 +153,9 @@ function create_element(type) {
     element_background_color_update.push(1)
     element_border_style_update.push(1)
     element_border_radius_update.push(1)
+
+    // Events
+    element_mousedown.push(0);
 
     element_count += 1;
     return id;
@@ -304,7 +310,18 @@ function set_text() {}
 
 
 
+// Events
+function event_mousedown(event) {
+    var DOM_id = event["srcElement"]["id"];
+    element_mousedown[+DOM_id] = 1;
+    console.log(DOM_id);
+    return;
+}
 
+function add_event_mousedown(id) {
+    DOM_element[id].addEventListener("mousedown", event_mousedown);
+    return;
+}
 
 
 
@@ -394,6 +411,8 @@ set_height(box_1, 300);
 set_border_radius(box_1, 5);
 set_shadow(box_1, 0.1, 0.1, 3, "lightgray");
 
+add_event_mousedown(box_1);
+
 var box_2 = create_element("div");
 set_x(box_2, root, 300); 
 set_y(box_2, root, 125);
@@ -401,6 +420,11 @@ set_width(box_2, 200);
 set_height(box_2, 300);
 set_border_radius(box_2, 5);
 set_shadow(box_2, 0.1, 0.1, 3, "lightgray");
+
+add_event_mousedown(box_2);
+
+
+
 
 
 function window_resized() {
