@@ -36,6 +36,7 @@ let DOM_body = document.body;
 DOM_body.style.margin = "0px";
 DOM_body.style.left = "0px";
 DOM_body.style.top = "0px";
+//DOM_body.style.backgroundColor = "lightgray";
 
 // DOM ROOT
 let DOM_root = document.createElement("div");
@@ -46,8 +47,10 @@ DOM_root.style.padding = "0px";
 DOM_root.style.border = "none";
 DOM_root.style.left = "0px";
 DOM_root.style.top = "0px";
+DOM_root.style.width = DOM_window_width + "px";
+DOM_root.style.height = DOM_window_height + "px";
 DOM_root.style.zIndex = "0";
-DOM_root.style.backgroundColor = "white";
+DOM_root.style.backgroundColor = "lightgray";
 DOM_body.append(DOM_root);
 
 // DEFINE VIRTUAL
@@ -179,7 +182,7 @@ function create_element(type) {
     DOM_element.push(element);
     element_shadow_color.push("lightgray");
     element_background_color.push("white");
-    element_border_style.push("solid");
+    element_border_style.push("none");
     element_text_content.push("test");
 
     // Update
@@ -265,6 +268,10 @@ function update_DOM() {
 
 
 // PROPERTY WRAPPER
+// Visibility
+function show(id) {}
+function hide(id) {}
+
 // Position
 function set_x(id, origin, x) {
     element_x[id] = element_x[origin] + x;
@@ -345,13 +352,31 @@ function set_border_radius(id, radius) {
 }
 
 // Text
-function set_text(id, text) {
+function set_text_content(id, text) {
     element_text_content[id] = text;
     DOM_element_text_content_update[id] = 1;
     DOM_element_update[id] = 1;
     return;
 }
 
+/*
+function set_text_align(origin) {
+    if (origin === "left") {}
+    else if (origin === "center") {}
+    else if (origin === "right") {}
+    else {}
+    return;
+}
+function set_text_font(id, font) {
+    let element = document.getElementById(id + "");
+    element.style.fontFamily = font;
+    return;
+}
+
+function set_text_size() {}
+function set_text_color() {}
+function set_text_style() {}
+*/
 
 
 // Events
@@ -367,7 +392,9 @@ function add_event_mousedown(id) {
     return;
 }
 
-
+function remove_event_mousedown(id) {
+    return;
+}
 
 
 // UTILITY FUNCTIONS
@@ -392,7 +419,7 @@ function behind() {}
 // ANIMATION FUNCTIONS
 // Position
 
-const CURVE_LINEAR = [0.0, 1.0, 2.0, 3.0, 4.0];
+const CURVE_LINEAR = [0.0, 1.0, 2.0, 3.0, 4.0]; // change to typed array
 
 function move_interpolated() {}
 
@@ -416,60 +443,58 @@ create_virtual(100);
 
 // header
 let header = create_element("div");
-set_width(header, DOM_window_width);
-set_height(header, 75);
-set_shadow(header, 0.1, 0.1, 5, "lightgray");
-
 let header_home = create_element("button");
-set_x(header_home, root, 100);
-set_y(header_home, root, 25);
-set_z_index(header_home, 1);
-set_width(header_home, 75);
-set_height(header_home, 25);
-set_shadow(header_home, 0.1, 0.1, 3, "lightgray");
-set_border_radius(header_home, 5);
-//set_text_font(header_home, font_1);
-
 let header_about = create_element("button");
-set_x(header_about, root, 200);
-set_y(header_about, root, 25);
-set_z_index(header_about, 1);
-set_width(header_about, 75);
-set_height(header_about, 25);
-set_shadow(header_about, 0.1, 0.1, 3, "lightgray");
-set_border_radius(header_about, 5);
-//set_text_font(header_about, font_1);
-
 let header_news = create_element("button");
-set_x(header_news, root, 300);
-set_y(header_news, root, 25);
-set_z_index(header_news, 1);
-set_width(header_news, 75);
-set_height(header_news, 25);
-set_shadow(header_news, 0.1, 0.1, 3, "lightgray");
-set_border_radius(header_news, 5);
-//set_text_font(header_news, font_1);
-
-// boxes
 let box_1 = create_element("div");
-set_x(box_1, root, 50); 
-set_y(box_1, root, 125);
-set_width(box_1, 200);
-set_height(box_1, 300);
-set_border_radius(box_1, 5);
-set_shadow(box_1, 0.1, 0.1, 3, "lightgray");
-
-add_event_mousedown(box_1);
-
 let box_2 = create_element("div");
-set_x(box_2, root, 300); 
-set_y(box_2, root, 125);
-set_width(box_2, 200);
-set_height(box_2, 300);
-set_border_radius(box_2, 5);
-set_shadow(box_2, 0.1, 0.1, 3, "lightgray");
 
-add_event_mousedown(box_2);
+function create_page_home() {
+    set_width(header, DOM_window_width);
+    set_height(header, 75);
+    set_shadow(header, 0.1, 0.1, 5, "gray");
+
+    set_x(header_home, root, 100);
+    set_y(header_home, root, 25);
+    set_z_index(header_home, 1);
+    set_width(header_home, 75);
+    set_height(header_home, 25);
+    set_shadow(header_home, 0.1, 0.1, 3, "gray");
+    set_border_radius(header_home, 5);
+
+    set_x(header_about, root, 200);
+    set_y(header_about, root, 25);
+    set_z_index(header_about, 1);
+    set_width(header_about, 75);
+    set_height(header_about, 25);
+    set_shadow(header_about, 0.1, 0.1, 3, "gray");
+    set_border_radius(header_about, 5);
+
+    set_x(header_news, root, 300);
+    set_y(header_news, root, 25);
+    set_z_index(header_news, 1);
+    set_width(header_news, 75);
+    set_height(header_news, 25);
+    set_shadow(header_news, 0.1, 0.1, 3, "gray");
+    set_border_radius(header_news, 5);
+
+    set_x(box_1, root, 50); 
+    set_y(box_1, root, 125);
+    set_width(box_1, 200);
+    set_height(box_1, 300);
+    set_border_radius(box_1, 5);
+    set_shadow(box_1, 0.1, 0.1, 3, "gray");
+    add_event_mousedown(box_1);
+
+    set_x(box_2, root, 300); 
+    set_y(box_2, root, 125);
+    set_width(box_2, 200);
+    set_height(box_2, 300);
+    set_border_radius(box_2, 5);
+    set_shadow(box_2, 0.1, 0.1, 3, "gray");
+
+    add_event_mousedown(box_2);
+}
 
 function window_resized() {
     if (window.innerWidth !== element_width[root]) { return 1; }
@@ -481,16 +506,23 @@ function window_resized() {
 let time = Date.now()
 let delta = 0.0
 
-function main() {
-    
+function set_delta() {
     delta = time - Date.now();
     time = Date.now();
-    //console.log(delta);
+    return;
+}
+
+create_page_home();
+
+function main() {
+    
+    set_delta();
+
 
     // window size dependent elements
     if (window_resized() === 1) {
-        element_width[root] = window.innerWidth;
-        element_height[root] = window.innerHeight;
+        set_width(root, window.innerWidth);
+        set_height(root, window.innerHeight);
 
         set_width(header, element_width[root]);
         center_to_center(header_news, root);
@@ -515,36 +547,4 @@ export {
 };
 
 and indert type="module" in the html script tag
-*/
-
-
-/*
-function create_text() { // wrap text in a div
-     // TEXT
-     element.style.textAlign = "center";
-     element.style.wordWrap = "break-word";
-     element.style.wordBreak = "keep-all";
-}
-
-function set_text_origin(origin) {
-    if (origin === "left") {}
-    else if (origin === "center") {}
-    else if (origin === "right") {}
-    else {}
-    return;
-}
-function set_text_font(id, font) {
-    let element = document.getElementById(id + "");
-    element.style.fontFamily = font;
-    return;
-}
-
-function set_text_size() {}
-function set_text_color() {}
-function set_text_style() {}
-
-function place_at_origin(id, target) {}
-function place_at_center(id, target) {}
-function place_at_bottom(id, target) {}
-function place_at_top(id, target) {}
 */
