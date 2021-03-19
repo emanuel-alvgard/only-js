@@ -96,6 +96,9 @@ let DOM_element_text_content_update;
 // Events
 let element_mousedown;
 
+// Animations
+let element_animation_slide;
+
 // Dynamic Arrays
 let DOM_element;
 let element_shadow_color;
@@ -142,6 +145,9 @@ function create_virtual(elements) {
 
     // Events
     element_mousedown = new Uint8Array(elements);
+
+    // Animations 
+    element_animation_slide = new Float32Array(elements);
 
     // Dynamic Arrays
     DOM_element = [DOM_root];
@@ -419,9 +425,35 @@ function behind() {}
 // ANIMATION FUNCTIONS
 // Position
 
+
+
 const CURVE_LINEAR = [0.0, 1.0, 2.0, 3.0, 4.0]; // change to typed array
 
-function move_interpolated() {}
+
+// NOT WORKING!!
+function animation_slide(delta, id, start, end, speed) { // ad curve as parameter
+    if (element_animation_slide[id] === 1) {
+        if (element_x[id] < end[0]) {
+            set_x(id, root, element_x[id] + (speed * delta));
+            set_y(id, root, element_y[id] + (speed * delta));
+        }
+        else {
+            set_x(id, root, end[0]);
+            set_y(id, root, end[1]);
+            element_animation_slide[id] = 0;
+        }
+    }
+    else {
+        set_x(id, root, start[0]);
+        set_y(id, root, start[1]);
+        element_animation_slide[id] = 1;
+    }
+    return;
+}
+function animation_fade_in() {}
+function animation_fade_out() {}
+function animation_zoom_in() {}
+function animation_zoom_out() {}
 
 function animation_pop_out(delta, id, duration, curve) {
     
@@ -496,41 +528,58 @@ function create_page_home() {
     add_event_mousedown(box_2);
 }
 
-function window_resized() {
+function root_resized() {
     if (window.innerWidth !== element_width[root]) { return 1; }
     else if (window.innerHeight !== element_height[root]) { return 1; }
     else { return 0; } 
 }
 
+function root_mousedown() {} // check if mousedown on root. If 1 then check which element.
 
-let time = Date.now()
+
+let time = performance.now();
 let delta = 0.0
 
 function set_delta() {
-    delta = time - Date.now();
-    time = Date.now();
+    delta = (performance.now() - time) / 1000.0;
+    time = performance.now();
     return;
 }
 
 create_page_home();
 
+
+// *TEST*
+function animate_element_on_click(id) {
+    if (element_mousedown[id] === 1) {
+        animation_slide(delta, id, [100, 100], [150, 150], 10.0);
+        
+        if (element_animation_slide[id] === 0) {
+            element_mousedown[id] = 0;
+        }
+    }
+    return;
+}
+
+
 function main() {
     
     set_delta();
-
+    //console.log(delta);
 
     // window size dependent elements
-    if (window_resized() === 1) {
+    if (root_resized() === 1) {
         set_width(root, window.innerWidth);
         set_height(root, window.innerHeight);
 
         set_width(header, element_width[root]);
         center_to_center(header_news, root);
-        center_to_center(header_home, box_1);
         center_to_center(header_about, box_2);
     }
 
-    //set_x(header_home, root, (element_x[header_home] + 1));
+
+    animate_element_on_click(box_1);
+    center_to_center(header_home, box_1);
 
     update_DOM();
     
