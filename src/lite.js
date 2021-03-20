@@ -2,6 +2,8 @@
 
 // TODO
 // setup set_text function and other text functions
+// change colors to array uint8 [255, 255, 255]
+// put curve into animation_slide
 
 
 let DOM_window_width = window.innerWidth;
