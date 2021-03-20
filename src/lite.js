@@ -99,7 +99,8 @@ let DOM_element_text_content_update;
 let element_mousedown;
 
 // Animations
-let element_animation_slide;
+let element_slide_x;
+let element_slide_x_progress;
 
 // Dynamic Arrays
 let DOM_element;
@@ -149,7 +150,8 @@ function create_virtual(elements) {
     element_mousedown = new Uint8Array(elements);
 
     // Animations 
-    element_animation_slide = new Float32Array(elements);
+    element_slide_x = new Float32Array(elements);
+    element_slide_x_progress = new Float32Array(elements);
 
     // Dynamic Arrays
     DOM_element = [DOM_root];
@@ -208,6 +210,18 @@ function create_element(type) {
     element_count += 1;
     return id;
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 function update_DOM_element(id) {
@@ -272,6 +286,18 @@ function update_DOM() {
     }
     return;
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -387,6 +413,19 @@ function set_text_style() {}
 */
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Events
 function event_mousedown(event) {
     let DOM_id = event["srcElement"]["id"];
@@ -424,34 +463,78 @@ function behind() {}
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // ANIMATION FUNCTIONS
 // Position
 
 
 
-const CURVE_LINEAR = [0.0, 1.0, 2.0, 3.0, 4.0]; // change to typed array
+const CURVE_LINEAR = [1.0, 1.0, 1.0, 1.0, 1.0]; // change to typed array
+const CURVE_EASE_IN = [0.5, 0.5, 1.0, 1.0, 2.0];
 
-
-// NOT WORKING!!
-function animation_slide(delta, id, start, end, speed) { // ad curve as parameter
-    if (element_animation_slide[id] === 1) {
-        if (element_x[id] < end[0]) {
-            set_x(id, root, element_x[id] + (speed * delta));
-            set_y(id, root, element_y[id] + (speed * delta));
+function animation_slide_x(delta, id, start, end, speed, curve) {
+    
+    if (element_slide_x[id] === 1) { 
+        if (end > start) {
+            if (element_x[id] < end) {
+                if (element_slide_x_progress[id] < ((end - start) / 5) * 1) {
+                    set_x(id, root, (element_x[id] + (speed * delta)) * curve[0]);
+                    element_slide_x_progress[id] += (speed * delta) * curve[0];
+                }
+                else if (element_slide_x_progress[id] < ((end - start) / 5) * 2) {
+                    set_x(id, root, (element_x[id] + (speed * delta)) * curve[1]);
+                    element_slide_x_progress[id] += (speed * delta) * curve[1];
+                }
+                else if (element_slide_x_progress[id] < ((end - start) / 5) * 3) {
+                    set_x(id, root, (element_x[id] + (speed * delta)) * curve[2]);
+                    element_slide_x_progress[id] += (speed * delta) * curve[2];
+                }
+                else if (element_slide_x_progress[id] < ((end - start) / 5) * 4) {
+                    set_x(id, root, (element_x[id] + (speed * delta)) * curve[3]);
+                    element_slide_x_progress[id] += (speed * delta) * curve[3];
+                }
+                else {
+                    set_x(id, root, (element_x[id] + (speed * delta)) * curve[4]);
+                    element_slide_x_progress[id] += (speed * delta) * curve[4];
+                }
+            }
+            else {
+                set_x(id, root, end);
+                element_slide_x[id] = 0;
+                element_slide_x_progress[id] = 0;
+            }
         }
-        else {
-            set_x(id, root, end[0]);
-            set_y(id, root, end[1]);
-            element_animation_slide[id] = 0;
+        else if (end < start) {
+            if (element_x[id] > end) {
+                set_x(id, root, element_x[id] - (speed * delta));
+            }
+            else {
+                set_x(id, root, end);
+                element_slide_x[id] = 0;
+            }
         }
-    }
-    else {
-        set_x(id, root, start[0]);
-        set_y(id, root, start[1]);
-        element_animation_slide[id] = 1;
+    }    
+    else { 
+        element_slide_x[id] = 1;
+        set_x(id, root, start);
     }
     return;
 }
+
+
 function animation_fade_in() {}
 function animation_fade_out() {}
 function animation_zoom_in() {}
@@ -460,6 +543,19 @@ function animation_zoom_out() {}
 function animation_pop_out(delta, id, duration, curve) {
     
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -543,7 +639,7 @@ let time = performance.now();
 let delta = 0.0
 
 function set_delta() {
-    delta = (performance.now() - time) / 1000.0;
+    delta = (performance.now() - time) / 10.0;
     time = performance.now();
     return;
 }
@@ -554,12 +650,13 @@ create_page_home();
 // *TEST*
 function animate_element_on_click(id) {
     if (element_mousedown[id] === 1) {
-        animation_slide(delta, id, [100, 100], [150, 150], 10.0);
+        animation_slide_x(delta, id, 100, 200, 2.0, CURVE_EASE_IN);
         
-        if (element_animation_slide[id] === 0) {
+        if (element_slide_x[id] === 0) {
             element_mousedown[id] = 0;
         }
     }
+    //console.log(element_animation_slide[id]);
     return;
 }
 
