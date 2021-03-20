@@ -64,7 +64,7 @@ let element_id;
 // Position
 let element_x;
 let element_y;
-let element_z_index;
+let element_z;
 let element_rotation;
 
 // Dimension
@@ -84,7 +84,7 @@ let element_border_radius;
 // Update
 let DOM_element_update;
 let DOM_element_transform_update;
-let DOM_element_z_index_update;
+let DOM_element_z_update;
 let DOM_element_width_update;
 let DOM_element_height_update;
 let DOM_element_shadow_update;
@@ -114,7 +114,7 @@ function create_virtual(elements) {
     element_id = new Uint8Array(elements);
     element_x = new Float32Array(elements);
     element_y = new Float32Array(elements);
-    element_z_index = new Uint8Array(elements);
+    element_z = new Float32Array(elements);
     element_rotation = new Int16Array(elements);
 
     // Dimension
@@ -134,7 +134,7 @@ function create_virtual(elements) {
     // Update
     DOM_element_update = new Uint8Array(elements);
     DOM_element_transform_update = new Uint8Array(elements);
-    DOM_element_z_index_update = new Uint8Array(elements);
+    DOM_element_z_update = new Uint8Array(elements);
     DOM_element_width_update = new Uint8Array(elements);
     DOM_element_height_update = new Uint8Array(elements);
     DOM_element_shadow_update = new Uint8Array(elements);
@@ -194,7 +194,7 @@ function create_element(type) {
     // Update
     DOM_element_update[id] = 1;
     DOM_element_transform_update[id] = 1;
-    DOM_element_z_index_update[id] = 1;
+    DOM_element_z_update[id] = 1;
     DOM_element_width_update[id] = 1;
     DOM_element_height_update[id] = 1;
     DOM_element_shadow_update[id] = 1;
@@ -219,9 +219,9 @@ function update_DOM_element(id) {
             + element_y[id] + ")";
         DOM_element_transform_update[id] = 0;
     }
-    if (DOM_element_z_index_update[id] === 1) {
-        DOM_element[id].style.zIndex = element_z_index[id] + "";
-        DOM_element_z_index_update[id] = 0;
+    if (DOM_element_z_update[id] === 1) {
+        DOM_element[id].style.zIndex = element_z[id] + "";
+        DOM_element_z_update[id] = 0;
     }
     if (DOM_element_width_update[id] === 1) {
         DOM_element[id].style.width = element_width[id] + "px";
@@ -293,9 +293,9 @@ function set_y(id, origin, y) {
     return;
 }
 
-function set_z_index(id, z_index) {
-    element_z_index[id] = z_index;
-    DOM_element_z_index_update[id] = 1;
+function set_z(id, z_index) {
+    element_z[id] = z_index;
+    DOM_element_z_update[id] = 1;
     DOM_element_update[id] = 1;
     return;
 }
@@ -488,7 +488,7 @@ function create_page_home() {
 
     set_x(header_home, root, 100);
     set_y(header_home, root, 25);
-    set_z_index(header_home, 1);
+    set_z(header_home, 1);
     set_width(header_home, 75);
     set_height(header_home, 25);
     set_shadow(header_home, 0.1, 0.1, 3, "gray");
@@ -496,7 +496,7 @@ function create_page_home() {
 
     set_x(header_about, root, 200);
     set_y(header_about, root, 25);
-    set_z_index(header_about, 1);
+    set_z(header_about, 1);
     set_width(header_about, 75);
     set_height(header_about, 25);
     set_shadow(header_about, 0.1, 0.1, 3, "gray");
@@ -504,7 +504,7 @@ function create_page_home() {
 
     set_x(header_news, root, 300);
     set_y(header_news, root, 25);
-    set_z_index(header_news, 1);
+    set_z(header_news, 1);
     set_width(header_news, 75);
     set_height(header_news, 25);
     set_shadow(header_news, 0.1, 0.1, 3, "gray");
