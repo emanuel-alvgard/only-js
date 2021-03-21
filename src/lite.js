@@ -3,7 +3,8 @@
 // TODO
 // setup set_text function and other text functions
 // change colors to array uint8 [255, 255, 255]
-// put curve into animation_slide
+// put curve into animation_slide (10 checkpoints ?)
+// set_z should also have "root" as a parameter
 
 
 let DOM_window_width = window.innerWidth;
