@@ -483,7 +483,8 @@ function behind() {}
 
 
 const CURVE_LINEAR = [1.0, 1.0, 1.0, 1.0, 1.0]; // change to typed array
-const CURVE_EASE_IN = [0.5, 0.5, 1.0, 1.0, 2.0];
+const CURVE_EASE_IN = [0.3, 0.4, 0.7, 1.4, 2.2];
+const CURVE_SMOOTH = [0.7, 1.3, 1.9, 0.8, 0.3];
 
 function animation_slide_x(delta, id, start, end, speed, curve) {
     
@@ -491,30 +492,36 @@ function animation_slide_x(delta, id, start, end, speed, curve) {
         if (end > start) {
             if (element_x[id] < end) {
                 if (element_slide_x_progress[id] < ((end - start) / 5) * 1) {
-                    set_x(id, root, (element_x[id] + (speed * delta)) * curve[0]);
-                    element_slide_x_progress[id] += (speed * delta) * curve[0];
+                    set_x(id, root, element_x[id] + ((speed * delta) * curve[0]));
+                    element_slide_x_progress[id] += ((speed * delta) * curve[0]);
                 }
                 else if (element_slide_x_progress[id] < ((end - start) / 5) * 2) {
-                    set_x(id, root, (element_x[id] + (speed * delta)) * curve[1]);
-                    element_slide_x_progress[id] += (speed * delta) * curve[1];
+                    set_x(id, root, element_x[id] + ((speed * delta) * curve[1]));
+                    element_slide_x_progress[id] += ((speed * delta) * curve[1]);
                 }
                 else if (element_slide_x_progress[id] < ((end - start) / 5) * 3) {
-                    set_x(id, root, (element_x[id] + (speed * delta)) * curve[2]);
-                    element_slide_x_progress[id] += (speed * delta) * curve[2];
+                    set_x(id, root, element_x[id] + ((speed * delta) * curve[2]));
+                    element_slide_x_progress[id] += ((speed * delta) * curve[2]);
                 }
                 else if (element_slide_x_progress[id] < ((end - start) / 5) * 4) {
-                    set_x(id, root, (element_x[id] + (speed * delta)) * curve[3]);
-                    element_slide_x_progress[id] += (speed * delta) * curve[3];
+                    set_x(id, root, element_x[id] + ((speed * delta) * curve[3]));
+                    element_slide_x_progress[id] += ((speed * delta) * curve[3]);
                 }
                 else {
-                    set_x(id, root, (element_x[id] + (speed * delta)) * curve[4]);
-                    element_slide_x_progress[id] += (speed * delta) * curve[4];
+                    set_x(id, root, element_x[id] + ((speed * delta) * curve[4]));
+                    element_slide_x_progress[id] += ((speed * delta) * curve[4]);
+                    
+                    if (element_x[id] >= end) {
+                        set_x(id, root, end); //change
+                        element_slide_x[id] = 0;
+                        element_slide_x_progress[id] = 0.0;
+                    }
                 }
             }
             else {
-                set_x(id, root, end);
-                element_slide_x[id] = 0;
-                element_slide_x_progress[id] = 0;
+                //set_x(id, root, end);
+                //element_slide_x[id] = 0;
+                //element_slide_x_progress[id] = 0.0;
             }
         }
         else if (end < start) {
@@ -616,7 +623,7 @@ function create_page_home() {
     set_shadow(box_1, 0.1, 0.1, 3, "gray");
     add_event_mousedown(box_1);
 
-    set_x(box_2, root, 300); 
+    set_x(box_2, root, 600); 
     set_y(box_2, root, 125);
     set_width(box_2, 200);
     set_height(box_2, 300);
@@ -650,7 +657,7 @@ create_page_home();
 // *TEST*
 function animate_element_on_click(id) {
     if (element_mousedown[id] === 1) {
-        animation_slide_x(delta, id, 100, 200, 2.0, CURVE_EASE_IN);
+        animation_slide_x(delta, id, 100, 300, 5.0, CURVE_SMOOTH);
         
         if (element_slide_x[id] === 0) {
             element_mousedown[id] = 0;
