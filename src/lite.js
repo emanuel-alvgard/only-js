@@ -2,7 +2,7 @@
 
 // TODO
 // setup set_text function and other text functions
-// change colors to array uint8 [255, 255, 255]
+// change colors to array uint8 [255, 255, 255, 1.0]
 // put curve into animation_slide (10 checkpoints ?)
 // set_z should also have "root" as a parameter
 
@@ -53,7 +53,7 @@ DOM_root.style.top = "0px";
 DOM_root.style.width = DOM_window_width + "px";
 DOM_root.style.height = DOM_window_height + "px";
 DOM_root.style.zIndex = "0";
-DOM_root.style.backgroundColor = "lightgray";
+DOM_root.style.backgroundColor = "rgba(225, 225, 225, 1.0)";
 DOM_body.append(DOM_root);
 
 // DEFINE VIRTUAL
@@ -79,6 +79,16 @@ let element_skew_x;
 let element_skew_y;
 
 // Style
+let element_background_color_red;
+let element_background_color_green;
+let element_background_color_blue;
+let element_background_color_alpha;
+    
+let element_shadow_color_red;
+let element_shadow_color_green;
+let element_shadow_color_blue;
+let element_shadow_color_aplha;
+
 let element_shadow_x;
 let element_shadow_y;
 let element_shadow_blur;
@@ -106,8 +116,6 @@ let element_slide_x_checkpoint;
 
 // Dynamic Arrays
 let DOM_element;
-let element_shadow_color;
-let element_background_color;
 let element_border_style;
 let element_text_content;
 
@@ -131,6 +139,16 @@ function create_virtual(elements) {
     element_skew_y = new Float32Array(elements);
 
     // Style
+    element_background_color_red = new Uint8Array(elements);
+    element_background_color_green = new Uint8Array(elements);
+    element_background_color_blue = new Uint8Array(elements);
+    element_background_color_alpha = new Float32Array(elements);
+    
+    element_shadow_color_red = new Uint8Array(elements);
+    element_shadow_color_green = new Uint8Array(elements);
+    element_shadow_color_blue = new Uint8Array(elements);
+    element_shadow_color_aplha = new Float32Array(elements);
+    
     element_shadow_x = new Float32Array(elements);
     element_shadow_y = new Float32Array(elements);
     element_shadow_blur = new Float32Array(elements);
@@ -158,8 +176,6 @@ function create_virtual(elements) {
 
     // Dynamic Arrays
     DOM_element = [DOM_root];
-    element_shadow_color = ["black"];
-    element_background_color = ["white"];
     element_border_style = ["none"];
     element_text_content = [""];
 
@@ -188,13 +204,23 @@ function create_element(type) {
     element.id = id_string;
 
     // Dimensions
-    element_scale_x[id] = 1;
-    element_scale_y[id] = 1;
+    element_scale_x[id] = 1.0;
+    element_scale_y[id] = 1.0;
+
+    // Style
+    element_background_color_red[id] = 255;
+    element_background_color_green[id] = 255;
+    element_background_color_blue[id] = 255;
+    element_background_color_alpha[id] = 1.0;
+
+    element_shadow_color_red[id] = 255;
+    element_shadow_color_green[id] = 255;
+    element_shadow_color_blue[id] = 255;
+    element_shadow_color_alpha[id] = 1.0;
+    
     
     // Dynamic Arrays
     DOM_element.push(element);
-    element_shadow_color.push("lightgray");
-    element_background_color.push("white");
     element_border_style.push("none");
     element_text_content.push("test");
 
@@ -254,11 +280,11 @@ function update_DOM_element(id) {
         DOM_element[id].style.boxShadow = (element_shadow_x[id] + "px ") 
             + (element_shadow_y[id] + "px ") 
             + (element_shadow_blur[id] + "px ") 
-            + element_shadow_color[id];
+            + element_shadow_color[id]; // change to new rgba
         DOM_element_shadow_update[id] = 0;
     }
     if (DOM_element_background_color_update[id] === 1) {
-        DOM_element[id].style.backgroundColor = element_background_color[id];
+        DOM_element[id].style.backgroundColor = element_background_color[id]; // change to new rgba
         DOM_element_background_color_update[id] = 0;
     }
     if (DOM_element_border_style_update[id] === 1) {
@@ -367,7 +393,7 @@ function set_skew_y(id, scale) {
 // Style
 function set_opacity() {}
 
-function set_shadow(id, x, y, blur, color) {
+function set_shadow(id, x, y, blur, color) { // change to new rgba
     element_shadow_x[id] = x;
     element_shadow_y[id] = y;
     element_shadow_blur[id] = blur;
@@ -486,49 +512,60 @@ function behind() {}
 
 
 const CURVE_LINEAR = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]; // change to typed array
-const CURVE_EASE_IN = [0.3, 0.4, 0.7, 1.4, 2.2];
+//const CURVE_EASE_IN;
 const CURVE_SMOOTH = [0.5, 1.0, 1.5, 2.0, 1.75, 1.5, 1.0, 0.5, 0.25, 0.1];
 
-function animation_curve() {}
+/*
+function animation_curve_positive(checkpoint, progress, curve, func, id, delta, speed, property) {
+   
+    if (progress < checkpoint * 1) {
+        func(id, root, element_x[id] + ((speed * delta) * curve[0]));
+        element_slide_x_progress[id] += ((speed * delta) * curve[0]);
+
+}
+*/
 
 function animation_slide_x(delta, id, start, end, speed, curve) {
     
     if (element_slide_x[id] === 1) { 
         if (end > start) {
             if (element_x[id] < end) {
-                if (element_slide_x_progress[id] < ((end - start) / 10) * 1) {
+
+                element_slide_x_checkpoint[id] = (end - start) / 10;
+
+                if (element_slide_x_progress[id] < element_slide_x_checkpoint[id] * 1) {
                     set_x(id, root, element_x[id] + ((speed * delta) * curve[0]));
                     element_slide_x_progress[id] += ((speed * delta) * curve[0]);
                 }
-                else if (element_slide_x_progress[id] < ((end - start) / 10) * 2) {
+                else if (element_slide_x_progress[id] < element_slide_x_checkpoint[id] * 2) {
                     set_x(id, root, element_x[id] + ((speed * delta) * curve[1]));
                     element_slide_x_progress[id] += ((speed * delta) * curve[1]);
                 }
-                else if (element_slide_x_progress[id] < ((end - start) / 10) * 3) {
+                else if (element_slide_x_progress[id] < element_slide_x_checkpoint[id] * 3) {
                     set_x(id, root, element_x[id] + ((speed * delta) * curve[2]));
                     element_slide_x_progress[id] += ((speed * delta) * curve[2]);
                 }
-                else if (element_slide_x_progress[id] < ((end - start) / 10) * 4) {
+                else if (element_slide_x_progress[id] < element_slide_x_checkpoint[id] * 4) {
                     set_x(id, root, element_x[id] + ((speed * delta) * curve[3]));
                     element_slide_x_progress[id] += ((speed * delta) * curve[3]);
                 }   
-                else if (element_slide_x_progress[id] < ((end - start) / 10) * 5) {
+                else if (element_slide_x_progress[id] < element_slide_x_checkpoint[id] * 5) {
                     set_x(id, root, element_x[id] + ((speed * delta) * curve[4]));
                     element_slide_x_progress[id] += ((speed * delta) * curve[4]);
                 }
-                else if (element_slide_x_progress[id] < ((end - start) / 10) * 6) {
+                else if (element_slide_x_progress[id] < element_slide_x_checkpoint[id] * 6) {
                     set_x(id, root, element_x[id] + ((speed * delta) * curve[5]));
                     element_slide_x_progress[id] += ((speed * delta) * curve[5]);
                 }
-                else if (element_slide_x_progress[id] < ((end - start) / 10) * 7) {
+                else if (element_slide_x_progress[id] < element_slide_x_checkpoint[id] * 7) {
                     set_x(id, root, element_x[id] + ((speed * delta) * curve[6]));
                     element_slide_x_progress[id] += ((speed * delta) * curve[6]);
                 }
-                else if (element_slide_x_progress[id] < ((end - start) / 10) * 8) {
+                else if (element_slide_x_progress[id] < element_slide_x_checkpoint[id] * 8) {
                     set_x(id, root, element_x[id] + ((speed * delta) * curve[7]));
                     element_slide_x_progress[id] += ((speed * delta) * curve[7]);
                 }
-                else if (element_slide_x_progress[id] < ((end - start) / 10) * 9) {
+                else if (element_slide_x_progress[id] < element_slide_x_checkpoint[id] * 9) {
                     set_x(id, root, element_x[id] + ((speed * delta) * curve[8]));
                     element_slide_x_progress[id] += ((speed * delta) * curve[8]);
                 }
@@ -572,9 +609,6 @@ function animation_fade_out() {}
 function animation_zoom_in() {}
 function animation_zoom_out() {}
 
-function animation_pop_out(delta, id, duration, curve) {
-    
-}
 
 
 
