@@ -485,34 +485,56 @@ function behind() {}
 
 
 
-const CURVE_LINEAR = [1.0, 1.0, 1.0, 1.0, 1.0]; // change to typed array
+const CURVE_LINEAR = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]; // change to typed array
 const CURVE_EASE_IN = [0.3, 0.4, 0.7, 1.4, 2.2];
-const CURVE_SMOOTH = [0.7, 1.3, 1.9, 0.8, 0.3];
+const CURVE_SMOOTH = [0.5, 1.0, 1.5, 2.0, 1.75, 1.5, 1.0, 0.5, 0.25, 0.1];
+
+function animation_curve() {}
 
 function animation_slide_x(delta, id, start, end, speed, curve) {
     
     if (element_slide_x[id] === 1) { 
         if (end > start) {
             if (element_x[id] < end) {
-                if (element_slide_x_progress[id] < ((end - start) / 5) * 1) {
+                if (element_slide_x_progress[id] < ((end - start) / 10) * 1) {
                     set_x(id, root, element_x[id] + ((speed * delta) * curve[0]));
                     element_slide_x_progress[id] += ((speed * delta) * curve[0]);
                 }
-                else if (element_slide_x_progress[id] < ((end - start) / 5) * 2) {
+                else if (element_slide_x_progress[id] < ((end - start) / 10) * 2) {
                     set_x(id, root, element_x[id] + ((speed * delta) * curve[1]));
                     element_slide_x_progress[id] += ((speed * delta) * curve[1]);
                 }
-                else if (element_slide_x_progress[id] < ((end - start) / 5) * 3) {
+                else if (element_slide_x_progress[id] < ((end - start) / 10) * 3) {
                     set_x(id, root, element_x[id] + ((speed * delta) * curve[2]));
                     element_slide_x_progress[id] += ((speed * delta) * curve[2]);
                 }
-                else if (element_slide_x_progress[id] < ((end - start) / 5) * 4) {
+                else if (element_slide_x_progress[id] < ((end - start) / 10) * 4) {
                     set_x(id, root, element_x[id] + ((speed * delta) * curve[3]));
                     element_slide_x_progress[id] += ((speed * delta) * curve[3]);
-                }
-                else {
+                }   
+                else if (element_slide_x_progress[id] < ((end - start) / 10) * 5) {
                     set_x(id, root, element_x[id] + ((speed * delta) * curve[4]));
                     element_slide_x_progress[id] += ((speed * delta) * curve[4]);
+                }
+                else if (element_slide_x_progress[id] < ((end - start) / 10) * 6) {
+                    set_x(id, root, element_x[id] + ((speed * delta) * curve[5]));
+                    element_slide_x_progress[id] += ((speed * delta) * curve[5]);
+                }
+                else if (element_slide_x_progress[id] < ((end - start) / 10) * 7) {
+                    set_x(id, root, element_x[id] + ((speed * delta) * curve[6]));
+                    element_slide_x_progress[id] += ((speed * delta) * curve[6]);
+                }
+                else if (element_slide_x_progress[id] < ((end - start) / 10) * 8) {
+                    set_x(id, root, element_x[id] + ((speed * delta) * curve[7]));
+                    element_slide_x_progress[id] += ((speed * delta) * curve[7]);
+                }
+                else if (element_slide_x_progress[id] < ((end - start) / 10) * 9) {
+                    set_x(id, root, element_x[id] + ((speed * delta) * curve[8]));
+                    element_slide_x_progress[id] += ((speed * delta) * curve[8]);
+                }
+                else {
+                    set_x(id, root, element_x[id] + ((speed * delta) * curve[9]));
+                    element_slide_x_progress[id] += ((speed * delta) * curve[9]);
                     
                     if (element_x[id] >= end) {
                         set_x(id, root, end); //change
@@ -660,7 +682,7 @@ create_page_home();
 // *TEST*
 function animate_element_on_click(id) {
     if (element_mousedown[id] === 1) {
-        animation_slide_x(delta, id, 100, 300, 5.0, CURVE_SMOOTH);
+        animation_slide_x(delta, id, 100, 300, 7.5, CURVE_SMOOTH);
         
         if (element_slide_x[id] === 0) {
             element_mousedown[id] = 0;
