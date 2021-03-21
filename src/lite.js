@@ -102,6 +102,7 @@ let element_mousedown;
 // Animations
 let element_slide_x;
 let element_slide_x_progress;
+let element_slide_x_checkpoint;
 
 // Dynamic Arrays
 let DOM_element;
@@ -153,6 +154,7 @@ function create_virtual(elements) {
     // Animations 
     element_slide_x = new Float32Array(elements);
     element_slide_x_progress = new Float32Array(elements);
+    element_slide_x_checkpoint = new Float32Array(elements);
 
     // Dynamic Arrays
     DOM_element = [DOM_root];
