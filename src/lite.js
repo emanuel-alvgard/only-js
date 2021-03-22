@@ -2,7 +2,6 @@
 
 // TODO
 // setup set_text function and other text functions
-// change colors to array uint8 [255, 255, 255, 1.0]
 // put curve into animation_slide (10 checkpoints ?)
 // set_z should also have "root" as a parameter
 
@@ -87,7 +86,7 @@ let element_background_color_alpha;
 let element_shadow_color_red;
 let element_shadow_color_green;
 let element_shadow_color_blue;
-let element_shadow_color_aplha;
+let element_shadow_color_alpha;
 
 let element_shadow_x;
 let element_shadow_y;
@@ -147,7 +146,7 @@ function create_virtual(elements) {
     element_shadow_color_red = new Uint8Array(elements);
     element_shadow_color_green = new Uint8Array(elements);
     element_shadow_color_blue = new Uint8Array(elements);
-    element_shadow_color_aplha = new Float32Array(elements);
+    element_shadow_color_alpha = new Float32Array(elements);
     
     element_shadow_x = new Float32Array(elements);
     element_shadow_y = new Float32Array(elements);
@@ -157,7 +156,6 @@ function create_virtual(elements) {
     // Update
     DOM_element_update = new Uint8Array(elements);
     DOM_element_transform_update = new Uint8Array(elements);
-    DOM_element_z_update = new Uint8Array(elements);
     DOM_element_width_update = new Uint8Array(elements);
     DOM_element_height_update = new Uint8Array(elements);
     DOM_element_shadow_update = new Uint8Array(elements);
@@ -224,7 +222,6 @@ function create_element(type) {
     // Update
     DOM_element_update[id] = 1;
     DOM_element_transform_update[id] = 1;
-    DOM_element_z_update[id] = 1;
     DOM_element_width_update[id] = 1;
     DOM_element_height_update[id] = 1;
     DOM_element_shadow_update[id] = 1;
@@ -259,11 +256,8 @@ function update_DOM_element(id) {
             + (element_scale_y[id] + ", ")  
             + (element_x[id] + ", ") 
             + element_y[id] + ")";
-        DOM_element_transform_update[id] = 0;
-    }
-    if (DOM_element_z_update[id] === 1) {
         DOM_element[id].style.zIndex = element_z[id] + "";
-        DOM_element_z_update[id] = 0;
+        DOM_element_transform_update[id] = 0;
     }
     if (DOM_element_width_update[id] === 1) {
         DOM_element[id].style.width = element_width[id] + "px";
@@ -278,17 +272,17 @@ function update_DOM_element(id) {
             + (element_shadow_y[id] + "px ") 
             + (element_shadow_blur[id] + "px ") 
             + "rgba("
-            + (element_shadow_color_red[id] + " ")
-            + (element_shadow_color_green[id] + " ")
-            + (element_shadow_color_blue[id] + " ")
+            + (element_shadow_color_red[id] + ", ")
+            + (element_shadow_color_green[id] + ", ")
+            + (element_shadow_color_blue[id] + ", ")
             + (element_shadow_color_alpha[id] + ")");  
         DOM_element_shadow_update[id] = 0;
     }
     if (DOM_element_background_color_update[id] === 1) {
         DOM_element[id].style.backgroundColor = "rgba("
-        + (element_background_color_red[id] + " ")
-        + (element_background_color_green[id] + " ")
-        + (element_background_color_blue[id] + " ")
+        + (element_background_color_red[id] + ", ")
+        + (element_background_color_green[id] + ", ")
+        + (element_background_color_blue[id] + ", ")
         + (element_background_color_alpha[id] + ")");
         DOM_element_background_color_update[id] = 0;
     }
@@ -355,9 +349,9 @@ function set_y(id, origin, y) {
     return;
 }
 
-function set_z(id, z_index) {
-    element_z[id] = z_index;
-    DOM_element_z_update[id] = 1;
+function set_z(id, origin, z) {
+    element_z[id] = element_z[origin] + z;
+    DOM_element_transform_update[id] = 1;
     DOM_element_update[id] = 1;
     return;
 }
@@ -402,7 +396,10 @@ function set_shadow(id, x, y, blur, color) { // change to new rgba
     element_shadow_x[id] = x;
     element_shadow_y[id] = y;
     element_shadow_blur[id] = blur;
-    element_shadow_color[id] = color;
+    element_shadow_color_red[id] = color[0];
+    element_shadow_color_green[id] = color[1];
+    element_shadow_color_blue[id] = color[2];
+    element_shadow_color_alpha[id] = color[3];
     DOM_element_shadow_update[id] = 1;
     DOM_element_update[id] = 1;
     return;
@@ -653,30 +650,30 @@ let box_2 = create_element("div");
 function create_page_home() {
     set_width(header, DOM_window_width);
     set_height(header, 75);
-    set_shadow(header, 0.1, 0.1, 5, "gray");
+    set_shadow(header, 0.1, 0.1, 10, [200, 200, 200, 1.0]);
 
     set_x(header_home, root, 100);
     set_y(header_home, root, 25);
-    set_z(header_home, 1);
+    set_z(header_home, root, 1.0);
     set_width(header_home, 75);
     set_height(header_home, 25);
-    set_shadow(header_home, 0.1, 0.1, 3, "gray");
+    set_shadow(header_home, 0.1, 0.1, 5, [225, 225, 225, 1.0]);
     set_border_radius(header_home, 5);
 
     set_x(header_about, root, 200);
     set_y(header_about, root, 25);
-    set_z(header_about, 1);
+    set_z(header_about, root, 1.0);
     set_width(header_about, 75);
     set_height(header_about, 25);
-    set_shadow(header_about, 0.1, 0.1, 3, "gray");
+    set_shadow(header_about, 0.1, 0.1, 5, [225, 225, 225, 1.0]);
     set_border_radius(header_about, 5);
 
     set_x(header_news, root, 300);
     set_y(header_news, root, 25);
-    set_z(header_news, 1);
+    set_z(header_news, root, 1.0);
     set_width(header_news, 75);
     set_height(header_news, 25);
-    set_shadow(header_news, 0.1, 0.1, 3, "gray");
+    set_shadow(header_news, 0.1, 0.1, 5, [225, 225, 225, 1.0]);
     set_border_radius(header_news, 5);
 
     set_x(box_1, root, 50); 
@@ -684,7 +681,7 @@ function create_page_home() {
     set_width(box_1, 200);
     set_height(box_1, 300);
     set_border_radius(box_1, 5);
-    set_shadow(box_1, 0.1, 0.1, 3, "gray");
+    set_shadow(box_1, 0.1, 0.1, 10, [200, 200, 200, 1.0]);
     add_event_mousedown(box_1);
 
     set_x(box_2, root, 600); 
@@ -692,7 +689,7 @@ function create_page_home() {
     set_width(box_2, 200);
     set_height(box_2, 300);
     set_border_radius(box_2, 5);
-    set_shadow(box_2, 0.1, 0.1, 3, "gray");
+    set_shadow(box_2, 0.1, 0.1, 10, [200, 200, 200, 1.0]);
 
     add_event_mousedown(box_2);
 }
