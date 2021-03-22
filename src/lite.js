@@ -213,9 +213,6 @@ function create_element(type) {
     element_background_color_blue[id] = 255;
     element_background_color_alpha[id] = 1.0;
 
-    element_shadow_color_red[id] = 255;
-    element_shadow_color_green[id] = 255;
-    element_shadow_color_blue[id] = 255;
     element_shadow_color_alpha[id] = 1.0;
     
     
@@ -280,11 +277,19 @@ function update_DOM_element(id) {
         DOM_element[id].style.boxShadow = (element_shadow_x[id] + "px ") 
             + (element_shadow_y[id] + "px ") 
             + (element_shadow_blur[id] + "px ") 
-            + element_shadow_color[id]; // change to new rgba
+            + "rgba("
+            + (element_shadow_color_red[id] + " ")
+            + (element_shadow_color_green[id] + " ")
+            + (element_shadow_color_blue[id] + " ")
+            + (element_shadow_color_alpha[id] + ")");  
         DOM_element_shadow_update[id] = 0;
     }
     if (DOM_element_background_color_update[id] === 1) {
-        DOM_element[id].style.backgroundColor = element_background_color[id]; // change to new rgba
+        DOM_element[id].style.backgroundColor = "rgba("
+        + (element_background_color_red[id] + " ")
+        + (element_background_color_green[id] + " ")
+        + (element_background_color_blue[id] + " ")
+        + (element_background_color_alpha[id] + ")");
         DOM_element_background_color_update[id] = 0;
     }
     if (DOM_element_border_style_update[id] === 1) {
