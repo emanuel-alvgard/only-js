@@ -304,7 +304,6 @@ function update_DOM_element(id) {
 let update_DOM_counter = 0;
 function update_DOM() {
 
-    
     for (update_DOM_counter = 0; update_DOM_counter < element_count; update_DOM_counter ++) {
         if (DOM_element_update[i] === 0) {}
         else { 
@@ -697,14 +696,14 @@ function create_page_home() {
 let root_resized = 0;
 let root_mousedown = 1;
 
-function event_root_resized() {
+function root_event_resized() {
     if (window.innerWidth !== element_width[root]) { root_resized = 1; }
     else if (window.innerHeight !== element_height[root]) { root_resized = 1; }
     else { root_resized = 0; }
     return; 
 }
 
-function event_root_mousedown() {} // check if mousedown on root. If 1 then check which element.
+function root_event_mousedown() {} // check if mousedown on root. If 1 then check which element.
 
 
 let time = performance.now();
@@ -736,6 +735,7 @@ function animate_element_on_click(id) {
 function main() {
     
     set_delta();
+    root_event_resized();
     //console.log(delta);
 
     // window size dependent elements
