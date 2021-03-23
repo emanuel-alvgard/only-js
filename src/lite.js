@@ -4,6 +4,7 @@
 // setup set_text function and other text functions
 // put curve into animation_slide (10 checkpoints ?)
 // set_z should also have "root" as a parameter
+// add + before 64bit floats and |0 after 32bit ints
 
 
 let DOM_window_width = window.innerWidth;
