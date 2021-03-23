@@ -301,17 +301,18 @@ function update_DOM_element(id) {
     return;
 }
 
-
+let update_DOM_counter = 0;
 function update_DOM() {
 
-    let i;
-    for (i = 0; i < element_count; i ++) {
+    
+    for (update_DOM_counter = 0; update_DOM_counter < element_count; update_DOM_counter ++) {
         if (DOM_element_update[i] === 0) {}
         else { 
             update_DOM_element(i);
             DOM_element_update[i] = 0; 
         }
     }
+    update_DOM_counter = 0;
     return;
 }
 
@@ -459,9 +460,7 @@ function set_text_style() {}
 
 // Events
 function event_mousedown(event) {
-    let DOM_id = event["srcElement"]["id"];
-    element_mousedown[+DOM_id] = 1;
-    console.log(DOM_id);
+    element_mousedown[+event["srcElement"]["id"]] = 1;
     return;
 }
 
@@ -478,7 +477,7 @@ function remove_event_mousedown(id) {
 // UTILITY FUNCTIONS
 // Position
 function center_to_center(id, ref) {
-    let ref_center_x = element_x[ref] + (element_width[ref] / 2);
+    let ref_center_x = element_x[ref] + (element_width[ref] / 2); // remove local allocations
     let ref_center_y = element_y[ref] + (element_height[ref] / 2);
     let new_x = ref_center_x - (element_width[id] / 2);
     let new_y = ref_center_y - (element_height[id] / 2);
@@ -639,7 +638,7 @@ let font_2 = load_google_font(
 
 create_virtual(100);    
 
-// header
+// create an element_pool() function?? 
 let header = create_element("div");
 let header_home = create_element("button");
 let header_about = create_element("button");
@@ -694,13 +693,18 @@ function create_page_home() {
     add_event_mousedown(box_2);
 }
 
-function root_resized() {
-    if (window.innerWidth !== element_width[root]) { return 1; }
-    else if (window.innerHeight !== element_height[root]) { return 1; }
-    else { return 0; } 
+
+let root_resized = 0;
+let root_mousedown = 1;
+
+function event_root_resized() {
+    if (window.innerWidth !== element_width[root]) { root_resized = 1; }
+    else if (window.innerHeight !== element_height[root]) { root_resized = 1; }
+    else { root_resized = 0; }
+    return; 
 }
 
-function root_mousedown() {} // check if mousedown on root. If 1 then check which element.
+function event_root_mousedown() {} // check if mousedown on root. If 1 then check which element.
 
 
 let time = performance.now();
@@ -735,7 +739,7 @@ function main() {
     //console.log(delta);
 
     // window size dependent elements
-    if (root_resized() === 1) {
+    if (root_rezied === 1) {
         set_width(root, window.innerWidth);
         set_height(root, window.innerHeight);
 
