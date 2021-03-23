@@ -517,17 +517,17 @@ const CURVE_LINEAR = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]; // chan
 //const CURVE_EASE_IN;
 const CURVE_SMOOTH = [0.5, 1.0, 1.5, 2.0, 1.75, 1.5, 1.0, 0.5, 0.25, 0.1];
 
-/*
-function animation_curve_positive(checkpoint, progress, curve, func, id, delta, speed, property) {
+
+function animation(checkpoint, progress, curve, func, id, delta, speed, property) {
    
     if (progress < checkpoint * 1) {
         func(id, root, element_x[id] + ((speed * delta) * curve[0]));
         element_slide_x_progress[id] += ((speed * delta) * curve[0]);
-
+    }
 }
-*/
 
-function animation_slide_x(delta, id, start, end, speed, curve) {
+
+function animation_slide_x(delta, id, start, end, speed, curve) { // finish this function and then paste it's code into animation() to there generalize it
     
     if (element_slide_x[id] === 1) { 
         if (end > start) {
