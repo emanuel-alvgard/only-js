@@ -306,10 +306,10 @@ let update_DOM_counter = 0;
 function update_DOM() {
 
     for (update_DOM_counter = 0; update_DOM_counter < element_count; update_DOM_counter ++) {
-        if (DOM_element_update[i] === 0) {}
+        if (DOM_element_update[update_DOM_counter] === 0) {}
         else { 
-            update_DOM_element(i);
-            DOM_element_update[i] = 0; 
+            update_DOM_element(update_DOM_counter);
+            DOM_element_update[update_DOM_counter] = 0; 
         }
     }
     update_DOM_counter = 0;
@@ -530,73 +530,106 @@ function animation_slide_x(delta, id, start, end, speed, curve) { // finish this
     
     if (element_slide_x[id] === 1) { 
         if (end > start) {
-            if (element_x[id] < end) {
 
-                element_slide_x_checkpoint[id] = (end - start) / 10;
+            element_slide_x_checkpoint[id] = (end - start) / 10;
 
-                if (element_slide_x_progress[id] < element_slide_x_checkpoint[id] * 1) {
-                    set_x(id, root, element_x[id] + ((speed * delta) * curve[0]));
-                    element_slide_x_progress[id] += ((speed * delta) * curve[0]);
-                }
-                else if (element_slide_x_progress[id] < element_slide_x_checkpoint[id] * 2) {
-                    set_x(id, root, element_x[id] + ((speed * delta) * curve[1]));
-                    element_slide_x_progress[id] += ((speed * delta) * curve[1]);
-                }
-                else if (element_slide_x_progress[id] < element_slide_x_checkpoint[id] * 3) {
-                    set_x(id, root, element_x[id] + ((speed * delta) * curve[2]));
-                    element_slide_x_progress[id] += ((speed * delta) * curve[2]);
-                }
-                else if (element_slide_x_progress[id] < element_slide_x_checkpoint[id] * 4) {
-                    set_x(id, root, element_x[id] + ((speed * delta) * curve[3]));
-                    element_slide_x_progress[id] += ((speed * delta) * curve[3]);
-                }   
-                else if (element_slide_x_progress[id] < element_slide_x_checkpoint[id] * 5) {
-                    set_x(id, root, element_x[id] + ((speed * delta) * curve[4]));
-                    element_slide_x_progress[id] += ((speed * delta) * curve[4]);
-                }
-                else if (element_slide_x_progress[id] < element_slide_x_checkpoint[id] * 6) {
-                    set_x(id, root, element_x[id] + ((speed * delta) * curve[5]));
-                    element_slide_x_progress[id] += ((speed * delta) * curve[5]);
-                }
-                else if (element_slide_x_progress[id] < element_slide_x_checkpoint[id] * 7) {
-                    set_x(id, root, element_x[id] + ((speed * delta) * curve[6]));
-                    element_slide_x_progress[id] += ((speed * delta) * curve[6]);
-                }
-                else if (element_slide_x_progress[id] < element_slide_x_checkpoint[id] * 8) {
-                    set_x(id, root, element_x[id] + ((speed * delta) * curve[7]));
-                    element_slide_x_progress[id] += ((speed * delta) * curve[7]);
-                }
-                else if (element_slide_x_progress[id] < element_slide_x_checkpoint[id] * 9) {
-                    set_x(id, root, element_x[id] + ((speed * delta) * curve[8]));
-                    element_slide_x_progress[id] += ((speed * delta) * curve[8]);
-                }
-                else {
-                    set_x(id, root, element_x[id] + ((speed * delta) * curve[9]));
-                    element_slide_x_progress[id] += ((speed * delta) * curve[9]);
-                    
-                    if (element_x[id] >= end) {
-                        set_x(id, root, end); //change
-                        element_slide_x[id] = 0;
-                        element_slide_x_progress[id] = 0.0;
-                    }
-                }
+            if (element_slide_x_progress[id] < element_slide_x_checkpoint[id] * 1) {
+                set_x(id, root, element_x[id] + ((speed * delta) * curve[0]));
+                element_slide_x_progress[id] += ((speed * delta) * curve[0]);
             }
-            else {
-                //set_x(id, root, end);
-                //element_slide_x[id] = 0;
-                //element_slide_x_progress[id] = 0.0;
+            else if (element_slide_x_progress[id] < element_slide_x_checkpoint[id] * 2) {
+                set_x(id, root, element_x[id] + ((speed * delta) * curve[1]));
+                element_slide_x_progress[id] += ((speed * delta) * curve[1]);
             }
-        }
-        else if (end < start) {
-            if (element_x[id] > end) {
-                set_x(id, root, element_x[id] - (speed * delta));
+            else if (element_slide_x_progress[id] < element_slide_x_checkpoint[id] * 3) {
+                set_x(id, root, element_x[id] + ((speed * delta) * curve[2]));
+                element_slide_x_progress[id] += ((speed * delta) * curve[2]);
+            }
+            else if (element_slide_x_progress[id] < element_slide_x_checkpoint[id] * 4) {
+                set_x(id, root, element_x[id] + ((speed * delta) * curve[3]));
+                element_slide_x_progress[id] += ((speed * delta) * curve[3]);
+            }   
+            else if (element_slide_x_progress[id] < element_slide_x_checkpoint[id] * 5) {
+                set_x(id, root, element_x[id] + ((speed * delta) * curve[4]));
+                element_slide_x_progress[id] += ((speed * delta) * curve[4]);
+            }
+            else if (element_slide_x_progress[id] < element_slide_x_checkpoint[id] * 6) {
+                set_x(id, root, element_x[id] + ((speed * delta) * curve[5]));
+                element_slide_x_progress[id] += ((speed * delta) * curve[5]);
+            }
+            else if (element_slide_x_progress[id] < element_slide_x_checkpoint[id] * 7) {
+                set_x(id, root, element_x[id] + ((speed * delta) * curve[6]));
+                element_slide_x_progress[id] += ((speed * delta) * curve[6]);
+            }
+            else if (element_slide_x_progress[id] < element_slide_x_checkpoint[id] * 8) {
+                set_x(id, root, element_x[id] + ((speed * delta) * curve[7]));
+                element_slide_x_progress[id] += ((speed * delta) * curve[7]);
+            }
+            else if (element_slide_x_progress[id] < element_slide_x_checkpoint[id] * 9) {
+                set_x(id, root, element_x[id] + ((speed * delta) * curve[8]));
+                element_slide_x_progress[id] += ((speed * delta) * curve[8]);
+            }
+            else if (element_x[id] < end) {
+                set_x(id, root, element_x[id] + ((speed * delta) * curve[9]));
+                element_slide_x_progress[id] += ((speed * delta) * curve[9]);
             }
             else {
                 set_x(id, root, end);
                 element_slide_x[id] = 0;
+                element_slide_x_progress[id] = 0.0;
             }
         }
-    }    
+        else if (end < start) {
+
+            element_slide_x_checkpoint[id] = (start - end) / 10;
+
+            if (element_slide_x_progress[id] < element_slide_x_checkpoint[id] * 1) {
+                set_x(id, root, element_x[id] - ((speed * delta) * curve[0]));
+                element_slide_x_progress[id] += ((speed * delta) * curve[0]);
+            }
+            else if (element_slide_x_progress[id] < element_slide_x_checkpoint[id] * 2) {
+                set_x(id, root, element_x[id] - ((speed * delta) * curve[1]));
+                element_slide_x_progress[id] += ((speed * delta) * curve[1]);
+            }
+            else if (element_slide_x_progress[id] < element_slide_x_checkpoint[id] * 3) {
+                set_x(id, root, element_x[id] - ((speed * delta) * curve[2]));
+                element_slide_x_progress[id] += ((speed * delta) * curve[2]);
+            }
+            else if (element_slide_x_progress[id] < element_slide_x_checkpoint[id] * 4) {
+                set_x(id, root, element_x[id] - ((speed * delta) * curve[3]));
+                element_slide_x_progress[id] += ((speed * delta) * curve[3]);
+            }   
+            else if (element_slide_x_progress[id] < element_slide_x_checkpoint[id] * 5) {
+                set_x(id, root, element_x[id] - ((speed * delta) * curve[4]));
+                element_slide_x_progress[id] += ((speed * delta) * curve[4]);
+            }
+            else if (element_slide_x_progress[id] < element_slide_x_checkpoint[id] * 6) {
+                set_x(id, root, element_x[id] - ((speed * delta) * curve[5]));
+                element_slide_x_progress[id] += ((speed * delta) * curve[5]);
+            }
+            else if (element_slide_x_progress[id] < element_slide_x_checkpoint[id] * 7) {
+                set_x(id, root, element_x[id] - ((speed * delta) * curve[6]));
+                element_slide_x_progress[id] += ((speed * delta) * curve[6]);
+            }
+            else if (element_slide_x_progress[id] < element_slide_x_checkpoint[id] * 8) {
+                set_x(id, root, element_x[id] - ((speed * delta) * curve[7]));
+                element_slide_x_progress[id] += ((speed * delta) * curve[7]);
+            }
+            else if (element_slide_x_progress[id] < element_slide_x_checkpoint[id] * 9) {
+                set_x(id, root, element_x[id] - ((speed * delta) * curve[8]));
+                element_slide_x_progress[id] += ((speed * delta) * curve[8]);
+            }
+            else if (element_x[id] > end) {
+                set_x(id, root, element_x[id] - ((speed * delta) * curve[9]));
+                element_slide_x_progress[id] += ((speed * delta) * curve[9]);
+            }
+            else {
+                set_x(id, root, end);
+                element_slide_x[id] = 0;
+                element_slide_x_progress[id] = 0.0;
+            }
+        }
+    }
     else { 
         element_slide_x[id] = 1;
         set_x(id, root, start);
@@ -722,7 +755,7 @@ create_page_home();
 // *TEST*
 function animate_element_on_click(id) {
     if (element_mousedown[id] === 1) {
-        animation_slide_x(delta, id, 100, 300, 7.5, CURVE_SMOOTH);
+        animation_slide_x(delta, id, 300, 100, 7.5, CURVE_SMOOTH);
         
         if (element_slide_x[id] === 0) {
             element_mousedown[id] = 0;
@@ -740,7 +773,7 @@ function main() {
     //console.log(delta);
 
     // window size dependent elements
-    if (root_rezied === 1) {
+    if (root_resized === 1) {
         set_width(root, window.innerWidth);
         set_height(root, window.innerHeight);
 
