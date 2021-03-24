@@ -716,13 +716,12 @@ function create_page_home() {
     set_shadow(box_1, 0.1, 0.1, 10, [200, 200, 200, 1.0]);
     add_event_mousedown(box_1);
 
-    set_x(box_2, root, 600); 
+    set_x(box_2, root, 300); 
     set_y(box_2, root, 125);
     set_width(box_2, 200);
     set_height(box_2, 300);
     set_border_radius(box_2, 5);
     set_shadow(box_2, 0.1, 0.1, 10, [200, 200, 200, 1.0]);
-
     add_event_mousedown(box_2);
 }
 
@@ -753,9 +752,9 @@ create_page_home();
 
 
 // *TEST*
-function animate_element_on_click(id) {
+function animate_element_on_click(id, start, end) {
     if (element_mousedown[id] === 1) {
-        animation_slide_x(delta, id, 300, 100, 7.5, CURVE_SMOOTH);
+        animation_slide_x(delta, id, start, end, 7.5, CURVE_SMOOTH);
         
         if (element_slide_x[id] === 0) {
             element_mousedown[id] = 0;
@@ -783,7 +782,9 @@ function main() {
     }
 
 
-    animate_element_on_click(box_1);
+    animate_element_on_click(box_1, 50.0, 150.0);
+    animate_element_on_click(box_2, 300.0, 450.0);
+
     center_to_center(header_home, box_1);
 
     update_DOM();
