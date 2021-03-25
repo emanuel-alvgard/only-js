@@ -685,6 +685,7 @@ let header_about = create_element("button");
 let header_news = create_element("button");
 let box_1 = create_element("div");
 let box_2 = create_element("div");
+let input = create_element("input");
 
 function create_page_home() {
     set_width(header, DOM_window_width);
@@ -730,6 +731,12 @@ function create_page_home() {
     set_border_radius(box_2, 5);
     set_shadow(box_2, 0.1, 0.1, 10, [200, 200, 200, 1.0]);
     add_event(box_2, "mousedown");
+
+    set_x(input, root, 200);
+    set_y(input, root, 700);
+    set_z(input, root, 1);
+    set_width(input, 75);
+    set_height(input, 25);
 }
 
 
@@ -793,6 +800,7 @@ function main() {
     animate_element_on_click(box_2, 300.0, 450.0);
 
     center_to_center(header_home, box_1);
+    set_text_content(box_1, DOM_element[input].value);
 
     update_DOM();
     
