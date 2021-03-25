@@ -108,6 +108,7 @@ let DOM_element_text_content_update;
 
 // Events
 let element_mousedown;
+let element_mouseup;
 
 // Animations
 let element_slide_x;
@@ -167,6 +168,7 @@ function create_virtual(elements) {
 
     // Events
     element_mousedown = new Uint8Array(elements);
+    element_mouseup = new Uint8Array(elements);
 
     // Animations 
     element_slide_x = new Float32Array(elements);
@@ -464,12 +466,17 @@ function event_mousedown(event) {
     return;
 }
 
-function add_event_mousedown(id) {
-    DOM_element[id].addEventListener("mousedown", event_mousedown);
+function event_mouseup(event) {
+    element_mouseup[+event["srcElement"]["id"]] = 1;
     return;
 }
 
-function remove_event_mousedown(id) {
+function add_event(id, event) {    
+    if (event === "mousedown") { DOM_element[id].addEventListener("mousedown", event_mousedown); return; }
+    if (event === "mouseup") { DOM_element[id].addEventListener("mousedown", event_mouseup); return; }
+}
+
+function remove_event(id, event) {
     return;
 }
 
