@@ -5,8 +5,8 @@
 2.u8:0x100. # 0x100 is written if 0 occurs 3 or more times in a row 
 3.u8:0x100. # 
 4.u8:0x100.
-5.s."John"/1/24/32/45,"other string"/2/30/40.
-6.u8.0,2,3,4,6,34,32,7,255,0x90.
+5.s:"John"/1/24/32/45,"other string"/2/30/40.
+6.u8:0,2,3,4,6,34,32,7,255,0x90.
 
 #/ this is equal to
 
