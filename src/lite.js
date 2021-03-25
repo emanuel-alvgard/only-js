@@ -721,7 +721,7 @@ function create_page_home() {
     set_height(box_1, 300);
     set_border_radius(box_1, 5);
     set_shadow(box_1, 0.1, 0.1, 10, [200, 200, 200, 1.0]);
-    add_event_mousedown(box_1);
+    add_event(box_1, "mousedown");
 
     set_x(box_2, root, 300); 
     set_y(box_2, root, 125);
@@ -729,7 +729,7 @@ function create_page_home() {
     set_height(box_2, 300);
     set_border_radius(box_2, 5);
     set_shadow(box_2, 0.1, 0.1, 10, [200, 200, 200, 1.0]);
-    add_event_mousedown(box_2);
+    add_event(box_2, "mousedown");
 }
 
 
