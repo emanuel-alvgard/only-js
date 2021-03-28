@@ -1,6 +1,7 @@
 # to find the right id just count the dots
-
-0.u8:0x100.
+(NEW)
+[a0*100][b1,2,3,4]
+(OLD)
 1.u8:0,255,1,1,0,1.
 2.u8:0x100. # 0x100 is written if 0 occurs 3 or more times in a row 
 3.u8:0x100. # 
