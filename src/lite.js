@@ -503,6 +503,9 @@ function reset_mouseup() {
 }
 
 
+
+
+// Reset
 function reset_events() {
     if (element_mousemove[root] === 1) {
         reset_mousemove();
@@ -515,8 +518,6 @@ function reset_events() {
     }
     return;
 }
-
-
 
 
 function add_event(id, event) {
@@ -694,7 +695,7 @@ let input = create_element("input");
 let pointer = create_element("div");
 
 function create_page_home() {
-    set_width(header, DOM_root.offsetWidth);
+    set_width(header, element_width[root]);
     set_height(header, 75);
     set_shadow(header, 0.1, 0.1, 10, [200, 200, 200, 1.0]);
 
@@ -805,8 +806,8 @@ function main() {
     
     set_delta();
 
-    set_width(root, DOM_root.offsetWidth); // does not work
-    set_height(root, DOM_root.offsetHeight);
+    set_width(root, DOM_body.clientWidth); // does not work
+    set_height(root, DOM_body.clientHeight);
 
     set_width(header, element_width[root]);
     center_to_center(header_news, root);
