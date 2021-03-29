@@ -56,6 +56,10 @@ DOM_body.append(DOM_root);
 
 // DEFINE VIRTUAL
 
+// Global
+let mouse_x = 0.0;
+let mouse_y = 0.0;
+
 // Static Arrays
 // Elements
 let root = 0;
@@ -453,36 +457,67 @@ function set_text_style() {}
 
 
 
+// EVENTS
 
-// Events Root
-let root_mousemove = 0;
-let root_mouse_x = 0.0;
-let root_mouse_y = 0.0;
-let root_mousedown = 0;
-let root_mouseup = 0;
-let root_resize = 0;
-
-// Events Element
+// Mouse
 function event_mousemove(event) {
-    root_mousemove = 1;
-    root_mouse_x = event["clientX"];
-    root_mouse_y = event["clientY"];
+    element_mousemove[root] = 1;
+    mouse_x = event["clientX"];
+    mouse_y = event["clientY"];
     element_mousemove[+event["srcElement"]["id"]] = 1;
     return;
 }
 
+let _counter1;
+function reset_mousemove() {
+    for (_counter1 = 0; _counter1 < element_count; _counter1 ++) {
+        element_mousemove[_counter1] = 0;
+    }
+    return;
+}
 
 function event_mousedown(event) {
-    root_mousedown = 1;
+    element_mousedown[root] = 1;
     element_mousedown[+event["srcElement"]["id"]] = 1;
     return;
 }
 
+let _counter2;
+function reset_mousedown() {
+    for (_counter2 = 0; _counter2 < element_count; _counter2 ++) {
+        element_mousedown[_counter2] = 0;
+    }
+}
+
 function event_mouseup(event) {
-    root_mouseup = 1;
+    element_mouseup[root] = 1;
     element_mouseup[+event["srcElement"]["id"]] = 1;
     return;
 }
+
+let _counter3;
+function reset_mouseup() {
+    for (_counter3 = 0; _counter3 < element_count; _counter3 ++) {
+        element_mouseup[_counter3] = 0;
+    }
+}
+
+
+function reset_events() {
+    if (element_mousemove[root] === 1) {
+        reset_mousemove();
+    }
+    if (element_mousedown[root] === 1) {
+        reset_mousedown();
+    }
+    if (element_mouseup[root] === 1) {
+        reset_mouseup();
+    }
+    return;
+}
+
+
+
 
 function add_event(id, event) {
     if (event === "mousemove") { DOM_element[id].addEventListener("mousemove", event_mousemove); return; }    
@@ -491,25 +526,6 @@ function add_event(id, event) {
 }
 
 function remove_event(id, event) {
-    return;
-}
-
-let _counter1;
-function reset_events() {
-    root_mousemove = 0;
-    root_mousedown = 0;
-    root_mouseup = 0;
-    root_resize = 0;
-
-    for (_counter1 = 0; _counter1 < element_count; _counter1 ++) {
-        element_mousemove[_counter1] = 0;
-    }
-    for (_counter1 = 0; _counter1 < element_count; _counter1 ++) {
-        element_mousedown[_counter1] = 0;
-    }
-    for (_counter1 = 0; _counter1 < element_count; _counter1 ++) {
-        element_mouseup[_counter1] = 0;
-    }
     return;
 }
 
@@ -583,7 +599,7 @@ function animation_curve(checkpoint, progress) {
     return animation_curve_checkpoint - 1;
 }
 
-// maybe add animation_started?
+
 let animation_slide_x_checkpoint;
 function animation_slide_x(id, delta, start, end, speed, curve) {
 
@@ -751,8 +767,10 @@ function create_page_home() {
 
 // *TEST*
 function custom_pointer() {
-    if (root_mousemove === 1) {
-        center_to_center(pointer, );
+    if (element_mousemove[root] === 1) {
+        //center_to_center(pointer, );
+        set_x(pointer, root, mouse_x)
+        set_y(pointer, root, mouse_y)
     }
 }
 
@@ -770,11 +788,11 @@ create_page_home();
 
 // *TEST*
 function animate_element_on_click(id, start, end) {
-    if (element_mousedown[id] === 1) {
+    if (element_mousedown[id] === 1 && element_slide_x[id] === 0) {
         animation_slide_x(id, delta, start, end, 7.5, CURVE_SMOOTH);
         return;
     }
-    if (element_slide_x_progress != 0.0) { // NOT WORKING
+    if (element_slide_x[id] === 1) {
         animation_slide_x(id, delta, start, end, 7.5, CURVE_SMOOTH);
         return;
     }
@@ -795,7 +813,7 @@ function main() {
     center_to_center(header_about, box_2);
 
     animate_element_on_click(box_1, 50.0, 200.0);
-    //animate_element_on_click(box_2, 300.0, 450.0);
+    animate_element_on_click(box_2, 300.0, 450.0);
 
     center_to_center(header_home, box_1);
     set_text_content(box_1, DOM_element[input].value);
