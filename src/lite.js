@@ -9,9 +9,6 @@
 // add + before 64bit floats and |0 after 32bit ints
 
 
-let DOM_window_width = window.innerWidth;
-let DOM_window_height = window.innerHeight;
-
 // DOM HEAD
 let DOM_head = document.head;
 let google_fonts = document.createElement("link");
@@ -41,7 +38,6 @@ let DOM_body = document.body;
 DOM_body.style.margin = "0px";
 DOM_body.style.left = "0px";
 DOM_body.style.top = "0px";
-//DOM_body.style.backgroundColor = "lightgray";
 
 // DOM ROOT
 let DOM_root = document.createElement("div");
@@ -52,8 +48,8 @@ DOM_root.style.padding = "0px";
 DOM_root.style.border = "none";
 DOM_root.style.left = "0px";
 DOM_root.style.top = "0px";
-DOM_root.style.width = DOM_window_width + "px";
-DOM_root.style.height = DOM_window_height + "px";
+DOM_root.style.width = "100%";
+DOM_root.style.height = "100%";
 DOM_root.style.zIndex = "0";
 DOM_root.style.backgroundColor = "rgba(225, 225, 225, 1.0)";
 DOM_body.append(DOM_root);
@@ -109,6 +105,7 @@ let DOM_element_border_radius_update;
 let DOM_element_text_content_update;
 
 // Events
+let element_mousemove;
 let element_mousedown;
 let element_mouseup;
 
@@ -169,6 +166,7 @@ function create_virtual(elements) {
     DOM_element_text_content_update = new Uint8Array(elements);
 
     // Events
+    element_mousemove = new Uint8Array(elements);
     element_mousedown = new Uint8Array(elements);
     element_mouseup = new Uint8Array(elements);
 
@@ -306,17 +304,17 @@ function update_DOM_element(id) {
     return;
 }
 
-let update_DOM_counter = 0;
+let _counter0;
 function update_DOM() {
 
-    for (update_DOM_counter = 0; update_DOM_counter < element_count; update_DOM_counter ++) {
-        if (DOM_element_update[update_DOM_counter] === 0) {}
+    for (_counter0 = 1; _counter0 < element_count; _counter0 ++) {
+        if (DOM_element_update[_counter0] === 0) {}
         else { 
-            update_DOM_element(update_DOM_counter);
-            DOM_element_update[update_DOM_counter] = 0; 
+            update_DOM_element(_counter0);
+            DOM_element_update[_counter0] = 0; 
         }
     }
-    update_DOM_counter = 0;
+    _counter0 = 0;
     return;
 }
 
@@ -456,31 +454,73 @@ function set_text_style() {}
 
 
 
+// Events Root
+let root_mousemove = 0;
+let root_mouse_x = 0.0;
+let root_mouse_y = 0.0;
+let root_mousedown = 0;
+let root_mouseup = 0;
+let root_resize = 0;
+
+// Events Element
+function event_mousemove(event) {
+    root_mousemove = 1;
+    root_mouse_x = event["clientX"];
+    root_mouse_y = event["clientY"];
+    element_mousemove[+event["srcElement"]["id"]] = 1;
+    return;
+}
 
 
-
-
-
-
-// Events
 function event_mousedown(event) {
+    root_mousedown = 1;
     element_mousedown[+event["srcElement"]["id"]] = 1;
     return;
 }
 
 function event_mouseup(event) {
+    root_mouseup = 1;
     element_mouseup[+event["srcElement"]["id"]] = 1;
     return;
 }
 
-function add_event(id, event) {    
+function add_event(id, event) {
+    if (event === "mousemove") { DOM_element[id].addEventListener("mousemove", event_mousemove); return; }    
     if (event === "mousedown") { DOM_element[id].addEventListener("mousedown", event_mousedown); return; }
-    if (event === "mouseup") { DOM_element[id].addEventListener("mousedown", event_mouseup); return; }
+    if (event === "mouseup") { DOM_element[id].addEventListener("mouseup", event_mouseup); return; }
 }
 
 function remove_event(id, event) {
     return;
 }
+
+let _counter1;
+function reset_events() {
+    root_mousemove = 0;
+    root_mousedown = 0;
+    root_mouseup = 0;
+    root_resize = 0;
+
+    for (_counter1 = 0; _counter1 < element_count; _counter1 ++) {
+        element_mousemove[_counter1] = 0;
+    }
+    for (_counter1 = 0; _counter1 < element_count; _counter1 ++) {
+        element_mousedown[_counter1] = 0;
+    }
+    for (_counter1 = 0; _counter1 < element_count; _counter1 ++) {
+        element_mouseup[_counter1] = 0;
+    }
+    return;
+}
+
+
+
+
+
+
+
+
+
 
 
 // UTILITY FUNCTIONS
@@ -493,6 +533,10 @@ function center_to_center(id, ref) {
     set_x(id, root, new_x);
     set_y(id, root, new_y);
     return;
+}
+
+function center_to_point(id, x, y) {
+    return; 
 }
 
 function infront() {}
@@ -539,7 +583,7 @@ function animation_curve(checkpoint, progress) {
     return animation_curve_checkpoint - 1;
 }
 
-
+// maybe add animation_started?
 let animation_slide_x_checkpoint;
 function animation_slide_x(id, delta, start, end, speed, curve) {
 
@@ -583,7 +627,7 @@ function animation_slide_x(id, delta, start, end, speed, curve) {
     }
     else { 
         element_slide_x[id] = 1;
-        set_x(id, root, start);
+        set_x(id, root, start);   
     }
     return;
 }
@@ -620,7 +664,8 @@ let font_2 = load_google_font(
     "Lato", "http://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext"
     );
 
-create_virtual(100);    
+create_virtual(100);
+add_event(root, "mousemove");
 
 // create an element_pool() function?? 
 let header = create_element("div");
@@ -630,9 +675,10 @@ let header_news = create_element("button");
 let box_1 = create_element("div");
 let box_2 = create_element("div");
 let input = create_element("input");
+let pointer = create_element("div");
 
 function create_page_home() {
-    set_width(header, DOM_window_width);
+    set_width(header, DOM_root.offsetWidth);
     set_height(header, 75);
     set_shadow(header, 0.1, 0.1, 10, [200, 200, 200, 1.0]);
 
@@ -681,6 +727,13 @@ function create_page_home() {
     set_z(input, root, 1);
     set_width(input, 75);
     set_height(input, 25);
+
+    set_x(pointer, root, 25);
+    set_y(pointer, root, 200);
+    set_width(pointer, 50);
+    set_height(pointer, 50);
+    set_z(pointer, root, -1.0);
+    add_event(pointer, "mousemove");
 }
 
 
@@ -696,21 +749,12 @@ function create_page_home() {
 
 
 
-
-
-// move up to events??
-let root_resized = 0;
-let root_mousedown = 1;
-
-function root_event_resized() { // maybe root should be 100% height??
-    if (window.innerWidth !== element_width[root]) { root_resized = 1; }
-    else if (window.innerHeight !== element_height[root]) { root_resized = 1; }
-    else { root_resized = 0; }
-    return; 
+// *TEST*
+function custom_pointer() {
+    if (root_mousemove === 1) {
+        center_to_center(pointer, );
+    }
 }
-
-function root_event_mousedown() {} // check if mousedown on root. If 1 then check which element.
-
 
 let time = performance.now();
 let delta = 0.0
@@ -728,39 +772,37 @@ create_page_home();
 function animate_element_on_click(id, start, end) {
     if (element_mousedown[id] === 1) {
         animation_slide_x(id, delta, start, end, 7.5, CURVE_SMOOTH);
-        
-        if (element_slide_x[id] === 0) {
-            element_mousedown[id] = 0;
-        }
+        return;
     }
-    //console.log(element_animation_slide[id]);
+    if (element_slide_x_progress != 0.0) { // NOT WORKING
+        animation_slide_x(id, delta, start, end, 7.5, CURVE_SMOOTH);
+        return;
+    }
     return;
 }
 
 
+// *TEST*
 function main() {
     
     set_delta();
-    root_event_resized();
-    //console.log(delta);
 
-    // window size dependent elements
-    if (root_resized === 1) {
-        set_width(root, window.innerWidth);
-        set_height(root, window.innerHeight);
+    set_width(root, DOM_root.offsetWidth); // does not work
+    set_height(root, DOM_root.offsetHeight);
 
-        set_width(header, element_width[root]);
-        center_to_center(header_news, root);
-        center_to_center(header_about, box_2);
-    }
+    set_width(header, element_width[root]);
+    center_to_center(header_news, root);
+    center_to_center(header_about, box_2);
 
-
-    animate_element_on_click(box_1, 50.0, 200.0); // this is an animation component
-    animate_element_on_click(box_2, 300.0, 450.0);
+    animate_element_on_click(box_1, 50.0, 200.0);
+    //animate_element_on_click(box_2, 300.0, 450.0);
 
     center_to_center(header_home, box_1);
     set_text_content(box_1, DOM_element[input].value);
 
+    custom_pointer();
+
+    reset_events();
     update_DOM();
     
     return window.requestAnimationFrame(main);
