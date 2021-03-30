@@ -124,7 +124,7 @@ let element_border_style;
 let element_text_content;
 
 
-// CREATE VIRTUAL
+// CREATE VIRTUAL ELEMENTS
 function create_virtual(elements) {
 
     // Static arrays
@@ -186,6 +186,14 @@ function create_virtual(elements) {
 
     return;
 }
+
+// GET PROPERTY
+function x(id) { return element_x[id]; }
+function y(id) { return element_y[id]; }
+function z(id) { return element_z[id]; }
+function rotation(id) { return element_rotation[id]; }
+function width(id) { return element_width[id]; }
+function height(id) { return element_height[id]; }
 
 // Element
 function create_element(type) {
