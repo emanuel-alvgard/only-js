@@ -8,7 +8,6 @@
 // setup set_text function and other text functions
 // add + before 64bit floats and |0 after 32bit ints
 
-
 // DOM HEAD
 let DOM_head = document.head;
 let google_fonts = document.createElement("link");
