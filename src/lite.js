@@ -187,12 +187,12 @@ function create_virtual(elements) {
 }
 
 // GET PROPERTY
-function x(id) { return element_x[id]; }
-function y(id) { return element_y[id]; }
-function z(id) { return element_z[id]; }
-function rotation(id) { return element_rotation[id]; }
-function width(id) { return element_width[id]; }
-function height(id) { return element_height[id]; }
+function get_x(id) { return element_x[id]; }
+function get_y(id) { return element_y[id]; }
+function get_z(id) { return element_z[id]; }
+function get_rotation(id) { return element_rotation[id]; }
+function get_width(id) { return element_width[id]; }
+function get_height(id) { return element_height[id]; }
 
 // Element
 function create_element(type) {
@@ -404,6 +404,13 @@ function set_skew_y(id, scale) {
 
 
 // Style
+function set_background_color() {}
+function set_background_image() {}
+function set_background_position() {}
+function set_background_attachment() {}
+function set_background_repeat() {}
+
+function set_overflow() {}
 function set_opacity() {}
 
 function set_shadow(id, x, y, blur, color) { // split up into separate functions like (shadow_color etc.)
@@ -419,6 +426,9 @@ function set_shadow(id, x, y, blur, color) { // split up into separate functions
     return;
 }
 
+function set_border_color() {}
+function set_border_width() {}
+
 function set_border_style() {
     DOM_element_border_style_update[id] = 1;
 }
@@ -429,6 +439,10 @@ function set_border_radius(id, radius) {
     DOM_element_update[id] = 1;
     return;
 }
+
+function set_filter_url() {} // (string)
+function set_filter_blur() {} // (px)
+function set_filter_color() {} // contrast, grayscale etc. (%)
 
 // Text
 function set_text_content(id, text) {
@@ -455,6 +469,9 @@ function set_text_font(id, font) {
 function set_text_size() {}
 function set_text_color() {}
 function set_text_style() {}
+function set_text_decoration() {}
+function set_text_indent() {}
+function set_text_spacing() {}
 */
 
 
