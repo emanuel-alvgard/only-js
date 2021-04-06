@@ -1,4 +1,7 @@
 # lite.js
+------
+*Data oriented DOM wrapper and UI library.*
+------
 **Examples**
 ````
 // CREATE
