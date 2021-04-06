@@ -6,6 +6,6 @@ get_x()
 get_y()
 
 ````
-Features
+**Features**
 ------
 + FAST
