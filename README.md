@@ -3,21 +3,23 @@
 
 **Examples**
 ------
+**Create**
 ````
-// CREATE
 element = create_element("div");
-
-// GET
+````
+**Get**
+````
 get_x(element)
 get_y(element)
-
-// SET
+````
+**Set**
+````
 set_x(element, root, 100.0);
 set_y(element, root, 100.0);
-
-// DELETE
+````
+**Delete**
+````
 delete_element(element);
-
 ````
 **Features**
 ------
