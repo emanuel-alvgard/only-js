@@ -1,7 +1,8 @@
-# lite.js
+# lite.js 
 *Data oriented DOM wrapper and UI library.*
-------
+
 **Examples**
+------
 ````
 // CREATE
 element = create_element("div");
