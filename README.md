@@ -26,5 +26,6 @@ delete_element(element);
 + Fast
 + Small
 + Readable
-+ Pure Javascript
++ Pure Javascript (no template syntax)
 + SOA memory layout and access
++ Zero dependencies
