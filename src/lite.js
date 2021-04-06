@@ -187,14 +187,56 @@ function create_virtual(elements) {
 }
 
 // GET PROPERTY
+// Misc
+function get_visibility() {}
+function get_cursor_style() {}
+function get_overflow() {}
+function get_opacity() {}
+
+// Position
 function get_x(id) { return element_x[id]; }
 function get_y(id) { return element_y[id]; }
 function get_z(id) { return element_z[id]; }
 function get_rotation(id) { return element_rotation[id]; }
+
+// Dimensions
 function get_width(id) { return element_width[id]; }
 function get_height(id) { return element_height[id]; }
+function get_clip(id) {}
+function get_scale_x() {}
+function get_scale_y() {}
+function get_skew_x() {}
+function get_skew_y() {}
 
-// Element
+// Background
+function get_background_color() {}
+function get_background_image() {}
+function get_background_position() {}
+function get_background_attachment() {}
+function get_background_repeat() {}
+
+// Shadow
+
+// Border
+
+// Filter
+
+
+// Text
+function get_text_content() {}
+function get_text_font() {}
+function get_text_align() {}
+function get_text_size() {}
+function get_text_weight() {}
+function get_text_variant() {}
+function get_text_color() {}
+function get_text_style() {}
+function get_text_decoration() {}
+function get_text_indent() {}
+function get_text_spacing() {}
+
+
+// CREATE ELEMENT
 function create_element(type) {
 
     let fragment = document.createDocumentFragment();
@@ -344,9 +386,12 @@ function update_DOM() {
 
 
 // PROPERTY WRAPPER
-// Visibility
-function show(id) {}
-function hide(id) {}
+// Misc
+function set_visibility(id) {} // uses the DOM display property (none)
+function set_cursor_style() {}
+function set_overflow() {}
+function set_opacity() {}
+
 
 // Position
 function set_x(id, origin, x) {
@@ -389,6 +434,8 @@ function set_height(id, height) {
     return;
 }
 
+function set_clip() {}
+
 function set_scale_x(id, scale) {
     DOM_element_transform_update[id] = 1;
 }
@@ -403,16 +450,15 @@ function set_skew_y(id, scale) {
 }
 
 
-// Style
+// Background
 function set_background_color() {}
 function set_background_image() {}
 function set_background_position() {}
 function set_background_attachment() {}
 function set_background_repeat() {}
 
-function set_overflow() {}
-function set_opacity() {}
 
+// Shadow
 function set_shadow(id, x, y, blur, color) { // split up into separate functions like (shadow_color etc.)
     element_shadow_x[id] = x;
     element_shadow_y[id] = y;
@@ -426,6 +472,7 @@ function set_shadow(id, x, y, blur, color) { // split up into separate functions
     return;
 }
 
+// Border
 function set_border_color() {}
 function set_border_width() {}
 
@@ -440,6 +487,7 @@ function set_border_radius(id, radius) {
     return;
 }
 
+// Filter
 function set_filter_url() {} // (string)
 function set_filter_blur() {} // (px)
 function set_filter_color() {} // contrast, grayscale etc. (%)
@@ -452,7 +500,6 @@ function set_text_content(id, text) {
     return;
 }
 
-/*
 function set_text_align(origin) {
     if (origin === "left") {}
     else if (origin === "center") {}
@@ -467,12 +514,14 @@ function set_text_font(id, font) {
 }
 
 function set_text_size() {}
+function set_text_weight() {}
+function set_text_variant() {}
 function set_text_color() {}
 function set_text_style() {}
 function set_text_decoration() {}
 function set_text_indent() {}
 function set_text_spacing() {}
-*/
+
 
 
 
@@ -531,19 +580,14 @@ function reset_mouseup() {
 
 // Reset
 function reset_events() {
-    if (element_mousemove[root] === 1) {
-        reset_mousemove();
-    }
-    if (element_mousedown[root] === 1) {
-        reset_mousedown();
-    }
-    if (element_mouseup[root] === 1) {
-        reset_mouseup();
-    }
+    if (element_mousemove[root] === 1) { reset_mousemove(); }
+    if (element_mousedown[root] === 1) { reset_mousedown(); }
+    if (element_mouseup[root] === 1) { reset_mouseup(); }
     return;
 }
 
 
+// Add / Remove
 function add_event(id, event) {
     if (event === "mousemove") { DOM_element[id].addEventListener("mousemove", event_mousemove); return; }    
     if (event === "mousedown") { DOM_element[id].addEventListener("mousedown", event_mousedown); return; }
