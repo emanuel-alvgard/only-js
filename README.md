@@ -23,4 +23,8 @@ delete_element(element);
 ````
 **Features**
 ------
-+ FAST
++ Fast
++ Small
++ Readable
++ Pure Javascript
++ SOA memory layout and access
