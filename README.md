@@ -7,6 +7,9 @@
 ```javascript
 import lite
 
+// Element buffer
+create_virtual(3);
+
 // Header
 header = create_element("div");
 set_width(header, get_width(root));
