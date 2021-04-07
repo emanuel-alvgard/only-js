@@ -4,27 +4,27 @@ Data oriented web framework.
 **Examples**
 ------
 ```javascript
-import lite
+import lt from 'lite.js'
 
-create_virtual_DOM(3);
+lt.create_virtual_DOM(3);
 
-header = create_element("div");
-set_width(header, get_width(root));
-set_height(header, 100.0);
+header = lt.create_element("div");
+lt.set_width(header, get_width(root));
+lt.set_height(header, 100.0);
 
-b1 = create_element("button");
-set_width(b1, 50.0);
-set_height(b1, 25.0);
-set_x(b1, header, 50.0);
-set_y(b1, header, 50.0);
-set_text_content(b1, "Button 1");
+b1 = lt.create_element("button");
+lt.set_width(b1, 50.0);
+lt.set_height(b1, 25.0);
+lt.set_x(b1, header, 50.0);
+lt.set_y(b1, header, 50.0);
+lt.set_text_content(b1, "Button 1");
 
-b2 = create_element("button");
-set_width(b2, 50.0);
-set_height(b2, 25.0);
-set_x(b2, header, 150.0);
-set_y(b2, header, 50.0);
-set_text_content(b2, "Button 2");
+b2 = lt.create_element("button");
+lt.set_width(b2, 50.0);
+lt.set_height(b2, 25.0);
+lt.set_x(b2, header, 150.0);
+lt.set_y(b2, header, 50.0);
+lt.set_text_content(b2, "Button 2");
 ```
 **Features**
 ------
