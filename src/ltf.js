@@ -1,7 +1,9 @@
 "use strict";
 
+// This is a parser for the "lite format" (ltf).
+
 // belongs to the caller
-let ltn_data = "(u8:1,2,3,0x7)(f32:1.0,2.0,0.0x8)";
+let ltf_data = "(u8:1,2,3,0x7)(f32:1.0,2.0,0.0x8)";
 let reciever;
 
 // this belongs to this module
@@ -112,4 +114,4 @@ function load(array, data, id) {
 
 
 
-load(reciever, ltn_data, 1);
+load(reciever, ltf_data, 1);

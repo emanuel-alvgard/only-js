@@ -7,6 +7,7 @@
 // TODO
 // setup set_text function and other text functions
 // add + before 64bit floats and |0 after 32bit ints
+// consider changing all 1/0 arrays from Uint to Int instead?
 
 // DOM HEAD
 let DOM_head = document.head;
