@@ -1,9 +1,8 @@
 # lite.js 
-*Data oriented web framework*
+Data oriented web framework.
 
 **Examples**
 ------
-**Header Menu**
 ```javascript
 import lite
 
@@ -29,10 +28,14 @@ set_text_content(b2, "Button 2");
 ```
 **Features**
 ------
-+ Fast
-+ Small
-+ Readable
-+ Pure Javascript (no template syntax)
-+ SOA memory layout and access
++ Pure JavaScript (no template syntax)
 + Zero dependencies
 + Virtually no garbage collection
++ SOA (structure of arrays) memory layout and access
++ Virtual DOM with flat hierarchy
+
+**Vision**
+------
+*To create a data oriented web framework 
+with as little performance bottlenecks as possible and where 
+JavaScript, HTML and CSS are unified into a coherent, readable and pure JavaScript API.*
