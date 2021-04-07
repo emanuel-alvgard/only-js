@@ -33,6 +33,7 @@ set_text_content(b2, "Button 2");
 + Virtually no garbage collection
 + SOA (structure of arrays) memory layout and access
 + Virtual DOM with flat hierarchy
++ Avoids JIT deoptimization
 
 **Vision**
 ------
