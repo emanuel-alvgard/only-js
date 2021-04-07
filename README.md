@@ -5,6 +5,8 @@
 ------
 **Header Menu**
 ```javascript
+import lite
+
 // Header
 header = create_element("div");
 set_width(header, get_width(root));
@@ -34,3 +36,4 @@ set_text_content(b2, "Button 2");
 + Pure Javascript (no template syntax)
 + SOA memory layout and access
 + Zero dependencies
++ Virtually no garbage collection
