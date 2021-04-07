@@ -1,5 +1,5 @@
 # lite.js 
-Data oriented web framework.
+Data Oriented Web Framework.
 
 **Examples**
 ------
