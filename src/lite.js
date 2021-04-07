@@ -124,8 +124,10 @@ let element_text_content;
 
 
 // CREATE VIRTUAL ELEMENTS
-function create_virtual(elements) {
-
+function create_virtual(size) {
+    
+    let elements = size + 1;
+    
     // Static arrays
     element_id = new Uint8Array(elements);
     element_x = new Float32Array(elements);
