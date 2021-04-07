@@ -249,6 +249,7 @@ function create_element(type) {
     element.style.position = "absolute";
     element.style.margin = "0px";
     element.style.padding = "0px";
+    element.style.outline = "none";
     
     fragment.append(element);
     DOM_root.append(fragment);
