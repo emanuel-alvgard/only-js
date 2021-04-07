@@ -9,7 +9,7 @@ import lt from 'lite.js'
 lt.create_virtual_DOM(3);
 
 header = lt.create_element("nav");
-lt.set_width(header, get_width(root));
+lt.set_width(header, lt.get_width(root));
 lt.set_height(header, 100.0);
 
 b1 = lt.create_element("button");
