@@ -6,7 +6,7 @@ Data oriented web framework.
 ```javascript
 import lite
 
-create_virtual(3);
+create_virtual_DOM(3);
 
 header = create_element("div");
 set_width(header, get_width(root));

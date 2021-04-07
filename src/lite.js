@@ -124,8 +124,8 @@ let element_border_style;
 let element_text_content;
 
 
-// CREATE VIRTUAL ELEMENTS
-function create_virtual(size) {
+// VIRTUAL DOM
+function create_virtual_DOM(size) {
     
     let elements = size + 1;
     
@@ -592,7 +592,7 @@ function reset_events() {
 
 
 // Add / Remove
-function add_event(id, event) {
+function add_event(event, id) {
     if (event === "mousemove") { DOM_element[id].addEventListener("mousemove", event_mousemove); return; }    
     if (event === "mousedown") { DOM_element[id].addEventListener("mousedown", event_mousedown); return; }
     if (event === "mouseup") { DOM_element[id].addEventListener("mouseup", event_mouseup); return; }
@@ -753,8 +753,8 @@ let font_2 = load_google_font(
     "Lato", "http://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext"
     );
 
-create_virtual(100);
-add_event(root, "mousemove");
+create_virtual_DOM(100);
+add_event("mousemove", root);
 
 // create an element_pool() function?? 
 let header = create_element("div");
@@ -801,7 +801,7 @@ function create_page_home() {
     set_height(box_1, 300);
     set_border_radius(box_1, 5);
     set_shadow(box_1, 0.1, 0.1, 10, [200, 200, 200, 1.0]);
-    add_event(box_1, "mousedown");
+    add_event("mousedown", box_1);
 
     set_x(box_2, root, 300); 
     set_y(box_2, root, 125);
@@ -809,7 +809,7 @@ function create_page_home() {
     set_height(box_2, 300);
     set_border_radius(box_2, 5);
     set_shadow(box_2, 0.1, 0.1, 10, [200, 200, 200, 1.0]);
-    add_event(box_2, "mousedown");
+    add_event("mousedown", box_2);
 
     set_x(input, root, 200);
     set_y(input, root, 700);
@@ -822,7 +822,7 @@ function create_page_home() {
     set_width(pointer, 50);
     set_height(pointer, 50);
     set_z(pointer, root, -1.0);
-    add_event(pointer, "mousemove");
+    add_event("mousemove", pointer);
 }
 
 
