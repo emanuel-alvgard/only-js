@@ -28,6 +28,7 @@ lt.set_text_content(b2, "Button 2");
 ```
 **Features**
 ------
++ Superior runtime performance
 + Pure JavaScript (no template syntax)
 + Zero dependencies
 + Virtually no garbage collection
