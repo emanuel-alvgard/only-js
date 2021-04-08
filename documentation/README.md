@@ -14,8 +14,11 @@ function_name(parameter_name: example_value) --> (example_return_value)
 ```
 **create**
 ```javascript
-create_virtual_DOM(size: 0) --> (null)
-create_element(type: "div", id: 0) --> (0)
+create_virtual_DOM(size)
+(1) --> (null)
+
+create_element(type)
+("div") --> (1)
 ```
 **get**
 ```javascript
