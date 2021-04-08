@@ -34,26 +34,26 @@ delete_element(id: 0) --> (null)
 ```
 **event**
 ```javascript
-add_event("", 0) -> (null)
-remove_event("", 0) -> (null)
+add_event(id: 0) --> (null)
+remove_event(id: 0) --> (null)
 ```
 **animation**
 ```javascript
 animation_slide_x(
-  id: 0
-  delta: 0.0
-  start: 0.0
-  end: 0.0
-  speed: 0.0
+  id: 0,
+  delta: 0.0,
+  start: 0.0,
+  end: 0.0,
+  speed: 0.0,
   curve: [0.0]
  ) --> (null)
  
 animation_slide_y(
-  id: 0
-  delta: 0.0
-  start: 0.0
-  end: 0.0
-  speed: 0.0
+  id: 0,
+  delta: 0.0,
+  start: 0.0,
+  end: 0.0,
+  speed: 0.0,
   curve: [0.0]
  ) --> (null)
 ```
