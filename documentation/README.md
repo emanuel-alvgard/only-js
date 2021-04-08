@@ -1,4 +1,4 @@
-# Reference
+# lite API Reference
 **Structure**
 ------
 *The lite api is structured as follows:*
@@ -22,23 +22,22 @@ create_element("div");
 
 **create**
 ------
+*create_virtual_DOM*
 ```javascript
-create_virtual_DOM(size);
+create_virtual_DOM(size)
 create_virtual_DOM(1);
-  
-create_element("div");
-  type: string
+```
+*create_element*
+```javascript
+create_element(type)
+element = create_element("div");
 ```
 **get**
 ------
+*get_x*
 ```javascript
-get_x(element: integer, x: float);
-get_y();
-get_z();
-get_rotation();
-
-get_width();
-get_height();
+get_x(id)
+get_x(element);
 ```
 **set**
 ------
