@@ -11,7 +11,7 @@
 **create**
 ```javascript
 create_virtual_DOM(size: 0) --> (null)
-create_element(type: "") --> (0)
+create_element(type: "", id: 0) --> (0)
 ```
 **get**
 ```javascript
