@@ -9,8 +9,8 @@
 7. *animation* - functions that use set function calls over multiple frames
 
 **The *api reference* is structured as follows:**
-1. Below are *examples* of each fucntion call
-2. *Click* the function name to see the full definition
+1. Below are *examples* of each function call
+2. *Click the function name* to see the full definition
 
 **create**
 ```javascript
