@@ -9,58 +9,40 @@
 7. *animation* - functions that use set function calls over multiple frames
 
 **The *api reference* is structured as follows:**
-```
-function_name(parameter_name: example_value) --> (example_return_value)
-```
+1. below are *example calls of each function*
+2. *click the function name* to see the full definition
+
 **create**
 ```javascript
-create_virtual_DOM(size)
-(1) --> (null)
-
-create_element(type)
-("div") --> (1)
+create_virtual_DOM(1);
+element = create_element("div");
 ```
 **get**
 ```javascript
-get_x(id: 0) --> (0.0)
-get_y(id: 0) --> (0.0)
-get_z(id: 0) --> (0.0)
+x = get_x(element);
+y = get_y(element);
+z = get_z(element);
 ```
 **set**
 ```javascript
-set_x(id: 0, origin: 0, x: 0.0) --> (null)
-set_y(id: 0, origin: 0, y: 0.0) --> (null)
-set_z(id: 0, origin: 0, z: 0.0) --> (null)
+set_x(element, root, 1.0);
+set_y(element, root, 1.0);
+set_z(element, root, 1.0);
 ```
 **update**
 ```javascript
 ```
 **delete**
 ```javascript
-delete_element(id: 0) --> (null)
+delete_element(element);
 ```
 **event**
 ```javascript
-add_event(event: "mousedown", id: 0) --> (null)
-remove_event(event: "mousedown", id: 0) --> (null)
+add_event("mousedown", element);
+remove_event("mousedown", element);
 ```
 **animation**
 ```javascript
-animation_slide_x(
-  id: 0,
-  delta: 0.0,
-  start: 0.0,
-  end: 0.0,
-  speed: 0.0,
-  curve: [0.0]
- ) --> (null)
- 
-animation_slide_y(
-  id: 0,
-  delta: 0.0,
-  start: 0.0,
-  end: 0.0,
-  speed: 0.0,
-  curve: [0.0]
- ) --> (null)
+animation_slide_x(element, delta, 1.0, 2.0, 1.0, CURVE_LINEAR);
+animation_slide_y(element, delta, 1.0, 2.0, 1.0, CURVE_LINEAR);
 ```
