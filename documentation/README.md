@@ -22,19 +22,16 @@ create_element("div");
 
 **create**
 ------
-*create_virtual_DOM*
 ```javascript
 create_virtual_DOM(size)
 create_virtual_DOM(1);
 ```
-*create_element*
 ```javascript
 create_element(type)
 element = create_element("div");
 ```
 **get**
 ------
-*get_x*
 ```javascript
 get_x(id)
 get_x(element);
