@@ -1,5 +1,5 @@
 # lite API Reference
-***The lite api is structured as follows:***
+**The lite api is structured as follows:**
 1. create - functions that creates/initializes element/object
 2. get - functions that gets a element property
 3. set - functions that sets a element property
