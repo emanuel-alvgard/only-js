@@ -26,9 +26,9 @@ z = get_z(element);
 ```
 **set**
 ```javascript
-set_x(element, root, 1.0);
-set_y(element, root, 1.0);
-set_z(element, root, 1.0);
+set_x(element, reference_element, 1.0);
+set_y(element, reference_element, 1.0);
+set_z(element, reference_element, 1.0);
 ```
 **update**
 ```javascript
