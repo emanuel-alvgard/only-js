@@ -8,6 +8,7 @@
 6. *event* - functions that adds, removes and handles events 
 7. *animation* - functions that use set function calls over multiple frames
 8. *utility* - functions that solve some common tasks
+9. *global* - global constants and variables
 
 **The *api reference* is structured as follows:**
 1. Below are *examples* of each function call
@@ -50,4 +51,11 @@ animation_slide_y(element, delta, 1.0, 2.0, 1.0, CURVE_LINEAR);
 **utility**
 ```javascript
 center_to_center(element, reference_element);
+```
+**global**
+```javascript
+ROOT = 0;
+CURVE_LINEAR = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0];
+CURVE_QUAD = [];
+CURVE_CUBE = [];
 ```
