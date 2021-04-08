@@ -1,5 +1,5 @@
 # lite API Reference
-**The lite api is structured as follows:**
+**The *lite api* is structured as follows:**
 1. *create* - functions that creates/initializes element/object
 2. *get* - functions that gets a element property
 3. *set* - functions that sets a element property
@@ -8,10 +8,14 @@
 6. *event* - functions that adds, removes and handles events 
 7. *animation* - functions that use set function calls over multiple frames
 
+**The *api reference* is structured as follows:**
+```
+function_name(parameter_name: example_value) --> (example_return_value)
+```
 **create**
 ```javascript
 create_virtual_DOM(size: 0) --> (null)
-create_element(type: "", id: 0) --> (0)
+create_element(type: "div", id: 0) --> (0)
 ```
 **get**
 ```javascript
@@ -34,8 +38,8 @@ delete_element(id: 0) --> (null)
 ```
 **event**
 ```javascript
-add_event(id: 0) --> (null)
-remove_event(id: 0) --> (null)
+add_event(event: "mousedown", id: 0) --> (null)
+remove_event(event: "mousedown", id: 0) --> (null)
 ```
 **animation**
 ```javascript
