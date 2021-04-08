@@ -9,13 +9,11 @@
 7. animation - functions that use set function calls over multiple frames
 
 **create**
-------
 ```javascript
 create_virtual_DOM(size)
 create_element(type)
 ```
 **get**
-------
 ```javascript
 get_x(id)
 get_y(id)
@@ -27,12 +25,15 @@ set_x(id, origin, x)
 set_y(id, origin, y)
 set_z(id, origin, z)
 ```
-------
 **update**
-------
+```javascript
+```
 **delete**
-------
+```javascript
+```
 **event**
-------
+```javascript
+```
 **animation**
-------
+```javascript
+```
