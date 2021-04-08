@@ -34,7 +34,7 @@ delete_element(id: 0) -> (null)
 ```
 **event**
 ```javascript
-add_event(name: "") -> (null)
+add_event(name: "") return (null)
 //remove_event(event_name: "") -> (null)
 ```
 **animation**
