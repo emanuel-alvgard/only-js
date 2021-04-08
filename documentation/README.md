@@ -49,5 +49,5 @@ animation_slide_y(element, delta, 1.0, 2.0, 1.0, CURVE_LINEAR);
 ```
 **utility**
 ```javascript
-center_to_center(element, target_element);
+center_to_center(element, reference_element);
 ```
