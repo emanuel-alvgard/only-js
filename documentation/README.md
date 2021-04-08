@@ -10,20 +10,20 @@
 
 **create**
 ```javascript
-create_virtual_DOM(size)
-create_element(type)
+create_virtual_DOM(size: int) -> (null)
+create_element(type: string) -> (integer)
 ```
 **get**
 ```javascript
-get_x(id)
-get_y(id)
-get_z(id)
+get_x(id: int) -> (float)
+get_y(id: int) -> (float)
+get_z(id: int) -> (float)
 ```
 **set**
 ```javascript
-set_x(id, origin, x)
-set_y(id, origin, y)
-set_z(id, origin, z)
+set_x(id: int, origin: int, x: float) -> (null)
+set_y(id: int, origin: int, y: float) -> (null)
+set_z(id: int, origin: int, z: float) -> (null)
 ```
 **update**
 ```javascript
