@@ -7,6 +7,7 @@
 5. *delete* - functions that deletes/deinitializes an element/object
 6. *event* - functions that adds, removes and handles events 
 7. *animation* - functions that use set function calls over multiple frames
+8. *utility* - functions solve some common tasks
 
 **The *api reference* is structured as follows:**
 1. Below are *examples* of each function call
@@ -45,4 +46,8 @@ remove_event("mousedown", element);
 ```javascript
 animation_slide_x(element, delta, 1.0, 2.0, 1.0, CURVE_LINEAR);
 animation_slide_y(element, delta, 1.0, 2.0, 1.0, CURVE_LINEAR);
+```
+**utility**
+```javascript
+center_to_center(element, target_element);
 ```
