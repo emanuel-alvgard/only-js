@@ -21,21 +21,21 @@ get_z(id: 0) --> (0.0)
 ```
 **set**
 ```javascript
-set_x(id: 0, origin: 0, x: 0.0) --- (null)
-set_y(id: 0, origin: 0, y: 0.0) --- (null)
-set_z(id: 0, origin: 0, z: 0.0) --- (null)
+set_x(id: 0, origin: 0, x: 0.0) --> (null)
+set_y(id: 0, origin: 0, y: 0.0) --> (null)
+set_z(id: 0, origin: 0, z: 0.0) --> (null)
 ```
 **update**
 ```javascript
 ```
 **delete**
 ```javascript
-delete_element(id: 0) --- (null)
+delete_element(id: 0) --> (null)
 ```
 **event**
 ```javascript
-add_event(name: "") --> (null)
-//remove_event(event_name: "") -> (null)
+add_event(event: "", id: 0) --> (null)
+//remove_event(event: "", id: 0) --> (null)
 ```
 **animation**
 ```javascript
@@ -46,7 +46,7 @@ animation_slide_x(
   end: 0.0
   speed: 0.0
   curve: [0.0]
- ) -> (null)
+ ) --> (null)
  
 animation_slide_y(
   id: 0
@@ -55,5 +55,5 @@ animation_slide_y(
   end: 0.0
   speed: 0.0
   curve: [0.0]
- ) -> (null)
+ ) --> (null)
 ```
