@@ -1,7 +1,7 @@
 # lite API Reference
 **Structure**
 ------
-*The lite api is structured as follows:*
+***The lite api is structured as follows:***
 1. create - functions that creates/initializes element/object
 2. get - functions that gets a element property
 3. set - functions that sets a element property
@@ -10,7 +10,7 @@
 6. event - functions that adds, removes and handles events 
 7. animation - functions that use set function calls over multiple frames
 
-*The api reference is structured as follows:*
+***The api reference is structured as follows:***
 1. function name and parameter names:
 ```javascript
 create_element(type);
@@ -23,7 +23,9 @@ create_element("div");
 **create**
 ------
 ```javascript
-create_virtual_DOM(size)
+create_virtual_DOM:
+  size: float
+  
 create_virtual_DOM(1);
 ```
 ```javascript
