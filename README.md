@@ -6,7 +6,7 @@ Data Oriented Web Framework.
 ```javascript
 import lt from 'lite.js'
 
-lt.create_virtual_DOM(3);
+lt.create_virtual(3);
 
 header = lt.create_element("nav");
 lt.set_width(header, lt.get_width(root));

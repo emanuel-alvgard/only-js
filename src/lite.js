@@ -118,14 +118,26 @@ let element_slide_x;
 let element_slide_x_progress;
 let element_slide_x_checkpoint;
 
+// Text
+let element_text_align;
+let element_text_size;
+let element_text_weight;
+let element_text_color_red;
+let element_text_color_green;
+let element_text_color_blue;
+let element_text_color_alpha;
+
 // Dynamic Arrays
 let DOM_element;
 let element_border_style;
 let element_text_content;
+let element_text_font;
+let element_text_variant;
+let element_text_style;
 
 
 // VIRTUAL DOM
-function create_virtual_DOM(size) {
+function create_virtual(size) {
     
     let elements = size + 1;
     
@@ -181,10 +193,19 @@ function create_virtual_DOM(size) {
     element_slide_x_progress = new Float32Array(elements);
     element_slide_x_checkpoint = new Float32Array(elements);
 
+    // Text
+    lement_text_color_red = new Uint8Array(elements);
+    element_text_color_green = new Uint8Array(elements);
+    element_text_color_blue = new Uint8Array(elements);
+    element_text_color_alpha = new Uint8Array(elements);
+
     // Dynamic Arrays
     DOM_element = [DOM_root];
     element_border_style = ["none"];
     element_text_content = [""];
+    element_text_font = [""];
+    element_text_variant = [""];
+    element_text_style = [""];
 
     return;
 }
@@ -298,6 +319,23 @@ function create_element(type) {
 
 
 
+
+
+// UPDATE FUNCTIONS
+update_counter_1;
+function udate_DOM_element_width() {
+    for (update_counter_1 = 0; update_counter_1 < element_count; update_counter_1 ++) {
+        DOM_element[update_counter_1].style.width = element_width[update_counter_1] + "px";
+        DOM_element_width_update[update_counter_1] = 0;
+    }
+}
+update_counter_2;
+function udate_DOM_element_height() {
+    for (update_counter_2 = 0; update_counter_2 < element_count; update_counter_2 ++) {
+        DOM_element[update_counter_2].style.height = element_height[update_counter_2] + "px";
+        DOM_element_height_update[update_counter_2] = 0;
+    }
+}
 
 
 
@@ -455,7 +493,15 @@ function set_skew_y(id, scale) {
 
 
 // Background
-function set_background_color() {}
+function set_background_color(id, color) {
+    element_background_color_red[id] = color[0];
+    element_background_color_green[id] = color[1];
+    element_background_color_blue[id] = color[2];
+    element_background_color_alpha[id] = color[3];
+    DOM_element_background_color_update[id] = 1;
+    DOM_element_update[id] = 1;
+    return;
+}
 function set_background_image() {}
 function set_background_position() {}
 function set_background_attachment() {}
@@ -753,7 +799,7 @@ let font_2 = load_google_font(
     "Lato", "http://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext"
     );
 
-create_virtual_DOM(100);
+create_virtual(100);
 add_event("mousemove", root);
 
 // create an element_pool() function?? 

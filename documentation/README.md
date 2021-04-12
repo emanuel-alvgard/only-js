@@ -16,7 +16,7 @@
 
 **create**
 ```javascript
-create_virtual_DOM(1);
+create_virtual(1);
 element = create_element("div");
 ```
 **get**
