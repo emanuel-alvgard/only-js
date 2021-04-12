@@ -5,6 +5,10 @@
 // create, get/set (individual properties), update, delete
 
 // TODO
+// create all property arrays
+// create all get functions
+// create all DOM_element_update arrays
+// update the create_element function
 // setup set_text function and other text functions
 // add + before 64bit floats and |0 after 32bit ints
 // consider changing all 1/0 arrays from Uint to Int instead?
@@ -40,19 +44,19 @@ DOM_body.style.left = "0px";
 DOM_body.style.top = "0px";
 
 // DOM ROOT
-let DOM_root = document.createElement("div");
-DOM_root.id = "0";
-DOM_root.style.position = "absolute";
-DOM_root.style.margin = "0px";
-DOM_root.style.padding = "0px";
-DOM_root.style.border = "none";
-DOM_root.style.left = "0px";
-DOM_root.style.top = "0px";
-DOM_root.style.width = "100%";
-DOM_root.style.height = "100%";
-DOM_root.style.zIndex = "0";
-DOM_root.style.backgroundColor = "rgba(225, 225, 225, 1.0)";
-DOM_body.append(DOM_root);
+let DOM_ROOT = document.createElement("div");
+DOM_ROOT.id = "0";
+DOM_ROOT.style.position = "absolute";
+DOM_ROOT.style.margin = "0px";
+DOM_ROOT.style.padding = "0px";
+DOM_ROOT.style.border = "none";
+DOM_ROOT.style.left = "0px";
+DOM_ROOT.style.top = "0px";
+DOM_ROOT.style.width = "100%";
+DOM_ROOT.style.height = "100%";
+DOM_ROOT.style.zIndex = "0";
+DOM_ROOT.style.backgroundColor = "rgba(225, 225, 225, 1.0)";
+DOM_body.append(DOM_ROOT);
 
 // DEFINE VIRTUAL
 
@@ -62,7 +66,7 @@ let mouse_y = 0.0;
 
 // Static Arrays
 // Elements
-let root = 0;
+const ROOT = 0;
 let element_count = 1;
 let element_id;
 
@@ -137,7 +141,7 @@ let element_text_style;
 
 
 // VIRTUAL DOM
-function create_virtual(size) {
+function create(size) {
     
     let elements = size + 1;
     
@@ -200,7 +204,7 @@ function create_virtual(size) {
     element_text_color_alpha = new Uint8Array(elements);
 
     // Dynamic Arrays
-    DOM_element = [DOM_root];
+    DOM_element = [DOM_ROOT];
     element_border_style = ["none"];
     element_text_content = [""];
     element_text_font = [""];
@@ -273,7 +277,7 @@ function create_element(type) {
     element.style.outline = "none";
     
     fragment.append(element);
-    DOM_root.append(fragment);
+    DOM_ROOT.append(fragment);
     
     // VIRTUAL
     // Element
@@ -509,17 +513,21 @@ function set_background_repeat() {}
 
 
 // Shadow
-function set_shadow(id, x, y, blur, color) { // split up into separate functions like (shadow_color etc.)
+function set_shadow(id, x, y, blur) { // split up into separate functions like (shadow_color etc.)
     element_shadow_x[id] = x;
     element_shadow_y[id] = y;
     element_shadow_blur[id] = blur;
+    DOM_element_shadow_update[id] = 1;
+    DOM_element_update[id] = 1;
+}
+
+function set_shadow_color(id, color) {
     element_shadow_color_red[id] = color[0];
     element_shadow_color_green[id] = color[1];
     element_shadow_color_blue[id] = color[2];
     element_shadow_color_alpha[id] = color[3];
-    DOM_element_shadow_update[id] = 1;
+    DOM_element_shadow_color_update[id] = 1;
     DOM_element_update[id] = 1;
-    return;
 }
 
 // Border
@@ -584,7 +592,7 @@ function set_text_spacing() {}
 
 // Mouse
 function event_mousemove(event) {
-    element_mousemove[root] = 1;
+    element_mousemove[ROOT] = 1;
     mouse_x = event["clientX"];
     mouse_y = event["clientY"];
     element_mousemove[+event["srcElement"]["id"]] = 1;
@@ -600,7 +608,7 @@ function reset_mousemove() {
 }
 
 function event_mousedown(event) {
-    element_mousedown[root] = 1;
+    element_mousedown[ROOT] = 1;
     element_mousedown[+event["srcElement"]["id"]] = 1;
     return;
 }
@@ -613,7 +621,7 @@ function reset_mousedown() {
 }
 
 function event_mouseup(event) {
-    element_mouseup[root] = 1;
+    element_mouseup[ROOT] = 1;
     element_mouseup[+event["srcElement"]["id"]] = 1;
     return;
 }
@@ -630,9 +638,9 @@ function reset_mouseup() {
 
 // Reset
 function reset_events() {
-    if (element_mousemove[root] === 1) { reset_mousemove(); }
-    if (element_mousedown[root] === 1) { reset_mousedown(); }
-    if (element_mouseup[root] === 1) { reset_mouseup(); }
+    if (element_mousemove[ROOT] === 1) { reset_mousemove(); }
+    if (element_mousedown[ROOT] === 1) { reset_mousedown(); }
+    if (element_mouseup[ROOT] === 1) { reset_mouseup(); }
     return;
 }
 
@@ -665,8 +673,8 @@ function center_to_center(id, ref) {
     let ref_center_y = element_y[ref] + (element_height[ref] / 2);
     let new_x = ref_center_x - (element_width[id] / 2);
     let new_y = ref_center_y - (element_height[id] / 2);
-    set_x(id, root, new_x);
-    set_y(id, root, new_y);
+    set_x(id, ROOT, new_x);
+    set_y(id, ROOT, new_y);
     return;
 }
 
@@ -732,11 +740,11 @@ function animation_slide_x(id, delta, start, end, speed, curve) {
             );
 
             if (element_x[id] < end) {
-                set_x(id, root, element_x[id] + ((speed * delta) * curve[animation_slide_x_checkpoint]));
+                set_x(id, ROOT, element_x[id] + ((speed * delta) * curve[animation_slide_x_checkpoint]));
                 element_slide_x_progress[id] += ((speed * delta) * curve[animation_slide_x_checkpoint]);      
             }
             else {
-                set_x(id, root, end);
+                set_x(id, ROOT, end);
                 element_slide_x[id] = 0;
                 element_slide_x_progress[id] = 0.0;
             }
@@ -750,11 +758,11 @@ function animation_slide_x(id, delta, start, end, speed, curve) {
             );
 
             if (element_x[id] > end) {
-                set_x(id, root, element_x[id] - ((speed * delta) * curve[animation_slide_x_checkpoint]));
+                set_x(id, ROOT, element_x[id] - ((speed * delta) * curve[animation_slide_x_checkpoint]));
                 element_slide_x_progress[id] += ((speed * delta) * curve[animation_slide_x_checkpoint]);      
             }
             else {
-                set_x(id, root, end);
+                set_x(id, ROOT, end);
                 element_slide_x[id] = 0;
                 element_slide_x_progress[id] = 0.0;
             }
@@ -762,7 +770,7 @@ function animation_slide_x(id, delta, start, end, speed, curve) {
     }
     else { 
         element_slide_x[id] = 1;
-        set_x(id, root, start);   
+        set_x(id, ROOT, start);   
     }
     return;
 }
@@ -799,8 +807,8 @@ let font_2 = load_google_font(
     "Lato", "http://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext"
     );
 
-create_virtual(100);
-add_event("mousemove", root);
+create(100);
+add_event("mousemove", ROOT);
 
 // create an element_pool() function?? 
 let header = create_element("div");
@@ -813,61 +821,61 @@ let input = create_element("input");
 let pointer = create_element("div");
 
 function create_page_home() {
-    set_width(header, element_width[root]);
+    set_width(header, element_width[ROOT]);
     set_height(header, 75);
     set_shadow(header, 0.1, 0.1, 10, [200, 200, 200, 1.0]);
 
-    set_x(header_home, root, 100);
-    set_y(header_home, root, 25);
-    set_z(header_home, root, 1.0);
+    set_x(header_home, ROOT, 100);
+    set_y(header_home, ROOT, 25);
+    set_z(header_home, ROOT, 1.0);
     set_width(header_home, 75);
     set_height(header_home, 25);
     set_shadow(header_home, 0.1, 0.1, 5, [225, 225, 225, 1.0]);
     set_border_radius(header_home, 5);
 
-    set_x(header_about, root, 200);
-    set_y(header_about, root, 25);
-    set_z(header_about, root, 1.0);
+    set_x(header_about, ROOT, 200);
+    set_y(header_about, ROOT, 25);
+    set_z(header_about, ROOT, 1.0);
     set_width(header_about, 75);
     set_height(header_about, 25);
     set_shadow(header_about, 0.1, 0.1, 5, [225, 225, 225, 1.0]);
     set_border_radius(header_about, 5);
 
-    set_x(header_news, root, 300);
-    set_y(header_news, root, 25);
-    set_z(header_news, root, 1.0);
+    set_x(header_news, ROOT, 300);
+    set_y(header_news, ROOT, 25);
+    set_z(header_news, ROOT, 1.0);
     set_width(header_news, 75);
     set_height(header_news, 25);
     set_shadow(header_news, 0.1, 0.1, 5, [225, 225, 225, 1.0]);
     set_border_radius(header_news, 5);
 
-    set_x(box_1, root, 50); 
-    set_y(box_1, root, 125);
+    set_x(box_1, ROOT, 50); 
+    set_y(box_1, ROOT, 125);
     set_width(box_1, 200);
     set_height(box_1, 300);
     set_border_radius(box_1, 5);
     set_shadow(box_1, 0.1, 0.1, 10, [200, 200, 200, 1.0]);
     add_event("mousedown", box_1);
 
-    set_x(box_2, root, 300); 
-    set_y(box_2, root, 125);
+    set_x(box_2, ROOT, 300); 
+    set_y(box_2, ROOT, 125);
     set_width(box_2, 200);
     set_height(box_2, 300);
     set_border_radius(box_2, 5);
     set_shadow(box_2, 0.1, 0.1, 10, [200, 200, 200, 1.0]);
     add_event("mousedown", box_2);
 
-    set_x(input, root, 200);
-    set_y(input, root, 700);
-    set_z(input, root, 1);
+    set_x(input, ROOT, 200);
+    set_y(input, ROOT, 700);
+    set_z(input, ROOT, 1);
     set_width(input, 75);
     set_height(input, 25);
 
-    set_x(pointer, root, 25);
-    set_y(pointer, root, 200);
+    set_x(pointer, ROOT, 25);
+    set_y(pointer, ROOT, 200);
     set_width(pointer, 50);
     set_height(pointer, 50);
-    set_z(pointer, root, -1.0);
+    set_z(pointer, ROOT, -1.0);
     add_event("mousemove", pointer);
 }
 
@@ -886,10 +894,10 @@ function create_page_home() {
 
 // *TEST*
 function custom_pointer() {
-    if (element_mousemove[root] === 1) {
+    if (element_mousemove[ROOT] === 1) {
         //center_to_center(pointer, );
-        set_x(pointer, root, mouse_x)
-        set_y(pointer, root, mouse_y)
+        set_x(pointer, ROOT, mouse_x)
+        set_y(pointer, ROOT, mouse_y)
     }
 }
 
@@ -924,11 +932,11 @@ function main() {
     
     set_delta();
 
-    set_width(root, DOM_body.clientWidth); // does not work
-    set_height(root, DOM_body.clientHeight);
+    set_width(ROOT, DOM_body.clientWidth); // does not work
+    set_height(ROOT, DOM_body.clientHeight);
 
-    set_width(header, element_width[root]);
-    center_to_center(header_news, root);
+    set_width(header, element_width[ROOT]);
+    center_to_center(header_news, ROOT);
     center_to_center(header_about, box_2);
 
     animate_element_on_click(box_1, 50.0, 200.0);
