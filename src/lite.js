@@ -63,12 +63,19 @@ DOM_body.append(DOM_ROOT);
 // Global
 let mouse_x = 0.0;
 let mouse_y = 0.0;
+let keyboard;
 
 // Static Arrays
 // Elements
 const ROOT = 0;
 let element_count = 1;
 let element_id;
+
+// Misc
+let element_visibility;
+let element_cursor_style;
+let element_overflow;
+let element_opacity;
 
 // Position
 let element_x;
@@ -84,12 +91,17 @@ let element_scale_y;
 let element_skew_x;
 let element_skew_y;
 
-// Style
+// Background
 let element_background_color_red;
 let element_background_color_green;
 let element_background_color_blue;
 let element_background_color_alpha;
-    
+let element_background_image;
+let element_background_position;
+let element_background_attachment;
+let element_background_repeat;
+
+// Shadow    
 let element_shadow_color_red;
 let element_shadow_color_green;
 let element_shadow_color_blue;
@@ -100,17 +112,12 @@ let element_shadow_y;
 let element_shadow_blur;
 let element_border_radius;
 
-// Update
-let DOM_element_update;
-let DOM_element_transform_update;
-let DOM_element_z_update;
-let DOM_element_width_update;
-let DOM_element_height_update;
-let DOM_element_shadow_update;
-let DOM_element_background_color_update;
-let DOM_element_border_style_update;
-let DOM_element_border_radius_update;
-let DOM_element_text_content_update;
+// Border
+let element_border_color;
+let element_border_width;
+border_style;
+border_radius;
+
 
 // Events
 let element_mousemove;
@@ -130,6 +137,20 @@ let element_text_color_red;
 let element_text_color_green;
 let element_text_color_blue;
 let element_text_color_alpha;
+
+// Update
+let DOM_element_update;
+let DOM_element_transform_update;
+let DOM_element_z_update;
+let DOM_element_width_update;
+let DOM_element_height_update;
+let DOM_element_shadow_update;
+let DOM_element_background_color_update;
+let DOM_element_border_style_update;
+let DOM_element_border_radius_update;
+let DOM_element_text_content_update;
+
+// Counters
 
 // Dynamic Arrays
 let DOM_element;
