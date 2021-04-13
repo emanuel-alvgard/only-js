@@ -115,8 +115,8 @@ let element_border_radius;
 // Border
 let element_border_color;
 let element_border_width;
-border_style;
-border_radius;
+let element_border_style;
+let element_border_radius;
 
 
 // Events
@@ -138,6 +138,15 @@ let element_text_color_green;
 let element_text_color_blue;
 let element_text_color_alpha;
 
+// Dynamic Arrays
+let DOM_element;
+let element_border_style;
+let element_text_content;
+let element_text_font;
+let element_text_variant;
+let element_text_style;
+
+/*
 // Update
 let DOM_element_update;
 let DOM_element_transform_update;
@@ -149,16 +158,9 @@ let DOM_element_background_color_update;
 let DOM_element_border_style_update;
 let DOM_element_border_radius_update;
 let DOM_element_text_content_update;
+*/
 
-// Counters
 
-// Dynamic Arrays
-let DOM_element;
-let element_border_style;
-let element_text_content;
-let element_text_font;
-let element_text_variant;
-let element_text_style;
 
 
 // VIRTUAL DOM
@@ -324,19 +326,8 @@ function create_element(type) {
     DOM_element.push(element);
     element_border_style.push("none");
     element_text_content.push("test");
-
-    // Update
-    DOM_element_update[id] = 1;
-    DOM_element_transform_update[id] = 1;
-    DOM_element_width_update[id] = 1;
-    DOM_element_height_update[id] = 1;
-    DOM_element_shadow_update[id] = 1;
-    DOM_element_background_color_update[id] = 1;
-    DOM_element_border_style_update[id] = 1;
-    DOM_element_border_radius_update[id] = 1;
-    DOM_element_text_content_update[id] = 1;
-
     element_count += 1;
+
     return id;
 }
 
@@ -347,25 +338,26 @@ function create_element(type) {
 
 
 // UPDATE FUNCTIONS
-update_counter_1;
+update_counter = new Uint32Array(100);
+
 function udate_DOM_element_width() {
-    for (update_counter_1 = 0; update_counter_1 < element_count; update_counter_1 ++) {
-        DOM_element[update_counter_1].style.width = element_width[update_counter_1] + "px";
-        DOM_element_width_update[update_counter_1] = 0;
+    for (update_counter[0] = 0; update_counter[0] < element_count; update_counter[0] ++) {
+        DOM_element[update_counter[0]].style.width = element_width[update_counter[0]] + "px";
     }
 }
-update_counter_2;
 function udate_DOM_element_height() {
-    for (update_counter_2 = 0; update_counter_2 < element_count; update_counter_2 ++) {
-        DOM_element[update_counter_2].style.height = element_height[update_counter_2] + "px";
-        DOM_element_height_update[update_counter_2] = 0;
+    for (update_counter[1] = 0; update_counter[1] < element_count; update_counter[1] ++) {
+        DOM_element[update_counter[1]].style.height = element_height[update_counter[1]] + "px";
     }
 }
 
 
 
-
-
+/* function update_DOM() {
+    update_DOM_element_width()
+    update_DOM_element_height()
+}
+*/
 
 
 
