@@ -2,18 +2,22 @@
 
 // NOTES
 // this api is structured as follows:
-// create, get/set (individual properties), update, delete
+// create, get/set (individual properties), update, clear
 
 // TODO
-// create all property arrays
 // create all get functions
-// create all DOM_element_update arrays
 // update the create_element function
 // setup set_text function and other text functions
 // add + before 64bit floats and |0 after 32bit ints
 // consider changing all 1/0 arrays from Uint to Int instead?
 
-// DOM HEAD
+
+
+
+
+/*-------------
+    DOM HEAD
+---------------*/
 let DOM_head = document.head;
 let google_fonts = document.createElement("link");
 google_fonts.rel = "preconnect"; 
@@ -37,13 +41,17 @@ function create_meta() {} // ??
 
 
 
-// DOM BODY
+
+
+/*-------------
+    DOM BODY
+---------------*/
 let DOM_body = document.body;
 DOM_body.style.margin = "0px";
 DOM_body.style.left = "0px";
 DOM_body.style.top = "0px";
 
-// DOM ROOT
+// ROOT ELEMENT
 let DOM_ROOT = document.createElement("div");
 DOM_ROOT.id = "0";
 DOM_ROOT.style.position = "absolute";
@@ -58,24 +66,37 @@ DOM_ROOT.style.zIndex = "0";
 DOM_ROOT.style.backgroundColor = "rgba(225, 225, 225, 1.0)";
 DOM_body.append(DOM_ROOT);
 
-// DEFINE VIRTUAL
 
-// Global
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*-------------------
+    DEFINE PROPERTY
+---------------------*/
+// GLOBAL
 let mouse_x = 0.0;
 let mouse_y = 0.0;
 let keyboard;
 
-// Static Arrays
-// Elements
+// STATIC ARRAYS
+// Element
 const ROOT = 0;
 let create_count = 1;
 let clear_count = 0;
 let element_id;
 
-// Misc
+// Visibility
 let element_visibility;
-let element_cursor_style;
-let element_overflow;
 let element_opacity;
 
 // Position
@@ -97,76 +118,98 @@ let element_background_color_red;
 let element_background_color_green;
 let element_background_color_blue;
 let element_background_color_alpha;
-let element_background_image;
-let element_background_position;
-let element_background_attachment;
-let element_background_repeat;
 
-// Shadow    
+// Shadow
+let element_shadow_x;
+let element_shadow_y;
+let element_shadow_blur;
+let element_border_radius;    
 let element_shadow_color_red;
 let element_shadow_color_green;
 let element_shadow_color_blue;
 let element_shadow_color_alpha;
 
-let element_shadow_x;
-let element_shadow_y;
-let element_shadow_blur;
-let element_border_radius;
-
 // Border
 let element_border_color;
 let element_border_width;
-let element_border_style;
 let element_border_radius;
 
-
-// Events
+// Event
 let element_mousemove;
 let element_mousedown;
 let element_mouseup;
 
-// Animations
+// Animation
+// slide
 let element_slide_x;
 let element_slide_x_progress;
 let element_slide_x_checkpoint;
+let element_slide_y;
+let element_slide_y_progress;
+let element_slide_y_checkpoint;
+// fade
+let element_fade_in;
+let element_fade_in_progress;
+let element_fade_in_checkpoint;
+let element_fade_out;
+let element_fade_out_progress;
+let element_fade_out_checkpoint;
+// zoom
+let element_zoom_in;
+let element_zoom_in_progress;
+let element_zoom_in_checkpoint;
+let element_zoom_out;
+let element_zoom_out_progress;
+let element_zoom_out_checkpoint;
 
 // Text
 let element_text_align;
 let element_text_size;
 let element_text_weight;
+let element_text_spacing;
+let element_text_indent;
+let element_text_decoration;
 let element_text_color_red;
 let element_text_color_green;
 let element_text_color_blue;
 let element_text_color_alpha;
 
-// Dynamic Arrays
+// DYNAMIC ARRAYS
+// Element
 let DOM_element = [DOM_ROOT];
-let element_border_style = ["none"];
+let clear_element = [0];
+
+// Misc
+let element_cursor_style = [""];
+let element_overflow = [""];
+let element_clip = [""];
+
+// Background
+let element_background_image = [""];
+let element_background_position = [""];
+let element_background_repeat = [""];
+let element_background_attachment = [""];
+
+// Border
+let element_border_style = [""];
+
+// Text
 let element_text_content = [""];
 let element_text_font = [""];
 let element_text_variant = [""];
 let element_text_style = [""];
-    
-let clear_element = [0];
-
-/*
-// Update
-let DOM_element_update;
-let DOM_element_transform_update;
-let DOM_element_z_update;
-let DOM_element_width_update;
-let DOM_element_height_update;
-let DOM_element_shadow_update;
-let DOM_element_background_color_update;
-let DOM_element_border_style_update;
-let DOM_element_border_radius_update;
-let DOM_element_text_content_update;
-*/
 
 
 
 
-// VIRTUAL DOM
+
+
+
+
+
+/*-------------------
+    CREATE PROPERTY
+---------------------*/
 function create(size) {
     
     let elements = size + 1;
@@ -205,18 +248,6 @@ function create(size) {
     element_shadow_blur = new Float32Array(elements);
     element_border_radius = new Float32Array(elements);
 
-    /* Update
-    DOM_element_update = new Uint8Array(elements);
-    DOM_element_transform_update = new Uint8Array(elements);
-    DOM_element_width_update = new Uint8Array(elements);
-    DOM_element_height_update = new Uint8Array(elements);
-    DOM_element_shadow_update = new Uint8Array(elements);
-    DOM_element_background_color_update = new Uint8Array(elements);
-    DOM_element_border_style_update = new Uint8Array(elements);
-    DOM_element_border_radius_update = new Uint8Array(elements);
-    DOM_element_text_content_update = new Uint8Array(elements);
-    */
-
     // Events
     element_mousemove = new Uint8Array(elements);
     element_mousedown = new Uint8Array(elements);
@@ -232,16 +263,31 @@ function create(size) {
     element_text_color_green = new Uint8Array(elements);
     element_text_color_blue = new Uint8Array(elements);
     element_text_color_alpha = new Uint8Array(elements);
-
-    return;
 }
 
+
+
+
+
+
+
+/*-------------------
+    CLEAR PROPERTY
+---------------------*/
+function clear_array() {}
 function clear() {
     // clears the whole virtual buffer to zero
     // can be efficient to use when loading a new page
 }
 
-// GET PROPERTY
+
+
+
+
+
+/*-----------------
+    GET PROPERTY
+-------------------*/
 // Misc
 function get_visibility() {}
 function get_cursor_style() {}
@@ -291,7 +337,16 @@ function get_text_indent() {}
 function get_text_spacing() {}
 
 
-// CREATE ELEMENT
+
+
+
+
+
+
+
+/*------------------
+    CREATE ELEMENT
+--------------------*/
 let new_id;
 let new_fragment;
 let new_element;
@@ -347,6 +402,14 @@ function create_element(type) {
     return new_id;
 }
 
+
+
+
+
+
+/*-----------------
+    CLEAR ELEMENT
+-------------------*/
 let empty = document.createElement("div");
 function clear_element(id) {
     DOM_element[id] = empty;
@@ -359,7 +422,9 @@ function clear_element(id) {
 
 
 
-// UPDATE FUNCTIONS
+/*------------------
+    UPDATE ELEMENT
+--------------------*/
 update_counter = new Uint32Array(100);
 
 function udate_DOM_element_width() {
@@ -372,14 +437,6 @@ function udate_DOM_element_height() {
         DOM_element[update_counter[1]].style.height = element_height[update_counter[1]] + "px";
     }
 }
-
-
-
-/* function update_DOM() {
-    update_DOM_element_width()
-    update_DOM_element_height()
-}
-*/
 
 
 
@@ -466,69 +523,44 @@ function update_DOM() {
 
 
 
-// PROPERTY WRAPPER
+/*-----------------
+    SET PROPERTY
+-------------------*/
 // Misc
 function set_visibility(id) {} // uses the DOM display property (none)
 function set_cursor_style() {}
 function set_overflow() {}
+function set_clip() {}
 function set_opacity() {}
+
 
 
 // Position
 function set_x(id, origin, x) {
     element_x[id] = element_x[origin] + x;
-    DOM_element_transform_update[id] = 1;
-    DOM_element_update[id] = 1;
-    return;
 }
-
 function set_y(id, origin, y) {
     element_y[id] = element_y[origin] + y;
-    DOM_element_transform_update[id] = 1;
-    DOM_element_update[id] = 1;
-    return;
 }
-
 function set_z(id, origin, z) {
     element_z[id] = element_z[origin] + z;
-    DOM_element_transform_update[id] = 1;
-    DOM_element_update[id] = 1;
-    return;
 }
+function set_rotation(id, degrees) {}
 
-function set_rotation(id, degrees) {
-    DOM_element_transform_update[id] = 1;
-}
 
-// Dimensions
+
+// Dimension
 function set_width(id, width) {
     element_width[id] = width;
-    DOM_element_width_update[id] = 1;
-    DOM_element_update[id] = 1;
-    return;
 }
-
 function set_height(id, height) {
     element_height[id] = height;
-    DOM_element_height_update[id] = 1;
-    DOM_element_update[id] = 1;
-    return;
 }
+function set_scale_x(id, scale) {}
+function set_scale_y(id, scale) {}
+function set_skew_x(id, scale) {}
+function set_skew_y(id, scale) {}
 
-function set_clip() {}
-
-function set_scale_x(id, scale) {
-    DOM_element_transform_update[id] = 1;
-}
-function set_scale_y(id, scale) {
-    DOM_element_transform_update[id] = 1;
-}
-function set_skew_x(id, scale) {
-    DOM_element_transform_update[id] = 1;
-}
-function set_skew_y(id, scale) {
-    DOM_element_transform_update[id] = 1;
-}
 
 
 // Background
@@ -537,9 +569,6 @@ function set_background_color(id, color) {
     element_background_color_green[id] = color[1];
     element_background_color_blue[id] = color[2];
     element_background_color_alpha[id] = color[3];
-    DOM_element_background_color_update[id] = 1;
-    DOM_element_update[id] = 1;
-    return;
 }
 function set_background_image() {}
 function set_background_position() {}
@@ -547,65 +576,50 @@ function set_background_attachment() {}
 function set_background_repeat() {}
 
 
-// Shadow
-function set_shadow(id, x, y, blur) { // split up into separate functions like (shadow_color etc.)
-    element_shadow_x[id] = x;
-    element_shadow_y[id] = y;
-    element_shadow_blur[id] = blur;
-    DOM_element_shadow_update[id] = 1;
-    DOM_element_update[id] = 1;
-}
 
+// Shadow
+function set_shadow_x() {}
+function set_shadow_y() {}
 function set_shadow_color(id, color) {
     element_shadow_color_red[id] = color[0];
     element_shadow_color_green[id] = color[1];
     element_shadow_color_blue[id] = color[2];
     element_shadow_color_alpha[id] = color[3];
-    DOM_element_shadow_color_update[id] = 1;
-    DOM_element_update[id] = 1;
 }
+function set_shadow_blur() {}
+
+
 
 // Border
 function set_border_color() {}
 function set_border_width() {}
-
-function set_border_style() {
-    DOM_element_border_style_update[id] = 1;
-}
-
+function set_border_style() {}
 function set_border_radius(id, radius) {
     element_border_radius[id] = radius;
-    DOM_element_border_radius_update[id] = 1;
-    DOM_element_update[id] = 1;
-    return;
 }
+
+
 
 // Filter
 function set_filter_url() {} // (string)
 function set_filter_blur() {} // (px)
 function set_filter_color() {} // contrast, grayscale etc. (%)
 
+
+
 // Text
 function set_text_content(id, text) {
     element_text_content[id] = text;
-    DOM_element_text_content_update[id] = 1;
-    DOM_element_update[id] = 1;
-    return;
 }
-
 function set_text_align(origin) {
     if (origin === "left") {}
     else if (origin === "center") {}
     else if (origin === "right") {}
-    else {}
-    return;
 }
 function set_text_font(id, font) {
     let element = document.getElementById(id + "");
     element.style.fontFamily = font;
-    return;
 }
-
 function set_text_size() {}
 function set_text_weight() {}
 function set_text_variant() {}
@@ -624,50 +638,36 @@ function set_text_spacing() {}
 
 
 // EVENTS
-
 // Mouse
 function event_mousemove(event) {
     element_mousemove[ROOT] = 1;
     mouse_x = event["clientX"];
     mouse_y = event["clientY"];
     element_mousemove[+event["srcElement"]["id"]] = 1;
-    return;
 }
-
-let _counter1;
 function reset_mousemove() {
-    for (_counter1 = 0; _counter1 < element_count; _counter1 ++) {
-        element_mousemove[_counter1] = 0;
+    for (let i = 0; i < element_count; i ++) {
+        element_mousemove[i] = 0;
     }
-    return;
 }
-
 function event_mousedown(event) {
     element_mousedown[ROOT] = 1;
     element_mousedown[+event["srcElement"]["id"]] = 1;
-    return;
 }
-
-let _counter2;
 function reset_mousedown() {
-    for (_counter2 = 0; _counter2 < element_count; _counter2 ++) {
-        element_mousedown[_counter2] = 0;
+    for (let i = 0; i < element_count; i ++) {
+        element_mousedown[i] = 0;
     }
 }
-
 function event_mouseup(event) {
     element_mouseup[ROOT] = 1;
     element_mouseup[+event["srcElement"]["id"]] = 1;
-    return;
 }
-
-let _counter3;
 function reset_mouseup() {
-    for (_counter3 = 0; _counter3 < element_count; _counter3 ++) {
-        element_mouseup[_counter3] = 0;
+    for (let i = 0; i < element_count; i ++) {
+        element_mouseup[i] = 0;
     }
 }
-
 
 
 
@@ -676,8 +676,8 @@ function reset_events() {
     if (element_mousemove[ROOT] === 1) { reset_mousemove(); }
     if (element_mousedown[ROOT] === 1) { reset_mousedown(); }
     if (element_mouseup[ROOT] === 1) { reset_mouseup(); }
-    return;
 }
+
 
 
 // Add / Remove
@@ -686,10 +686,7 @@ function add_event(event, id) {
     if (event === "mousedown") { DOM_element[id].addEventListener("mousedown", event_mousedown); return; }
     if (event === "mouseup") { DOM_element[id].addEventListener("mouseup", event_mouseup); return; }
 }
-
-function remove_event(id, event) {
-    return;
-}
+function remove_event(id, event) {}
 
 
 
@@ -813,7 +810,7 @@ function animation_slide_x(id, delta, start, end, speed, curve) {
     }
     return;
 }
-
+function animation_slide_y() {}
 
 function animation_fade_in() {}
 function animation_fade_out() {}
