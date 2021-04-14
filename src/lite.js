@@ -752,6 +752,10 @@ let animation_curve_checkpoint;
 function animation_curve(checkpoint, progress) {
    
     animation_curve_checkpoint = 1;
+    
+    // check if current checkpoint is negative
+    // if so check if progress > checkpiont * animation_curve_checkpoint
+    
     while (1) {
         if (progress < checkpoint * animation_curve_checkpoint) {
             break;
