@@ -26,7 +26,7 @@ lt.set_x(b2, header, 150.0);
 lt.set_y(b2, header, 50.0);
 lt.set_text_content(b2, "Button 2");
 
-clear();
+lt.clear();
 ```
 **Features**
 ------
