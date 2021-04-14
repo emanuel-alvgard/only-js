@@ -855,7 +855,7 @@ let box_2 = create_element("div");
 let input = create_element("input");
 let pointer = create_element("div");
 
-function create_page_home() {
+function create_home_page() {
     set_width(header, element_width[ROOT]);
     set_height(header, 75);
     set_shadow(header, 0.1, 0.1, 10, [200, 200, 200, 1.0]);
@@ -915,12 +915,11 @@ function create_page_home() {
 }
 
 
+function update_home_page() {}
 
 
 
-
-
-
+function page_router() {} // routes to pages on certain events
 
 
 
@@ -945,7 +944,7 @@ function set_delta() {
     return;
 }
 
-create_page_home();
+create_home_page();
 
 
 // *TEST*
