@@ -34,9 +34,10 @@ set_z(element, reference_element, 1.0);
 **update**
 ```javascript
 ```
-**delete**
+**clear**
 ```javascript
-delete_element(element);
+clear();
+clear_element(element);
 ```
 **event**
 ```javascript
