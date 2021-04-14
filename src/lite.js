@@ -170,8 +170,10 @@ let DOM_element_text_content_update;
 function create(size) {
     
     let elements = size + 1;
+
+    // Misc
     
-    // Static arrays
+    // Position
     element_id = new Uint8Array(elements);
     element_x = new Float32Array(elements);
     element_y = new Float32Array(elements);
@@ -186,12 +188,13 @@ function create(size) {
     element_skew_x = new Float32Array(elements);
     element_skew_y = new Float32Array(elements);
 
-    // Style
+    // Background
     element_background_color_red = new Uint8Array(elements);
     element_background_color_green = new Uint8Array(elements);
     element_background_color_blue = new Uint8Array(elements);
     element_background_color_alpha = new Float32Array(elements);
     
+    // Shadow
     element_shadow_color_red = new Uint8Array(elements);
     element_shadow_color_green = new Uint8Array(elements);
     element_shadow_color_blue = new Uint8Array(elements);
@@ -202,7 +205,7 @@ function create(size) {
     element_shadow_blur = new Float32Array(elements);
     element_border_radius = new Float32Array(elements);
 
-    // Update
+    /* Update
     DOM_element_update = new Uint8Array(elements);
     DOM_element_transform_update = new Uint8Array(elements);
     DOM_element_width_update = new Uint8Array(elements);
@@ -212,6 +215,7 @@ function create(size) {
     DOM_element_border_style_update = new Uint8Array(elements);
     DOM_element_border_radius_update = new Uint8Array(elements);
     DOM_element_text_content_update = new Uint8Array(elements);
+    */
 
     // Events
     element_mousemove = new Uint8Array(elements);
