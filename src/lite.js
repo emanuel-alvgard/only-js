@@ -1,7 +1,7 @@
 "use strict";
 
 // NOTES
-// this api is structures like the following:
+// this api is structured as follows:
 // create, get/set (individual properties), update, delete
 
 // TODO
