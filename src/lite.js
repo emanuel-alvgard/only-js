@@ -68,7 +68,8 @@ let keyboard;
 // Static Arrays
 // Elements
 const ROOT = 0;
-let element_count = 1;
+let create_count = 1;
+let clear_count = 0;
 let element_id;
 
 // Misc
@@ -139,12 +140,14 @@ let element_text_color_blue;
 let element_text_color_alpha;
 
 // Dynamic Arrays
-let DOM_element;
-let element_border_style;
-let element_text_content;
-let element_text_font;
-let element_text_variant;
-let element_text_style;
+let DOM_element = [DOM_ROOT];
+let element_border_style = ["none"];
+let element_text_content = [""];
+let element_text_font = [""];
+let element_text_variant = [""];
+let element_text_style = [""];
+    
+let clear_element = [0];
 
 /*
 // Update
@@ -226,15 +229,12 @@ function create(size) {
     element_text_color_blue = new Uint8Array(elements);
     element_text_color_alpha = new Uint8Array(elements);
 
-    // Dynamic Arrays
-    DOM_element = [DOM_ROOT];
-    element_border_style = ["none"];
-    element_text_content = [""];
-    element_text_font = [""];
-    element_text_variant = [""];
-    element_text_style = [""];
-
     return;
+}
+
+function clear() {
+    // clears the whole virtual buffer to zero
+    // can be efficient to use when loading a new page
 }
 
 // GET PROPERTY
@@ -288,50 +288,68 @@ function get_text_spacing() {}
 
 
 // CREATE ELEMENT
+let new_id;
+let new_fragment;
+let new_element;
+
 function create_element(type) {
 
-    let fragment = document.createDocumentFragment();
-    let element = document.createElement(type);
+    new_fragment = document.createDocumentFragment();
+    new_element = document.createElement(type);
 
     // DOM
-    element.style.position = "absolute";
-    element.style.margin = "0px";
-    element.style.padding = "0px";
-    element.style.outline = "none";
+    new_element.style.position = "absolute";
+    new_element.style.margin = "0px";
+    new_element.style.padding = "0px";
+    new_element.style.outline = "none";
     
-    fragment.append(element);
-    DOM_ROOT.append(fragment);
+    new_fragment.append(new_element);
+    DOM_ROOT.append(new_fragment);
     
     // VIRTUAL
-    // Element
-    let id = element_count;
-    element_id[id] = id;
-    let id_string = id + "";
-    element.id = id_string;
-
+    // Element  
+    if (clear_count === 0) {
+        new_id = create_count;
+        element_id[new_id] = new_id;
+        DOM_element.push(new_element);
+        create_count += 1;
+    }
+    else {
+        new_id = clear_element[clear_count];
+        DOM_element[new_id] = new_element;
+        clear_element.pop();
+        clear_count -= 1;
+    }
+    
+    new_element.id = new_id + "";
+    
     // Dimensions
-    element_scale_x[id] = 1.0;
-    element_scale_y[id] = 1.0;
+    element_scale_x[new_id] = 1.0;
+    element_scale_y[new_id] = 1.0;
 
     // Style
-    element_background_color_red[id] = 255;
-    element_background_color_green[id] = 255;
-    element_background_color_blue[id] = 255;
-    element_background_color_alpha[id] = 1.0;
+    element_background_color_red[new_id] = 255;
+    element_background_color_green[new_id] = 255;
+    element_background_color_blue[new_id] = 255;
+    element_background_color_alpha[new_id] = 1.0;
 
-    element_shadow_color_alpha[id] = 1.0;
+    element_shadow_color_alpha[new_id] = 1.0;
     
     
     // Dynamic Arrays
-    DOM_element.push(element);
     element_border_style.push("none");
     element_text_content.push("test");
-    element_count += 1;
 
-    return id;
+    return new_id;
 }
 
-
+let empty = document.createElement("div");
+function clear_element(id) {
+    DOM_element[id] = empty;
+    // clear all properties to 0
+    clear_element.push(id);
+    clear_count += 1;
+}
 
 
 
