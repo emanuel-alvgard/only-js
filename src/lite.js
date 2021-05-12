@@ -5,11 +5,14 @@
 // create, get/set (individual properties), update, clear
 
 // TODO
-// create all get functions
+// create all the SET functions
+// create all the UPDATE functions
+// add pushing to dynamic arrays in create_element() function
 // update the create_element function
 // setup set_text function and other text functions
 // add + before 64bit floats and |0 after 32bit ints
 // consider changing all 1/0 arrays from Uint to Int instead?
+// put global counters inside functions instead (these are allocated on the stack)
 
 
 
@@ -96,7 +99,6 @@ let clear_count = 0;
 let element_id;
 
 // Visibility
-let element_visibility;
 let element_opacity;
 
 // Position
@@ -114,25 +116,19 @@ let element_skew_x;
 let element_skew_y;
 
 // Background
-let element_background_color_red;
-let element_background_color_green;
-let element_background_color_blue;
-let element_background_color_alpha;
+let element_background_opacity;
 
 // Shadow
 let element_shadow_x;
 let element_shadow_y;
 let element_shadow_blur;
 let element_border_radius;    
-let element_shadow_color_red;
-let element_shadow_color_green;
-let element_shadow_color_blue;
-let element_shadow_color_alpha;
+let element_shadow_opacity;
 
 // Border
-let element_border_color;
 let element_border_width;
 let element_border_radius;
+let element_border_opacity;
 
 // Event
 let element_mousemove;
@@ -162,17 +158,16 @@ let element_zoom_out;
 let element_zoom_out_progress;
 let element_zoom_out_checkpoint;
 
+// Filter
+let element_filter_blur; // (px)
+let element_filter_grayscale; // contrast, grayscale etc. (%)
+
 // Text
-let element_text_align;
 let element_text_size;
 let element_text_weight;
 let element_text_spacing;
 let element_text_indent;
-let element_text_decoration;
-let element_text_color_red;
-let element_text_color_green;
-let element_text_color_blue;
-let element_text_color_alpha;
+let element_text_opacity;
 
 // DYNAMIC ARRAYS
 // Element
@@ -184,20 +179,34 @@ let element_cursor_style = [""];
 let element_overflow = [""];
 let element_clip = [""];
 
+// Visibility
+let element_visibility = [""];
+
 // Background
 let element_background_image = [""];
 let element_background_position = [""];
 let element_background_repeat = [""];
 let element_background_attachment = [""];
+let element_background_color = [[0, 0, 0]];
+
+// Shadow
+let element_shadow_color = [[0, 0, 0]];
 
 // Border
 let element_border_style = [""];
+let element_border_color = [[0, 0, 0]];
+
+// Filter
+let element_filter_url = [""];
 
 // Text
+let element_text_align = [""];
 let element_text_content = [""];
 let element_text_font = [""];
 let element_text_variant = [""];
 let element_text_style = [""];
+let element_text_decoration = [""];
+let element_text_color = [[0, 0, 0]];
 
 
 
@@ -213,14 +222,18 @@ let element_text_style = [""];
 function create(size) {
     
     let elements = size + 1;
+    let color = new Uint8Array(3);
 
-    // Misc
+    // Element
+    element_id = new Uint8Array(elements);
+
+    // Visibility
+    element_opacity = new Float32Array(elements);
     
     // Position
-    element_id = new Uint8Array(elements);
     element_x = new Float32Array(elements);
     element_y = new Float32Array(elements);
-    element_z = new Float32Array(elements);
+    element_z = new Int32Array(elements);
     element_rotation = new Int16Array(elements);
 
     // Dimension
@@ -232,21 +245,19 @@ function create(size) {
     element_skew_y = new Float32Array(elements);
 
     // Background
-    element_background_color_red = new Uint8Array(elements);
-    element_background_color_green = new Uint8Array(elements);
-    element_background_color_blue = new Uint8Array(elements);
-    element_background_color_alpha = new Float32Array(elements);
+    element_background_opacity = new Float32Array(elements);
     
     // Shadow
-    element_shadow_color_red = new Uint8Array(elements);
-    element_shadow_color_green = new Uint8Array(elements);
-    element_shadow_color_blue = new Uint8Array(elements);
-    element_shadow_color_alpha = new Float32Array(elements);
-    
     element_shadow_x = new Float32Array(elements);
     element_shadow_y = new Float32Array(elements);
     element_shadow_blur = new Float32Array(elements);
     element_border_radius = new Float32Array(elements);
+    element_shadow_opacity = new Float32Array(elements);
+
+    // Border
+    element_border_width = new Float32Array(elements);
+    element_border_radius = new Float32Array(elements);
+    element_border_opacity = new Float32Array(elements);
 
     // Events
     element_mousemove = new Uint8Array(elements);
@@ -254,15 +265,38 @@ function create(size) {
     element_mouseup = new Uint8Array(elements);
 
     // Animations 
+    // slide
     element_slide_x = new Float32Array(elements);
     element_slide_x_progress = new Float32Array(elements);
     element_slide_x_checkpoint = new Float32Array(elements);
+    element_slide_y = new Float32Array(elements);
+    element_slide_y_progress = new Float32Array(elements);
+    element_slide_y_checkpoint = new Float32Array(elements);
+    // fade
+    element_fade_in = new Float32Array(elements);
+    element_fade_in_progress = new Float32Array(elements);
+    element_fade_in_checkpoint = new Float32Array(elements);
+    element_fade_out = new Float32Array(elements);
+    element_fade_out_progress = new Float32Array(elements);
+    element_fade_out_checkpoint = new Float32Array(elements);
+    // zoom
+    element_zoom_in = new Float32Array(elements);
+    element_zoom_in_progress = new Float32Array(elements);
+    element_zoom_in_checkpoint = new Float32Array(elements);
+    element_zoom_out = new Float32Array(elements);
+    element_zoom_out_progress = new Float32Array(elements);
+    element_zoom_out_checkpoint = new Float32Array(elements);
+
+    // Filter
+    element_filter_blur = new Uint8Array(elements);
+    element_filter_grayscale = new Float32Array(elements);
 
     // Text
-    lement_text_color_red = new Uint8Array(elements);
-    element_text_color_green = new Uint8Array(elements);
-    element_text_color_blue = new Uint8Array(elements);
-    element_text_color_alpha = new Uint8Array(elements);
+    element_text_size = new Uint8Array(elements);
+    element_text_weight = new Uint8Array(elements);
+    element_text_spacing = new Float32Array(elements);
+    element_text_indent = new Float32Array(elements);
+    element_text_opacity = new Uint8Array(elements);
 }
 
 
@@ -274,7 +308,6 @@ function create(size) {
 /*-------------------
     CLEAR PROPERTY
 ---------------------*/
-function clear_array() {}
 function clear() {
     // clears the whole virtual buffer to zero
     // can be efficient to use when loading a new page
@@ -289,10 +322,13 @@ function clear() {
     GET PROPERTY
 -------------------*/
 // Misc
-function get_visibility() {}
-function get_cursor_style() {}
-function get_overflow() {}
-function get_opacity() {}
+function get_cursor_style(id) { return element_cursor_style[id]; }
+function get_overflow(id) { return element_overflow[id]; }
+function get_clip(id) { return element_clip[id]; }
+
+// Visibility
+function get_visibility(id) { return element_visibility[id]; }
+function get_opacity(id) { return element_opacity[id]; }
 
 // Position
 function get_x(id) { return element_x[id]; }
@@ -303,38 +339,53 @@ function get_rotation(id) { return element_rotation[id]; }
 // Dimensions
 function get_width(id) { return element_width[id]; }
 function get_height(id) { return element_height[id]; }
-function get_clip(id) {}
-function get_scale_x() {}
-function get_scale_y() {}
-function get_skew_x() {}
-function get_skew_y() {}
+function get_scale_x(id) { return element_scale_x[id]; }
+function get_scale_y(id) { return element_scale_y[id]; }
+function get_skew_x(id) { return element_skew_x[id]; }
+function get_skew_y(id) { return element_skew_y[id]; }
 
 // Background
-function get_background_color() {}
-function get_background_image() {}
-function get_background_position() {}
-function get_background_attachment() {}
-function get_background_repeat() {}
+function get_background_opacity(id) { return element_background_opacity[id]; }
+function get_background_image(id) { return element_background_image[id]; }
+function get_background_position(id) { return element_background_position[id]; }
+function get_background_attachment(id) { return element_background_attachment[id]; }
+function get_background_repeat(id) { return element_background_repeat[id]; }
+function get_background_color(id) {return element_background_color[id]; }
 
 // Shadow
+function get_shadow_x(id) { return element_shadow_x[id]; }
+function get_shadow_y(id) { return element_shadow_y[id]; }
+function get_shadow_radius(id) { return element_shadow_radius[id]; }
+function get_shadow_blur(id) { return element_shadow_blur[id]; }
+function get_shadow_color(id) { return element_shadow_color[id]; }
+function get_shadow_opacity(id) {return element_shadow_opacity[id]; }
 
 // Border
+function get_border_style(id) { return element_border_style[id]; }
+function get_border_width(id) { return element_border_width[id]; }
+function get_border_radius(id) { return element_border_radius[id]; }
+function get_border_color(id) { return element_border_color[id]; }
+function get_border_opacity(id) { return element_border_opacity[id]; }
 
 // Filter
-
+function get_filter_url(id) { return element_filter_url[id]; }
+function get_filter_blur(id) { return element_filter_blur[id]; }
+function get_filter_grayscale(id) { return element_filter_grayscale[id]; }
 
 // Text
-function get_text_content() {}
-function get_text_font() {}
-function get_text_align() {}
-function get_text_size() {}
-function get_text_weight() {}
-function get_text_variant() {}
-function get_text_color() {}
-function get_text_style() {}
-function get_text_decoration() {}
-function get_text_indent() {}
-function get_text_spacing() {}
+function get_text_content(id) { return element_text_content[id]; }
+function get_text_font(id) { return element_text_font[id]; }
+function get_text_align(id) { return element_text_align[id]; }
+function get_text_size(id) { return element_text_size[id]; }
+function get_text_weight(id) { return element_text_weight[id]; }
+function get_text_variant(id) { return element_text_variant[id]; }
+function get_text_style(id) { return element_text_style[id]; }
+function get_text_decoration(id) { return element_text_decoration[id]; }
+function get_text_indent(id) { return element_text_indent[id]; }
+function get_text_spacing(id) { return element_text_spacing[id]; }
+function get_text_color(id) { return element_text_color[id]; }
+function get_text_opacity(id) { return element_text_opacity[id]; }
+
 
 
 
@@ -382,22 +433,15 @@ function create_element(type) {
     
     new_element.id = new_id + "";
     
+    // STATIC ARRAYS
     // Dimensions
     element_scale_x[new_id] = 1.0;
     element_scale_y[new_id] = 1.0;
-
-    // Style
-    element_background_color_red[new_id] = 255;
-    element_background_color_green[new_id] = 255;
-    element_background_color_blue[new_id] = 255;
-    element_background_color_alpha[new_id] = 1.0;
-
-    element_shadow_color_alpha[new_id] = 1.0;
     
-    
-    // Dynamic Arrays
+    // DYNAMIC ARRAYS
     element_border_style.push("none");
     element_text_content.push("test");
+    // add all dynamic arrays here and push a value onto the array
 
     return new_id;
 }
@@ -425,22 +469,35 @@ function clear_element(id) {
 /*------------------
     UPDATE ELEMENT
 --------------------*/
-update_counter = new Uint32Array(100);
-
 function udate_DOM_element_width() {
-    for (update_counter[0] = 0; update_counter[0] < element_count; update_counter[0] ++) {
-        DOM_element[update_counter[0]].style.width = element_width[update_counter[0]] + "px";
+    for (i = 0; i < element_count; i ++) {
+        DOM_element[i].style.width = element_width[i] + "px";
     }
 }
 function udate_DOM_element_height() {
-    for (update_counter[1] = 0; update_counter[1] < element_count; update_counter[1] ++) {
-        DOM_element[update_counter[1]].style.height = element_height[update_counter[1]] + "px";
+    for (i = 0; i < element_count; i ++) {
+        DOM_element[i].style.height = element_height[i] + "px";
+    }
+}
+function udate_DOM_element_height() {
+    for (i = 0; i < element_count; i ++) {
+        DOM_element[i].style.height = element_height[i] + "px";
+    }
+}
+function udate_DOM_element_height() {
+    for (i = 0; i < element_count; i ++) {
+        DOM_element[i].style.height = element_height[i] + "px";
+    }
+}
+function udate_DOM_element_height() {
+    for (i = 0; i < element_count; i ++) {
+        DOM_element[i].style.height = element_height[i] + "px";
     }
 }
 
 
 
-
+// this will be removed in favor of the above implementation
 function update_DOM_element(id) {
     if (DOM_element_transform_update[id] === 1) {
         DOM_element[id].style.transform = "matrix("
@@ -495,6 +552,7 @@ function update_DOM_element(id) {
     return;
 }
 
+// this function will run all the individual update functions above
 let _counter0;
 function update_DOM() {
 
@@ -999,3 +1057,6 @@ export {
 
 and indert type="module" in the html script tag
 */
+
+
+
