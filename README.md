@@ -41,5 +41,5 @@ lt.clear();
 **Vision**
 ------
 *To create a data oriented web framework 
-with as little performance bottlenecks as possible and where 
-JavaScript, HTML and CSS are unified into a coherent, readable and pure JavaScript interface.*
+with as little performance bottlenecks as possible, where 
+JavaScript, HTML and CSS are unified into a coherent, readable and pure interface.*
