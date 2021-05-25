@@ -471,191 +471,136 @@ function clear_element(id) {
 // Misc
 function update_DOM_element_cursor_style() {
     for (i = 0; i < element_count; i ++) {
-        DOM_element[i].style.width = element_width[i] + "px";
+        DOM_element[i].style.cursor = element_cursor_style[i]; // DONE
     }
 }
 function update_DOM_element_overflow() {
     for (i = 0; i < element_count; i ++) {
-        DOM_element[i].style.height = element_height[i] + "px";
+        DOM_element[i].style.overflow = element_overflow[i]; // DONE
     }
 }
 function update_DOM_element_clip() {
     for (i = 0; i < element_count; i ++) {
-        DOM_element[i].style.height = element_height[i] + "px";
+        DOM_element[i].style.clip = element_clip[i]; // DONE
     }
 }
 
 // Visibility
 function update_DOM_element_visibility() {
     for (i = 0; i < element_count; i ++) {
-        DOM_element[i].style.height = element_height[i] + "px";
+        DOM_element[i].style.visibility = element_visibility[i]; // DONE
     }
 }
 function update_DOM_element_opacity() {
     for (i = 0; i < element_count; i ++) {
-        DOM_element[i].style.height = element_height[i] + "px";
+        DOM_element[i].style.opacity = element_opacity[i]; // DONE
     }
 }
 
-// Position
-function update_DOM_element_x() {
+// Position / Dimensions
+function update_DOM_element_transform() {
     for (i = 0; i < element_count; i ++) {
-        DOM_element[i].style.height = element_height[i] + "px";
-    }
-}
-function update_DOM_element_y() {
-    for (i = 0; i < element_count; i ++) {
-        DOM_element[i].style.height = element_height[i] + "px";
-    }
-}
-function update_DOM_element_z() {
-    for (i = 0; i < element_count; i ++) {
-        DOM_element[i].style.height = element_height[i] + "px";
-    }
-}
-function update_DOM_element_rotation() {
-    for (i = 0; i < element_count; i ++) {
-        DOM_element[i].style.height = element_height[i] + "px";
+        DOM_element[i].style.transform =  DOM_element[i].style.transform = "matrix("
+        + (element_scale_x[i] + ", ")
+        + (element_skew_x[i] + ", ") 
+        + (element_skew_y[i] + ", ") 
+        + (element_scale_y[i] + ", ")  
+        + (element_x[i] + ", ") 
+        + element_y[i] + ")";
+        DOM_element[i].style.zIndex = element_z[i] + ""; // DONE
     }
 }
 
 // Dimensions
 function update_DOM_element_width() {
     for (i = 0; i < element_count; i ++) {
-        DOM_element[i].style.height = element_height[i] + "px";
+        DOM_element[i].style.width = element_width[i] + "px"; // DONE
     }
 }
 function update_DOM_element_height() {
     for (i = 0; i < element_count; i ++) {
-        DOM_element[i].style.height = element_height[i] + "px";
-    }
-}
-function update_DOM_element_scale_x() {
-    for (i = 0; i < element_count; i ++) {
-        DOM_element[i].style.height = element_height[i] + "px";
-    }
-}
-function update_DOM_element_scale_y() {
-    for (i = 0; i < element_count; i ++) {
-        DOM_element[i].style.height = element_height[i] + "px";
-    }
-}
-function update_DOM_element_skew_x() {
-    for (i = 0; i < element_count; i ++) {
-        DOM_element[i].style.height = element_height[i] + "px";
-    }
-}
-function update_DOM_element_skew_y() {
-    for (i = 0; i < element_count; i ++) {
-        DOM_element[i].style.height = element_height[i] + "px";
+        DOM_element[i].style.height = element_height[i] + "px"; // DONE
     }
 }
 
 // Background
 function update_DOM_element_background_image() {
     for (i = 0; i < element_count; i ++) {
-        DOM_element[i].style.height = element_height[i] + "px";
+        DOM_element[i].style.backgroundImage = element_background_image[i]; // DONE
     }
 }
 function update_DOM_element_background_position() {
     for (i = 0; i < element_count; i ++) {
-        DOM_element[i].style.height = element_height[i] + "px";
+        DOM_element[i].style.backgroundPosition = element_background_position[i]; // DONE
     }
 }
 function update_DOM_element_background_attachment() {
     for (i = 0; i < element_count; i ++) {
-        DOM_element[i].style.height = element_height[i] + "px";
+        DOM_element[i].style.backgroundAttachment = element_background_attachment[i]; // DONE
     }
 }
 function update_DOM_element_background_repeat() {
     for (i = 0; i < element_count; i ++) {
-        DOM_element[i].style.height = element_height[i] + "px";
+        DOM_element[i].style.backgroundRepeat = element_background_repeat[i]; // DONE
     }
 }
 function update_DOM_element_background_color() {
     for (i = 0; i < element_count; i ++) {
-        DOM_element[i].style.height = element_height[i] + "px";
-    }
-}
-function update_DOM_element_background_opacity() {
-    for (i = 0; i < element_count; i ++) {
-        DOM_element[i].style.height = element_height[i] + "px";
+        DOM_element[i].style.backgroundColor = "rgb(" 
+            + (element_background_color[i][0] + ", ");
+            + (element_background_color[i][1] + ", ");
+            + (element_background_color[i][2] + ", ");
+            + (element_background_opacity[i] + ")"); // DONE
     }
 }
 
 // Shadow
-function update_DOM_element_shadow_x() {
+function update_DOM_element_shadow() {
     for (i = 0; i < element_count; i ++) {
-        DOM_element[i].style.height = element_height[i] + "px";
-    }
-}
-function update_DOM_element_shadow_y() {
-    for (i = 0; i < element_count; i ++) {
-        DOM_element[i].style.height = element_height[i] + "px";
-    }
-}
-function update_DOM_element_shadow_radius() {
-    for (i = 0; i < element_count; i ++) {
-        DOM_element[i].style.height = element_height[i] + "px";
-    }
-}
-function update_DOM_element_shadow_blur() {
-    for (i = 0; i < element_count; i ++) {
-        DOM_element[i].style.height = element_height[i] + "px";
-    }
-}
-function update_DOM_element_shadow_color() {
-    for (i = 0; i < element_count; i ++) {
-        DOM_element[i].style.height = element_height[i] + "px";
-    }
-}
-function update_DOM_element_shadow_opacity() {
-    for (i = 0; i < element_count; i ++) {
-        DOM_element[i].style.height = element_height[i] + "px";
+        DOM_element[i].style.boxShadow = (element_shadow_x[i] + "px ") 
+        + (element_shadow_y[i] + "px ") 
+        + (element_shadow_blur[i] + "px ") 
+        + "rgba("
+        + (element_shadow_color[i][0] + ", ")
+        + (element_shadow_color[i][1] + ", ")
+        + (element_shadow_color[i][2] + ", ")
+        + (element_shadow_opacity[i] + ")"); // DONE
     }
 }
 
 // Border
 function update_DOM_element_border_style() {
     for (i = 0; i < element_count; i ++) {
-        DOM_element[i].style.height = element_height[i] + "px";
+        DOM_element[i].style.borderStyle = element_border_style[i]; // DONE
     }
 }
 function update_DOM_element_border_width() {
     for (i = 0; i < element_count; i ++) {
-        DOM_element[i].style.height = element_height[i] + "px";
+        DOM_element[i].style.borderWidth = element_border_width[i] + "px"; // DONE
     }
 }
 function update_DOM_element_border_radius() {
     for (i = 0; i < element_count; i ++) {
-        DOM_element[i].style.height = element_height[i] + "px";
+        DOM_element[i].style.borderRadius = element_border_radius[i] + "px"; // DONE
     }
 }
 function update_DOM_element_border_color() {
     for (i = 0; i < element_count; i ++) {
-        DOM_element[i].style.height = element_height[i] + "px";
-    }
-}
-function update_DOM_element_border_opacity() {
-    for (i = 0; i < element_count; i ++) {
-        DOM_element[i].style.height = element_height[i] + "px";
+        DOM_element[i].style.borderColor = "rgb(" 
+            + (element_border_color[i][0] + ", ");
+            + (element_border_color[i][1] + ", ");
+            + (element_border_color[i][2] + ", ");
+            + (element_border_opacity[i] + ")"); // DONE
     }
 }
 
 // Filter
-function update_DOM_element_filter_url() {
+function update_DOM_element_filter() {
     for (i = 0; i < element_count; i ++) {
-        DOM_element[i].style.height = element_height[i] + "px";
-    }
-}
-function update_DOM_element_filter_blur() {
-    for (i = 0; i < element_count; i ++) {
-        DOM_element[i].style.height = element_height[i] + "px";
-    }
-}
-function update_DOM_element_filter_grayscale() {
-    for (i = 0; i < element_count; i ++) {
-        DOM_element[i].style.height = element_height[i] + "px";
+        DOM_element[i].style.filter = "url("
+            + (element_filter_url[i] + ") ");
+            + ("blur(" + element_filter_blur[i] + ") ");
+            + ("grayscale(" + element_filter_grayscale[i] + ")"); // DONE
     }
 }
 
@@ -715,11 +660,7 @@ function update_DOM_element_text_color() {
         DOM_element[i].style.height = element_height[i] + "px";
     }
 }
-function update_DOM_element_text_opacity() {
-    for (i = 0; i < element_count; i ++) {
-        DOM_element[i].style.height = element_height[i] + "px";
-    }
-}
+
 
 
 
