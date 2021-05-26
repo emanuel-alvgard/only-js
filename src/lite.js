@@ -113,7 +113,7 @@ let element_background_opacity;
 let element_shadow_x;
 let element_shadow_y;
 let element_shadow_blur;
-let element_border_radius;    
+let element_shadow_radius;    
 let element_shadow_opacity;
 
 // Border
@@ -164,7 +164,7 @@ let element_zoom_out_checkpoint;
 
 // Element
 let DOM_element = [DOM_ROOT];
-let clear_element = [0];
+let cleared_element = [0];
 
 // Misc
 let element_cursor_style = [""];
@@ -239,7 +239,7 @@ function create(size) {
     element_shadow_x = new Float32Array(elements);
     element_shadow_y = new Float32Array(elements);
     element_shadow_blur = new Float32Array(elements);
-    element_border_radius = new Float32Array(elements);
+    element_shadow_radius = new Float32Array(elements);
     element_shadow_opacity = new Float32Array(elements);
 
     // Border
@@ -378,52 +378,55 @@ function get_text_opacity(id) { return element_text_opacity[id]; }
 /*------------------
     CREATE ELEMENT
 --------------------*/
-let new_id;
-let new_fragment;
-let new_element;
-
 function create_element(type) {
 
-    new_fragment = document.createDocumentFragment();
-    new_element = document.createElement(type);
+    let fragment = document.createDocumentFragment();
+    let element = document.createElement(type);
 
     // DOM
-    new_element.style.position = "absolute";
-    new_element.style.margin = "0px";
-    new_element.style.padding = "0px";
-    new_element.style.outline = "none";
+    element.style.position = "absolute";
+    element.style.margin = "0px";
+    element.style.padding = "0px";
+    element.style.outline = "none";
     
-    new_fragment.append(new_element);
-    DOM_ROOT.append(new_fragment);
+    fragment.append(element);
+    DOM_ROOT.append(fragment);
     
     // VIRTUAL
-    // Element  
+    // Element
+    let id;  
     if (clear_count === 0) {
-        new_id = create_count;
-        element_id[new_id] = new_id;
-        DOM_element.push(new_element);
+        id = create_count;
+        element_id[id] = id;
+        DOM_element.push(element);
         create_count += 1;
     }
     else {
-        new_id = clear_element[clear_count];
-        DOM_element[new_id] = new_element;
-        clear_element.pop();
+        id = cleared_element[clear_count];
+        DOM_element[id] = element;
+        cleared_element.pop();
         clear_count -= 1;
     }
     
-    new_element.id = new_id + "";
+    element.id = id + "";
     
     // STATIC ARRAYS
     // Transform
-    element_scale_x[new_id] = 1.0;
-    element_scale_y[new_id] = 1.0;
+    element_scale_x[id] = 1.0;
+    element_scale_y[id] = 1.0;
+
+    // Background
+    element_background_opacity[id] = 1.0;
+
+    // Border
+    element_border_opacity[id] = 1.0;
     
     // DYNAMIC ARRAYS
     element_border_style.push("none");
     element_text_content.push("test");
     // add all dynamic arrays here and push a value onto the array
 
-    return new_id;
+    return id;
 }
 
 
@@ -438,7 +441,7 @@ let empty = document.createElement("div");
 function clear_element(id) {
     DOM_element[id] = empty;
     // clear all properties to 0
-    clear_element.push(id);
+    cleared_element.push(id);
     clear_count += 1;
 }
 
@@ -794,21 +797,30 @@ let font_2 = load_google_font("Lato", "http://fonts.googleapis.com/css?family=La
 create(100);
 let div = buffer("div", 50);
 let button = buffer("button", 10);
-let input = button("input", 10);
-
-add_event("mousemove", ROOT);
+let input = buffer("input", 10);
 
 function create_home_page() {
     // clear();
     let header = div[0];
+    set_width(header, 500.0);
+    set_height(header, 100.0);
+    set_border_width(header, 5.0);
+    set_border_color(header, [0, 0, 0]);
 }
 
 function update_home_page() {}
 
-function page_router() {} // routes to pages on certain events
+function page_router() {
+    create_home_page();
+}
 
 
+function main() {
+    page_router();
+    return window.requestAnimationFrame(main);
+}
 
+main();
 
 /*
 
