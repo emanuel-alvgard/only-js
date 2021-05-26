@@ -388,6 +388,7 @@ function create_element(type) {
     element.style.margin = "0px";
     element.style.padding = "0px";
     element.style.outline = "none";
+    element.style.visibility = "hidden";
     
     fragment.append(element);
     DOM_ROOT.append(fragment);
@@ -782,7 +783,7 @@ function set_text_opacity(id, value) { element_text_opacity[id] = value; }
 
 
 // BUFFERS
-function buffer(type, size) {
+function create_buffer(type, size) {
     let buffer = [];
     for (let i = 0; i < size; i ++) {
         buffer.push(create_element(type));
@@ -790,14 +791,16 @@ function buffer(type, size) {
     return buffer;
 }
 
+function clear_buffer(buffer) {}
+
 // APP 
 let font_1 = load_google_font("Roboto", "https://fonts.googleapis.com/css2?family=Roboto&display=swap");
 let font_2 = load_google_font("Lato", "http://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext");
 
 create(100);
-let div = buffer("div", 50);
-let button = buffer("button", 10);
-let input = buffer("input", 10);
+let div = create_buffer("div", 10);
+let button = create_buffer("button", 10);
+let input = create_buffer("input", 10);
 
 function create_home_page() {
     // clear();
