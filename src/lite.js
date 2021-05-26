@@ -72,16 +72,6 @@ DOM_body.append(DOM_ROOT);
 
 
 
-
-
-
-
-
-
-
-
-
-
 /*-------------------
     DEFINE PROPERTY
 ---------------------*/
@@ -214,10 +204,6 @@ let element_text_color = [[0, 0, 0]];
 
 
 
-
-
-
-
 /*-------------------
     CREATE PROPERTY
 ---------------------*/
@@ -305,8 +291,6 @@ function create(size) {
 
 
 
-
-
 /*-------------------
     CLEAR PROPERTY
 ---------------------*/
@@ -314,7 +298,6 @@ function clear() {
     // clears the whole virtual buffer to zero
     // can be efficient to use when loading a new page
 }
-
 
 
 
@@ -387,11 +370,6 @@ function get_text_indent(id) { return element_text_indent[id]; }
 function get_text_spacing(id) { return element_text_spacing[id]; }
 function get_text_color(id) { return element_text_color[id]; }
 function get_text_opacity(id) { return element_text_opacity[id]; }
-
-
-
-
-
 
 
 
@@ -729,97 +707,110 @@ function update_DOM() {
 
 
 
-
-
-
-
-
-
-
-
-
-
 /*-----------------
     SET PROPERTY
 -------------------*/
 // Misc
-function set_cursor_style() {}
-function set_overflow() {}
-function set_clip() {}
+function set_cursor_style(id, value) { element_cursor_style[id] = value; }
+function set_overflow(id, value) {element_overflow[id] = value; }
+function set_clip(id, value) { element_clip[id] = value; }
 
 // Visibility
-function set_visibility(id) {} // uses the DOM display property (none)
-function set_opacity() {}
+function set_visibility(id, value) { element_visibility[id] = value; }
+function set_opacity(id, value) { element_opacity[id] = value; }
 
 // Position
-function set_x(id, origin, x) { element_x[id] = element_x[origin] + x; }
-function set_y(id, origin, y) { element_y[id] = element_y[origin] + y; }
-function set_z_index(id, origin, z) { element_z[id] = element_z[origin] + z; }
-function set_rotation(id, degrees) {}
-function set_scale_x(id, scale) {}
-function set_scale_y(id, scale) {}
-function set_skew_x(id, scale) {}
-function set_skew_y(id, scale) {}
+function set_x(id, value) { element_x[id] = value; }
+function set_y(id, value) { element_y[id] = value; }
+function set_z_index(id, value) { element_z_index[id] = value; }
+function set_rotation(id, value) { element_rotation[id] = value; }
+function set_scale_x(id, value) { element_scale_x[id] = value; }
+function set_scale_y(id, value) { element_scale_y[id] = value; }
+function set_skew_x(id, value) { element_skew_x[id] = value; }
+function set_skew_y(id, value) { element_skew_y[id] = value; }
 
 // Dimensions
-function set_width(id, width) { element_width[id] = width; }
-function set_height(id, height) { element_height[id] = height; }
+function set_width(id, value) { element_width[id] = value; }
+function set_height(id, value) { element_height[id] = value; }
 
 // Background
-function set_background_image() {}
-function set_background_position() {}
-function set_background_attachment() {}
-function set_background_repeat() {}
-function set_background_color(id, color) {}
-function set_background_opacity(id, opacity) {}
+function set_background_image(id, value) { element_background_image[id] = value; }
+function set_background_position(id, value) { element_background_position[id] = value; }
+function set_background_attachment(id, value ) { element_background_attachment[id] = value; }
+function set_background_repeat(id, value) { element_background_repeat[id] = value; } 
+function set_background_color(id, value) { element_background_color[id] = value; }
+function set_background_opacity(id, value) { element_background_opacity[id] = value; }
 
 // Shadow
-function set_shadow_x() {}
-function set_shadow_y() {}
-function set_shadow_radius() {}
-function set_shadow_blur() {}
-function set_shadow_color(id, color) {}
-function set_shadow_opacity() {}
+function set_shadow_x(id, value) { element_shadow_x[id] = value; }
+function set_shadow_y(id, value) { element_shadow_y[id] = value; }
+function set_shadow_radius(id, value) { element_shadow[id] = value; }
+function set_shadow_blur(id, value) { element_shadow_blur[id] = value; }
+function set_shadow_color(id, value) { element_shadow_color[id] = value; }
+function set_shadow_opacity(id, value) { element_shadow_opacity[id] = value; }
 
 // Border
-function set_border_style() {}
-function set_border_width() {}
-function set_border_radius(id, radius) { element_border_radius[id] = radius; }
-function set_border_color() {}
-function set_border_opacity() {}
+function set_border_style(id, value) { element_border_style[id] = value; }
+function set_border_width(id, value) { element_border_width[id] = value; }
+function set_border_radius(id, value) { element_border_radius[id] = value; }
+function set_border_color(id, value) { element_border_color[id] = value; }
+function set_border_opacity(id, value) { element_border_opacity[id] = value; }
 
 // Filter
-function set_filter_url() {} // (string)
-function set_filter_blur() {} // (px)
-function set_filter_grayscale() {} // contrast, grayscale etc. (%)
+function set_filter_url(id, value) { element_filter_url[id] = value; }
+function set_filter_blur(id, value) { element_filter_blur[id] = value; }
+function set_filter_grayscale(id, value) { element_filter_grayscale[id] = value; }
 
 // Text
-function set_text_content(id, text) { element_text_content[id] = text; }
-function set_text_font(id, font) {
-    let element = document.getElementById(id + "");
-    element.style.fontFamily = font;
+function set_text_content(id, value) { element_text_content[id] = value; }
+function set_text_font(id, value) { element_text_font[id] = value; }
+function set_text_align(id, value) { element_text_align[id] = value; }
+function set_text_size(id, value) { element_text_size[id] = value; }
+function set_text_weight(id, value) { element_text_weight[id] = value; }
+function set_text_variant(id, value) { element_text_variant[id] = value; }
+function set_text_style(id, value) { element_text_style[id] = value; }
+function set_text_decoration(id, value) { element_text_decoration[id] = value; }
+function set_text_indent(id, value) { element_text_indent[id] = value; }
+function set_text_spacing(id, value) { element_text_spacing[id] = value; }
+function set_text_color(id, value) { element_text_color[id] = value; }
+function set_text_opacity(id, value) { element_text_opacity[id] = value; }
+
+
+
+
+// BUFFERS
+function buffer(type, size) {
+    let buffer = [];
+    for (let i = 0; i < size; i ++) {
+        buffer.push(create_element(type));
+    }
+    return buffer;
 }
-function set_text_align(origin) {
-    if (origin === "left") {}
-    else if (origin === "center") {}
-    else if (origin === "right") {}
+
+// APP 
+let font_1 = load_google_font("Roboto", "https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+let font_2 = load_google_font("Lato", "http://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext");
+
+create(100);
+let div = buffer("div", 50);
+let button = buffer("button", 10);
+let input = button("input", 10);
+
+add_event("mousemove", ROOT);
+
+function create_home_page() {
+    // clear();
+    let header = div[0];
 }
-function set_text_size() {}
-function set_text_weight() {}
-function set_text_variant() {}
-function set_text_style() {}
-function set_text_decoration() {}
-function set_text_indent() {}
-function set_text_spacing() {}
-function set_text_color() {}
-function set_text_opacity() {}
+
+function update_home_page() {}
+
+function page_router() {} // routes to pages on certain events
 
 
 
 
-
-
-
+/*
 
 // EVENTS
 // Mouse
@@ -884,6 +875,8 @@ function remove_event(id, event) {}
 
 // UTILITY FUNCTIONS
 // Position
+function dependent_position() {}
+
 function center_to_center(id, ref) {
     let ref_center_x = element_x[ref] + (element_width[ref] / 2); // remove local allocations
     let ref_center_y = element_y[ref] + (element_height[ref] / 2);
@@ -1002,115 +995,12 @@ function animation_zoom_in() {}
 function animation_zoom_out() {}
 
 
+*/
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-// APP 
-let font_1 = load_google_font(
-    "Roboto", "https://fonts.googleapis.com/css2?family=Roboto&display=swap"
-    );
-let font_2 = load_google_font(
-    "Lato", "http://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext"
-    );
-
-create(100);
-add_event("mousemove", ROOT);
-
-// create an element_pool() function?? 
-let header = create_element("div");
-let header_home = create_element("button");
-let header_about = create_element("button");
-let header_news = create_element("button");
-let box_1 = create_element("div");
-let box_2 = create_element("div");
-let input = create_element("input");
-let pointer = create_element("div");
-
-function create_home_page() {
-    set_width(header, element_width[ROOT]);
-    set_height(header, 75);
-    set_shadow(header, 0.1, 0.1, 10, [200, 200, 200, 1.0]);
-
-    set_x(header_home, ROOT, 100);
-    set_y(header_home, ROOT, 25);
-    set_z(header_home, ROOT, 1.0);
-    set_width(header_home, 75);
-    set_height(header_home, 25);
-    set_shadow(header_home, 0.1, 0.1, 5, [225, 225, 225, 1.0]);
-    set_border_radius(header_home, 5);
-
-    set_x(header_about, ROOT, 200);
-    set_y(header_about, ROOT, 25);
-    set_z(header_about, ROOT, 1.0);
-    set_width(header_about, 75);
-    set_height(header_about, 25);
-    set_shadow(header_about, 0.1, 0.1, 5, [225, 225, 225, 1.0]);
-    set_border_radius(header_about, 5);
-
-    set_x(header_news, ROOT, 300);
-    set_y(header_news, ROOT, 25);
-    set_z(header_news, ROOT, 1.0);
-    set_width(header_news, 75);
-    set_height(header_news, 25);
-    set_shadow(header_news, 0.1, 0.1, 5, [225, 225, 225, 1.0]);
-    set_border_radius(header_news, 5);
-
-    set_x(box_1, ROOT, 50); 
-    set_y(box_1, ROOT, 125);
-    set_width(box_1, 200);
-    set_height(box_1, 300);
-    set_border_radius(box_1, 5);
-    set_shadow(box_1, 0.1, 0.1, 10, [200, 200, 200, 1.0]);
-    add_event("mousedown", box_1);
-
-    set_x(box_2, ROOT, 300); 
-    set_y(box_2, ROOT, 125);
-    set_width(box_2, 200);
-    set_height(box_2, 300);
-    set_border_radius(box_2, 5);
-    set_shadow(box_2, 0.1, 0.1, 10, [200, 200, 200, 1.0]);
-    add_event("mousedown", box_2);
-
-    set_x(input, ROOT, 200);
-    set_y(input, ROOT, 700);
-    set_z(input, ROOT, 1);
-    set_width(input, 75);
-    set_height(input, 25);
-
-    set_x(pointer, ROOT, 25);
-    set_y(pointer, ROOT, 200);
-    set_width(pointer, 50);
-    set_height(pointer, 50);
-    set_z(pointer, ROOT, -1.0);
-    add_event("mousemove", pointer);
-}
-
-
-function update_home_page() {}
-
-
-
-function page_router() {} // routes to pages on certain events
-
-
-
-
-
-
+/*
 // *TEST*
 function custom_pointer() {
     if (element_mousemove[ROOT] === 1) {
@@ -1175,7 +1065,7 @@ function lite() {
 lite();
 
 
-/* ADD THIS LATER
+// ADD THIS LATER
 export {
     create_element,
     update_element
