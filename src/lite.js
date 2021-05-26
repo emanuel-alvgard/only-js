@@ -91,6 +91,8 @@ let mouse_y = 0.0;
 let keyboard;
 
 // STATIC ARRAYS
+
+// PROPERTIES
 // Element
 const ROOT = 0;
 let create_count = 1;
@@ -100,19 +102,19 @@ let element_id;
 // Visibility
 let element_opacity;
 
-// Position
+// Transform
 let element_x;
 let element_y;
-let element_z;
+let element_z_index;
 let element_rotation;
-
-// Dimensions
-let element_width;
-let element_height;
 let element_scale_x;
 let element_scale_y;
 let element_skew_x;
 let element_skew_y;
+
+// Dimensions
+let element_width;
+let element_height;
 
 // Background
 let element_background_opacity;
@@ -129,37 +131,9 @@ let element_border_width;
 let element_border_radius;
 let element_border_opacity;
 
-// Event
-let element_mousemove;
-let element_mousedown;
-let element_mouseup;
-
-// Animation
-// slide
-let element_slide_x;
-let element_slide_x_progress;
-let element_slide_x_checkpoint;
-let element_slide_y;
-let element_slide_y_progress;
-let element_slide_y_checkpoint;
-// fade
-let element_fade_in;
-let element_fade_in_progress;
-let element_fade_in_checkpoint;
-let element_fade_out;
-let element_fade_out_progress;
-let element_fade_out_checkpoint;
-// zoom
-let element_zoom_in;
-let element_zoom_in_progress;
-let element_zoom_in_checkpoint;
-let element_zoom_out;
-let element_zoom_out_progress;
-let element_zoom_out_checkpoint;
-
 // Filter
-let element_filter_blur; // (px)
-let element_filter_grayscale; // contrast, grayscale etc. (%)
+let element_filter_blur;
+let element_filter_grayscale;
 
 // Text
 let element_text_size;
@@ -168,7 +142,36 @@ let element_text_spacing;
 let element_text_indent;
 let element_text_opacity;
 
+// EVENTS
+let element_mousemove;
+let element_mousedown;
+let element_mouseup;
+
+// ANIMATIONS
+// Slide
+let element_slide_x;
+let element_slide_x_progress;
+let element_slide_x_checkpoint;
+let element_slide_y;
+let element_slide_y_progress;
+let element_slide_y_checkpoint;
+// Fade
+let element_fade_in;
+let element_fade_in_progress;
+let element_fade_in_checkpoint;
+let element_fade_out;
+let element_fade_out_progress;
+let element_fade_out_checkpoint;
+// Zoom
+let element_zoom_in;
+let element_zoom_in_progress;
+let element_zoom_in_checkpoint;
+let element_zoom_out;
+let element_zoom_out_progress;
+let element_zoom_out_checkpoint;
+
 // DYNAMIC ARRAYS
+
 // Element
 let DOM_element = [DOM_ROOT];
 let clear_element = [0];
@@ -221,27 +224,27 @@ let element_text_color = [[0, 0, 0]];
 function create(size) {
     
     let elements = size + 1;
-    let color = new Uint8Array(3);
 
+    // PROPERTIES
     // Element
     element_id = new Uint8Array(elements);
 
     // Visibility
     element_opacity = new Float32Array(elements);
     
-    // Position
+    // Transform
     element_x = new Float32Array(elements);
     element_y = new Float32Array(elements);
-    element_z = new Int32Array(elements);
+    element_z_index = new Int32Array(elements);
     element_rotation = new Int16Array(elements);
-
-    // Dimensions
-    element_width = new Float32Array(elements);
-    element_height = new Float32Array(elements);
     element_scale_x = new Float32Array(elements);
     element_scale_y = new Float32Array(elements);
     element_skew_x = new Float32Array(elements);
     element_skew_y = new Float32Array(elements);
+
+    // Dimensions
+    element_width = new Float32Array(elements);
+    element_height = new Float32Array(elements);
 
     // Background
     element_background_opacity = new Float32Array(elements);
@@ -258,34 +261,6 @@ function create(size) {
     element_border_radius = new Float32Array(elements);
     element_border_opacity = new Float32Array(elements);
 
-    // Events
-    element_mousemove = new Uint8Array(elements);
-    element_mousedown = new Uint8Array(elements);
-    element_mouseup = new Uint8Array(elements);
-
-    // Animations 
-    // slide
-    element_slide_x = new Float32Array(elements);
-    element_slide_x_progress = new Float32Array(elements);
-    element_slide_x_checkpoint = new Float32Array(elements);
-    element_slide_y = new Float32Array(elements);
-    element_slide_y_progress = new Float32Array(elements);
-    element_slide_y_checkpoint = new Float32Array(elements);
-    // fade
-    element_fade_in = new Float32Array(elements);
-    element_fade_in_progress = new Float32Array(elements);
-    element_fade_in_checkpoint = new Float32Array(elements);
-    element_fade_out = new Float32Array(elements);
-    element_fade_out_progress = new Float32Array(elements);
-    element_fade_out_checkpoint = new Float32Array(elements);
-    // zoom
-    element_zoom_in = new Float32Array(elements);
-    element_zoom_in_progress = new Float32Array(elements);
-    element_zoom_in_checkpoint = new Float32Array(elements);
-    element_zoom_out = new Float32Array(elements);
-    element_zoom_out_progress = new Float32Array(elements);
-    element_zoom_out_checkpoint = new Float32Array(elements);
-
     // Filter
     element_filter_blur = new Uint8Array(elements);
     element_filter_grayscale = new Float32Array(elements);
@@ -296,6 +271,34 @@ function create(size) {
     element_text_spacing = new Float32Array(elements);
     element_text_indent = new Float32Array(elements);
     element_text_opacity = new Uint8Array(elements);
+
+    // EVENTS
+    element_mousemove = new Uint8Array(elements);
+    element_mousedown = new Uint8Array(elements);
+    element_mouseup = new Uint8Array(elements);
+
+    // ANIMATIONS 
+    // Slide
+    element_slide_x = new Float32Array(elements);
+    element_slide_x_progress = new Float32Array(elements);
+    element_slide_x_checkpoint = new Float32Array(elements);
+    element_slide_y = new Float32Array(elements);
+    element_slide_y_progress = new Float32Array(elements);
+    element_slide_y_checkpoint = new Float32Array(elements);
+    // Fade
+    element_fade_in = new Float32Array(elements);
+    element_fade_in_progress = new Float32Array(elements);
+    element_fade_in_checkpoint = new Float32Array(elements);
+    element_fade_out = new Float32Array(elements);
+    element_fade_out_progress = new Float32Array(elements);
+    element_fade_out_checkpoint = new Float32Array(elements);
+    // Zoom
+    element_zoom_in = new Float32Array(elements);
+    element_zoom_in_progress = new Float32Array(elements);
+    element_zoom_in_checkpoint = new Float32Array(elements);
+    element_zoom_out = new Float32Array(elements);
+    element_zoom_out_progress = new Float32Array(elements);
+    element_zoom_out_checkpoint = new Float32Array(elements);
 }
 
 
@@ -329,19 +332,19 @@ function get_clip(id) { return element_clip[id]; }
 function get_visibility(id) { return element_visibility[id]; }
 function get_opacity(id) { return element_opacity[id]; }
 
-// Position
+// Transform
 function get_x(id) { return element_x[id]; }
 function get_y(id) { return element_y[id]; }
-function get_z(id) { return element_z[id]; }
+function get_z_index(id) { return element_z[id]; }
 function get_rotation(id) { return element_rotation[id]; }
-
-// Dimensions
-function get_width(id) { return element_width[id]; }
-function get_height(id) { return element_height[id]; }
 function get_scale_x(id) { return element_scale_x[id]; }
 function get_scale_y(id) { return element_scale_y[id]; }
 function get_skew_x(id) { return element_skew_x[id]; }
 function get_skew_y(id) { return element_skew_y[id]; }
+
+// Dimensions
+function get_width(id) { return element_width[id]; }
+function get_height(id) { return element_height[id]; }
 
 // Background
 function get_background_image(id) { return element_background_image[id]; }
@@ -433,7 +436,7 @@ function create_element(type) {
     new_element.id = new_id + "";
     
     // STATIC ARRAYS
-    // Dimensions
+    // Transform
     element_scale_x[new_id] = 1.0;
     element_scale_y[new_id] = 1.0;
     
@@ -497,7 +500,7 @@ function update_DOM_element_opacity() {
     }
 }
 
-// Position / Dimensions
+// Transform
 function update_DOM_element_transform() {
     for (i = 0; i < element_count; i ++) {
         DOM_element[i].style.transform =  DOM_element[i].style.transform = "matrix("
@@ -546,10 +549,10 @@ function update_DOM_element_background_repeat() {
 }
 function update_DOM_element_background_color() {
     for (i = 0; i < element_count; i ++) {
-        DOM_element[i].style.backgroundColor = "rgb(" 
-            + (element_background_color[i][0] + ", ");
-            + (element_background_color[i][1] + ", ");
-            + (element_background_color[i][2] + ", ");
+        DOM_element[i].style.backgroundColor = "rgba(" 
+            + (element_background_color[i][0] + ", ")
+            + (element_background_color[i][1] + ", ")
+            + (element_background_color[i][2] + ", ")
             + (element_background_opacity[i] + ")"); // DONE
     }
 }
@@ -586,10 +589,10 @@ function update_DOM_element_border_radius() {
 }
 function update_DOM_element_border_color() {
     for (i = 0; i < element_count; i ++) {
-        DOM_element[i].style.borderColor = "rgb(" 
-            + (element_border_color[i][0] + ", ");
-            + (element_border_color[i][1] + ", ");
-            + (element_border_color[i][2] + ", ");
+        DOM_element[i].style.borderColor = "rgba(" 
+            + (element_border_color[i][0] + ", ")
+            + (element_border_color[i][1] + ", ")
+            + (element_border_color[i][2] + ", ")
             + (element_border_opacity[i] + ")"); // DONE
     }
 }
@@ -598,8 +601,8 @@ function update_DOM_element_border_color() {
 function update_DOM_element_filter() {
     for (i = 0; i < element_count; i ++) {
         DOM_element[i].style.filter = "url("
-            + (element_filter_url[i] + ") ");
-            + ("blur(" + element_filter_blur[i] + ") ");
+            + (element_filter_url[i] + ") ")
+            + ("blur(" + element_filter_blur[i] + ") ")
             + ("grayscale(" + element_filter_grayscale[i] + ")"); // DONE
     }
 }
@@ -607,57 +610,61 @@ function update_DOM_element_filter() {
 // Text
 function update_DOM_element_text_content() {
     for (i = 0; i < element_count; i ++) {
-        DOM_element[i].style.height = element_height[i] + "px";
+        DOM_element[i].style.textContent = element_text_content[i]; // DONE
     }
 }
 function update_DOM_element_text_font() {
     for (i = 0; i < element_count; i ++) {
-        DOM_element[i].style.height = element_height[i] + "px";
+        DOM_element[i].style.fontFamily = element_text_font[i]; // DONE
     }
 }
 function update_DOM_element_text_align() {
     for (i = 0; i < element_count; i ++) {
-        DOM_element[i].style.height = element_height[i] + "px";
+        DOM_element[i].style.textAlign = element_text_align[i]; // DONE
     }
 }
 function update_DOM_element_text_size() {
     for (i = 0; i < element_count; i ++) {
-        DOM_element[i].style.height = element_height[i] + "px";
+        DOM_element[i].style.fontSize = element_text_size[i] + "px"; // DONE
     }
 }
 function update_DOM_element_text_weight() {
     for (i = 0; i < element_count; i ++) {
-        DOM_element[i].style.height = element_height[i] + "px";
+        DOM_element[i].style.fontWeight = element_text_weight[i] + "px"; // DONE
     }
 }
 function update_DOM_element_text_variant() {
     for (i = 0; i < element_count; i ++) {
-        DOM_element[i].style.height = element_height[i] + "px";
+        DOM_element[i].style.fontVariant = element_text_variant[i]; // DONE
     }
 }
 function update_DOM_element_text_style() {
     for (i = 0; i < element_count; i ++) {
-        DOM_element[i].style.height = element_height[i] + "px";
+        DOM_element[i].style.fontStyle = element_text_style[i]; // DONE
     }
 }
 function update_DOM_element_text_decoration() {
     for (i = 0; i < element_count; i ++) {
-        DOM_element[i].style.height = element_height[i] + "px";
+        DOM_element[i].style.textDecoration = element_text_decoration[i]; // DONE
     }
 }
 function update_DOM_element_text_indent() {
     for (i = 0; i < element_count; i ++) {
-        DOM_element[i].style.height = element_height[i] + "px";
+        DOM_element[i].style.textIndent = element_text_indent[i] + "px"; // DONE
     }
 }
 function update_DOM_element_text_spacing() {
     for (i = 0; i < element_count; i ++) {
-        DOM_element[i].style.height = element_height[i] + "px";
+        DOM_element[i].style.letterSpacing = element_text_spacing[i] + "px"; // DONE
     }
 }
 function update_DOM_element_text_color() {
     for (i = 0; i < element_count; i ++) {
-        DOM_element[i].style.height = element_height[i] + "px";
+        DOM_element[i].style.color = "rgba(" 
+        + (element_text_color[i][0] + ", ")
+        + (element_text_color[i][1] + ", ")
+        + (element_text_color[i][2] + ", ")
+        + (element_text_opacity[i] + ")"); // DONE
     }
 }
 
@@ -665,63 +672,9 @@ function update_DOM_element_text_color() {
 
 
 
-
-// this will be removed in favor of the above implementation
-function update_DOM_element(id) {
-    if (DOM_element_transform_update[id] === 1) {
-        DOM_element[id].style.transform = "matrix("
-            + (element_scale_x[id] + ", ")
-            + (element_skew_x[id] + ", ") 
-            + (element_skew_y[id] + ", ") 
-            + (element_scale_y[id] + ", ")  
-            + (element_x[id] + ", ") 
-            + element_y[id] + ")";
-        DOM_element[id].style.zIndex = element_z[id] + "";
-        DOM_element_transform_update[id] = 0;
-    }
-    if (DOM_element_width_update[id] === 1) {
-        DOM_element[id].style.width = element_width[id] + "px";
-        DOM_element_width_update[id] = 0;
-    }
-    if (DOM_element_height_update[id] === 1) {
-        DOM_element[id].style.height = element_height[id] + "px";
-        DOM_element_height_update[id] = 0;
-    }
-    if (DOM_element_shadow_update[id] === 1) {
-        DOM_element[id].style.boxShadow = (element_shadow_x[id] + "px ") 
-            + (element_shadow_y[id] + "px ") 
-            + (element_shadow_blur[id] + "px ") 
-            + "rgba("
-            + (element_shadow_color_red[id] + ", ")
-            + (element_shadow_color_green[id] + ", ")
-            + (element_shadow_color_blue[id] + ", ")
-            + (element_shadow_color_alpha[id] + ")");  
-        DOM_element_shadow_update[id] = 0;
-    }
-    if (DOM_element_background_color_update[id] === 1) {
-        DOM_element[id].style.backgroundColor = "rgba("
-        + (element_background_color_red[id] + ", ")
-        + (element_background_color_green[id] + ", ")
-        + (element_background_color_blue[id] + ", ")
-        + (element_background_color_alpha[id] + ")");
-        DOM_element_background_color_update[id] = 0;
-    }
-    if (DOM_element_border_style_update[id] === 1) {
-        DOM_element[id].style.border = element_border_style[id];
-        DOM_element_border_style_update[id] = 0;
-    }
-    if (DOM_element_border_radius_update[id] === 1) {
-        DOM_element[id].style.borderRadius = element_border_radius[id] + "px";
-        DOM_element_border_radius_update[id] = 0;
-    }
-    if (DOM_element_text_content_update[id] === 1) {
-        DOM_element[id].textContent = element_text_content[id];
-        DOM_element_text_content_update[id] = 0;
-    }
-    return;
-}
-
-// this function will run all the individual update functions above
+/*---------------
+    UPDATE DOM
+-----------------*/
 function update_DOM() {
     // Misc
     update_DOM_element_cursor_style();
@@ -732,23 +685,44 @@ function update_DOM() {
     update_DOM_element_visibility();
     update_DOM_element_opacity();
 
-    // Position
-    update_DOM_element_x();
-    update_DOM_element_y();
-    update_DOM_element_z();
-    update_DOM_element_rotation();
+    // Transform
+    update_DOM_element_transform();
 
     // Dimensions
     update_DOM_element_width();
     update_DOM_element_height();
-    update_DOM_element_scale_x();
-    update_DOM_element_scale_y();
-    update_DOM_element_skew_x();
-    update_DOM_element_skew_y();
 
     // Background
     update_DOM_element_background_image();
     update_DOM_element_background_position();
+    update_DOM_element_attachment();
+    update_DOM_element_repeat();
+    update_DOM_element_color();
+
+    // Shadow
+    update_DOM_element_shadow();
+
+    // border
+    update_DOM_element_border_style();
+    update_DOM_element_border_width();
+    update_DOM_element_border_radius();
+    update_DOM_element_border_color();
+
+    // filter
+    update_DOM_element_filter();
+
+    // text
+    update_DOM_element_text_content();
+    update_DOM_element_text_font();
+    update_DOM_element_text_align();
+    update_DOM_element_text_size();
+    update_DOM_element_text_weight();
+    update_DOM_element_text_variant();
+    update_DOM_element_text_style();
+    update_DOM_element_text_decoration();
+    update_DOM_element_text_indent();
+    update_DOM_element_text_spacing();
+    update_DOM_element_text_color();
 }
 
 
@@ -777,20 +751,19 @@ function set_clip() {}
 function set_visibility(id) {} // uses the DOM display property (none)
 function set_opacity() {}
 
-
 // Position
 function set_x(id, origin, x) { element_x[id] = element_x[origin] + x; }
 function set_y(id, origin, y) { element_y[id] = element_y[origin] + y; }
-function set_z(id, origin, z) { element_z[id] = element_z[origin] + z; }
+function set_z_index(id, origin, z) { element_z[id] = element_z[origin] + z; }
 function set_rotation(id, degrees) {}
-
-// Dimensions
-function set_width(id, width) { element_width[id] = width; }
-function set_height(id, height) { element_height[id] = height; }
 function set_scale_x(id, scale) {}
 function set_scale_y(id, scale) {}
 function set_skew_x(id, scale) {}
 function set_skew_y(id, scale) {}
+
+// Dimensions
+function set_width(id, width) { element_width[id] = width; }
+function set_height(id, height) { element_height[id] = height; }
 
 // Background
 function set_background_image() {}
@@ -1174,7 +1147,7 @@ function animate_element_on_click(id, start, end) {
 
 
 // *TEST*
-function main() {
+function lite() {
     
     set_delta();
 
@@ -1199,7 +1172,7 @@ function main() {
     return window.requestAnimationFrame(main);
 }
 
-main();
+lite();
 
 
 /* ADD THIS LATER
