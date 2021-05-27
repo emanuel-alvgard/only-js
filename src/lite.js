@@ -72,20 +72,20 @@ DOM_body.append(DOM_ROOT);
 
 
 
-/*-------------------
-    DEFINE PROPERTY
----------------------*/
-// GLOBAL
+/*------------------------------
+    DEFINE VIRTUAL PROPERTIES
+--------------------------------*/
+/* GLOBAL */
 let mouse_x = 0.0;
 let mouse_y = 0.0;
 let keyboard;
 
-// STATIC ARRAYS
-
+/* STATIC ARRAYS */
 // PROPERTIES
 // Element
 const ROOT = 0;
-let create_count = 1;
+let virtual_size = 1;
+let virtual_size = 1; //
 let clear_count = 0;
 let element_id;
 
@@ -160,8 +160,8 @@ let element_zoom_out;
 let element_zoom_out_progress;
 let element_zoom_out_checkpoint;
 
-// DYNAMIC ARRAYS
-
+/* DYNAMIC ARRAYS */
+// PROPERTIES
 // Element
 let DOM_element = [DOM_ROOT];
 let cleared_element = [0];
@@ -204,108 +204,105 @@ let element_text_color = [[0, 0, 0]];
 
 
 
-/*-------------------
-    CREATE PROPERTY
----------------------*/
-function create(size) {
+/*-----------------------------
+    CREATE VIRTUAL PROPERTIES
+-------------------------------*/
+function create_virtual(size) {
     
-    let elements = size + 1;
+    virtual_size += size;
 
     // PROPERTIES
     // Element
-    element_id = new Uint8Array(elements);
+    element_id = new Uint8Array(virtual_size);
 
     // Visibility
-    element_opacity = new Float32Array(elements);
+    element_opacity = new Float32Array(virtual_size);
     
     // Transform
-    element_x = new Float32Array(elements);
-    element_y = new Float32Array(elements);
-    element_z_index = new Int32Array(elements);
-    element_rotation = new Int16Array(elements);
-    element_scale_x = new Float32Array(elements);
-    element_scale_y = new Float32Array(elements);
-    element_skew_x = new Float32Array(elements);
-    element_skew_y = new Float32Array(elements);
+    element_x = new Float32Array(virtual_size);
+    element_y = new Float32Array(virtual_size);
+    element_z_index = new Int32Array(virtual_size);
+    element_rotation = new Int16Array(virtual_size);
+    element_scale_x = new Float32Array(virtual_size);
+    element_scale_y = new Float32Array(virtual_size);
+    element_skew_x = new Float32Array(virtual_size);
+    element_skew_y = new Float32Array(virtual_size);
 
     // Dimensions
-    element_width = new Float32Array(elements);
-    element_height = new Float32Array(elements);
+    element_width = new Float32Array(virtual_size);
+    element_height = new Float32Array(virtual_size);
 
     // Background
-    element_background_opacity = new Float32Array(elements);
+    element_background_opacity = new Float32Array(virtual_size);
     
     // Shadow
-    element_shadow_x = new Float32Array(elements);
-    element_shadow_y = new Float32Array(elements);
-    element_shadow_blur = new Float32Array(elements);
-    element_shadow_radius = new Float32Array(elements);
-    element_shadow_opacity = new Float32Array(elements);
+    element_shadow_x = new Float32Array(virtual_size);
+    element_shadow_y = new Float32Array(virtual_size);
+    element_shadow_blur = new Float32Array(virtual_size);
+    element_shadow_radius = new Float32Array(virtual_size);
+    element_shadow_opacity = new Float32Array(virtual_size);
 
     // Border
-    element_border_width = new Float32Array(elements);
-    element_border_radius = new Float32Array(elements);
-    element_border_opacity = new Float32Array(elements);
+    element_border_width = new Float32Array(virtual_size);
+    element_border_radius = new Float32Array(virtual_size);
+    element_border_opacity = new Float32Array(virtual_size);
 
     // Filter
-    element_filter_blur = new Uint8Array(elements);
-    element_filter_grayscale = new Float32Array(elements);
+    element_filter_blur = new Uint8Array(virtual_size);
+    element_filter_grayscale = new Float32Array(virtual_size);
 
     // Text
-    element_text_size = new Uint8Array(elements);
-    element_text_weight = new Uint8Array(elements);
-    element_text_spacing = new Float32Array(elements);
-    element_text_indent = new Float32Array(elements);
-    element_text_opacity = new Uint8Array(elements);
+    element_text_size = new Uint8Array(virtual_size);
+    element_text_weight = new Uint8Array(virtual_size);
+    element_text_spacing = new Float32Array(virtual_size);
+    element_text_indent = new Float32Array(virtual_size);
+    element_text_opacity = new Uint8Array(virtual_size);
 
     // EVENTS
-    element_mousemove = new Uint8Array(elements);
-    element_mousedown = new Uint8Array(elements);
-    element_mouseup = new Uint8Array(elements);
+    element_mousemove = new Uint8Array(virtual_size);
+    element_mousedown = new Uint8Array(virtual_size);
+    element_mouseup = new Uint8Array(virtual_size);
 
     // ANIMATIONS 
     // Slide
-    element_slide_x = new Float32Array(elements);
-    element_slide_x_progress = new Float32Array(elements);
-    element_slide_x_checkpoint = new Float32Array(elements);
-    element_slide_y = new Float32Array(elements);
-    element_slide_y_progress = new Float32Array(elements);
-    element_slide_y_checkpoint = new Float32Array(elements);
+    element_slide_x = new Float32Array(virtual_size);
+    element_slide_x_progress = new Float32Array(virtual_size);
+    element_slide_x_checkpoint = new Float32Array(virtual_size);
+    element_slide_y = new Float32Array(virtual_size);
+    element_slide_y_progress = new Float32Array(virtual_size);
+    element_slide_y_checkpoint = new Float32Array(virtual_size);
     // Fade
-    element_fade_in = new Float32Array(elements);
-    element_fade_in_progress = new Float32Array(elements);
-    element_fade_in_checkpoint = new Float32Array(elements);
-    element_fade_out = new Float32Array(elements);
-    element_fade_out_progress = new Float32Array(elements);
-    element_fade_out_checkpoint = new Float32Array(elements);
+    element_fade_in = new Float32Array(virtual_size);
+    element_fade_in_progress = new Float32Array(virtual_size);
+    element_fade_in_checkpoint = new Float32Array(virtual_size);
+    element_fade_out = new Float32Array(virtual_size);
+    element_fade_out_progress = new Float32Array(virtual_size);
+    element_fade_out_checkpoint = new Float32Array(virtual_size);
     // Zoom
-    element_zoom_in = new Float32Array(elements);
-    element_zoom_in_progress = new Float32Array(elements);
-    element_zoom_in_checkpoint = new Float32Array(elements);
-    element_zoom_out = new Float32Array(elements);
-    element_zoom_out_progress = new Float32Array(elements);
-    element_zoom_out_checkpoint = new Float32Array(elements);
+    element_zoom_in = new Float32Array(virtual_size);
+    element_zoom_in_progress = new Float32Array(virtual_size);
+    element_zoom_in_checkpoint = new Float32Array(virtual_size);
+    element_zoom_out = new Float32Array(virtual_size);
+    element_zoom_out_progress = new Float32Array(virtual_size);
+    element_zoom_out_checkpoint = new Float32Array(virtual_size);
 }
 
 
 
 
 
-/*-------------------
-    CLEAR PROPERTY
----------------------*/
-function clear() {
-    // clears the whole virtual buffer to zero
-    // can be efficient to use when loading a new page
-}
+/*----------------------------
+    CLEAR VIRTUAL PROPERTIES
+------------------------------*/
+function clear_virtual() {}
 
 
 
 
 
-/*-----------------
-    GET PROPERTY
--------------------*/
+/*------------------------
+    GET VIRTUAL PROPERTY
+--------------------------*/
 // Misc
 function get_cursor_style(id) { return element_cursor_style[id]; }
 function get_overflow(id) { return element_overflow[id]; }
@@ -375,9 +372,9 @@ function get_text_opacity(id) { return element_text_opacity[id]; }
 
 
 
-/*------------------
+/*-------------------
     CREATE ELEMENT
---------------------*/
+---------------------*/
 function create_element(type) {
 
     let fragment = document.createDocumentFragment();
@@ -411,7 +408,7 @@ function create_element(type) {
     
     element.id = id + "";
     
-    // STATIC ARRAYS
+    /* STATIC ARRAYS */
     // Transform
     element_scale_x[id] = 1.0;
     element_scale_y[id] = 1.0;
@@ -422,7 +419,7 @@ function create_element(type) {
     // Border
     element_border_opacity[id] = 1.0;
     
-    // DYNAMIC ARRAYS
+    /* DYNAMIC ARRAYS */
     element_border_style.push("none");
     element_text_content.push("test");
     // add all dynamic arrays here and push a value onto the array
@@ -455,36 +452,36 @@ function clear_element(id) {
 --------------------*/
 // Misc
 function update_DOM_element_cursor_style() {
-    for (i = 0; i < element_count; i ++) {
+    for (let i = 0; i < virtual_size; i ++) {
         DOM_element[i].style.cursor = element_cursor_style[i]; // DONE
     }
 }
 function update_DOM_element_overflow() {
-    for (i = 0; i < element_count; i ++) {
+    for (let i = 0; i < virtual_size; i ++) {
         DOM_element[i].style.overflow = element_overflow[i]; // DONE
     }
 }
 function update_DOM_element_clip() {
-    for (i = 0; i < element_count; i ++) {
+    for (let i = 0; i < virtual_size; i ++) {
         DOM_element[i].style.clip = element_clip[i]; // DONE
     }
 }
 
 // Visibility
 function update_DOM_element_visibility() {
-    for (i = 0; i < element_count; i ++) {
+    for (let i = 0; i < virtual_size; i ++) {
         DOM_element[i].style.visibility = element_visibility[i]; // DONE
     }
 }
 function update_DOM_element_opacity() {
-    for (i = 0; i < element_count; i ++) {
+    for (let i = 0; i < virtual_size; i ++) {
         DOM_element[i].style.opacity = element_opacity[i]; // DONE
     }
 }
 
 // Transform
 function update_DOM_element_transform() {
-    for (i = 0; i < element_count; i ++) {
+    for (let i = 0; i < virtual_size; i ++) {
         DOM_element[i].style.transform =  DOM_element[i].style.transform = "matrix("
         + (element_scale_x[i] + ", ")
         + (element_skew_x[i] + ", ") 
@@ -498,39 +495,39 @@ function update_DOM_element_transform() {
 
 // Dimensions
 function update_DOM_element_width() {
-    for (i = 0; i < element_count; i ++) {
+    for (let i = 0; i < virtual_size; i ++) {
         DOM_element[i].style.width = element_width[i] + "px"; // DONE
     }
 }
 function update_DOM_element_height() {
-    for (i = 0; i < element_count; i ++) {
+    for (let i = 0; i < virtual_size; i ++) {
         DOM_element[i].style.height = element_height[i] + "px"; // DONE
     }
 }
 
 // Background
 function update_DOM_element_background_image() {
-    for (i = 0; i < element_count; i ++) {
+    for (let i = 0; i < virtual_size; i ++) {
         DOM_element[i].style.backgroundImage = element_background_image[i]; // DONE
     }
 }
 function update_DOM_element_background_position() {
-    for (i = 0; i < element_count; i ++) {
+    for (let i = 0; i < virtual_size; i ++) {
         DOM_element[i].style.backgroundPosition = element_background_position[i]; // DONE
     }
 }
 function update_DOM_element_background_attachment() {
-    for (i = 0; i < element_count; i ++) {
+    for (let i = 0; i < virtual_size; i ++) {
         DOM_element[i].style.backgroundAttachment = element_background_attachment[i]; // DONE
     }
 }
 function update_DOM_element_background_repeat() {
-    for (i = 0; i < element_count; i ++) {
+    for (let i = 0; i < virtual_size; i ++) {
         DOM_element[i].style.backgroundRepeat = element_background_repeat[i]; // DONE
     }
 }
 function update_DOM_element_background_color() {
-    for (i = 0; i < element_count; i ++) {
+    for (let i = 0; i < virtual_size; i ++) {
         DOM_element[i].style.backgroundColor = "rgba(" 
             + (element_background_color[i][0] + ", ")
             + (element_background_color[i][1] + ", ")
@@ -541,7 +538,7 @@ function update_DOM_element_background_color() {
 
 // Shadow
 function update_DOM_element_shadow() {
-    for (i = 0; i < element_count; i ++) {
+    for (let i = 0; i < virtual_size; i ++) {
         DOM_element[i].style.boxShadow = (element_shadow_x[i] + "px ") 
         + (element_shadow_y[i] + "px ") 
         + (element_shadow_blur[i] + "px ") 
@@ -555,22 +552,22 @@ function update_DOM_element_shadow() {
 
 // Border
 function update_DOM_element_border_style() {
-    for (i = 0; i < element_count; i ++) {
+    for (let i = 0; i < virtual_size; i ++) {
         DOM_element[i].style.borderStyle = element_border_style[i]; // DONE
     }
 }
 function update_DOM_element_border_width() {
-    for (i = 0; i < element_count; i ++) {
+    for (let i = 0; i < virtual_size; i ++) {
         DOM_element[i].style.borderWidth = element_border_width[i] + "px"; // DONE
     }
 }
 function update_DOM_element_border_radius() {
-    for (i = 0; i < element_count; i ++) {
+    for (let i = 0; i < virtual_size; i ++) {
         DOM_element[i].style.borderRadius = element_border_radius[i] + "px"; // DONE
     }
 }
 function update_DOM_element_border_color() {
-    for (i = 0; i < element_count; i ++) {
+    for (let i = 0; i < virtual_size; i ++) {
         DOM_element[i].style.borderColor = "rgba(" 
             + (element_border_color[i][0] + ", ")
             + (element_border_color[i][1] + ", ")
@@ -581,7 +578,7 @@ function update_DOM_element_border_color() {
 
 // Filter
 function update_DOM_element_filter() {
-    for (i = 0; i < element_count; i ++) {
+    for (let i = 0; i < virtual_size; i ++) {
         DOM_element[i].style.filter = "url("
             + (element_filter_url[i] + ") ")
             + ("blur(" + element_filter_blur[i] + ") ")
@@ -591,57 +588,57 @@ function update_DOM_element_filter() {
 
 // Text
 function update_DOM_element_text_content() {
-    for (i = 0; i < element_count; i ++) {
+    for (let i = 0; i < virtual_size; i ++) {
         DOM_element[i].style.textContent = element_text_content[i]; // DONE
     }
 }
 function update_DOM_element_text_font() {
-    for (i = 0; i < element_count; i ++) {
+    for (let i = 0; i < virtual_size; i ++) {
         DOM_element[i].style.fontFamily = element_text_font[i]; // DONE
     }
 }
 function update_DOM_element_text_align() {
-    for (i = 0; i < element_count; i ++) {
+    for (let i = 0; i < virtual_size; i ++) {
         DOM_element[i].style.textAlign = element_text_align[i]; // DONE
     }
 }
 function update_DOM_element_text_size() {
-    for (i = 0; i < element_count; i ++) {
+    for (let i = 0; i < virtual_size; i ++) {
         DOM_element[i].style.fontSize = element_text_size[i] + "px"; // DONE
     }
 }
 function update_DOM_element_text_weight() {
-    for (i = 0; i < element_count; i ++) {
+    for (let i = 0; i < virtual_size; i ++) {
         DOM_element[i].style.fontWeight = element_text_weight[i] + "px"; // DONE
     }
 }
 function update_DOM_element_text_variant() {
-    for (i = 0; i < element_count; i ++) {
+    for (let i = 0; i < virtual_size; i ++) {
         DOM_element[i].style.fontVariant = element_text_variant[i]; // DONE
     }
 }
 function update_DOM_element_text_style() {
-    for (i = 0; i < element_count; i ++) {
+    for (let i = 0; i < virtual_size; i ++) {
         DOM_element[i].style.fontStyle = element_text_style[i]; // DONE
     }
 }
 function update_DOM_element_text_decoration() {
-    for (i = 0; i < element_count; i ++) {
+    for (let i = 0; i < virtual_size; i ++) {
         DOM_element[i].style.textDecoration = element_text_decoration[i]; // DONE
     }
 }
 function update_DOM_element_text_indent() {
-    for (i = 0; i < element_count; i ++) {
+    for (let i = 0; i < virtual_size; i ++) {
         DOM_element[i].style.textIndent = element_text_indent[i] + "px"; // DONE
     }
 }
 function update_DOM_element_text_spacing() {
-    for (i = 0; i < element_count; i ++) {
+    for (let i = 0; i < virtual_size; i ++) {
         DOM_element[i].style.letterSpacing = element_text_spacing[i] + "px"; // DONE
     }
 }
 function update_DOM_element_text_color() {
-    for (i = 0; i < element_count; i ++) {
+    for (let i = 0; i < virtual_size; i ++) {
         DOM_element[i].style.color = "rgba(" 
         + (element_text_color[i][0] + ", ")
         + (element_text_color[i][1] + ", ")
@@ -783,7 +780,7 @@ function set_text_opacity(id, value) { element_text_opacity[id] = value; }
 
 
 // BUFFERS
-function create_buffer(type, size) {
+function create_element_buffer(type, size) {
     let buffer = [];
     for (let i = 0; i < size; i ++) {
         buffer.push(create_element(type));
@@ -791,8 +788,31 @@ function create_buffer(type, size) {
     return buffer;
 }
 
-function clear_buffer(buffer) {}
+function clear_element_buffer(buffer) {}
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 // APP 
 let font_1 = load_google_font("Roboto", "https://fonts.googleapis.com/css2?family=Roboto&display=swap");
 let font_2 = load_google_font("Lato", "http://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext");
@@ -804,11 +824,17 @@ let input = create_buffer("input", 10);
 
 function create_home_page() {
     // clear();
+    
+    // header
     let header = div[0];
+    set_visibility(header, "visible");
+    set_x(header, 50.0);
     set_width(header, 500.0);
     set_height(header, 100.0);
+    set_border_style(header, "solid");
     set_border_width(header, 5.0);
-    set_border_color(header, [0, 0, 0]);
+    set_border_color(header, [0, 0, 0])
+
 }
 
 function update_home_page() {}
@@ -820,10 +846,64 @@ function page_router() {
 
 function main() {
     page_router();
+    update_DOM();
     return window.requestAnimationFrame(main);
 }
 
 main();
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*
 
@@ -836,7 +916,7 @@ function event_mousemove(event) {
     element_mousemove[+event["srcElement"]["id"]] = 1;
 }
 function reset_mousemove() {
-    for (let i = 0; i < element_count; i ++) {
+    for (let i = 0; i < virtual_size; i ++) {
         element_mousemove[i] = 0;
     }
 }
@@ -845,7 +925,7 @@ function event_mousedown(event) {
     element_mousedown[+event["srcElement"]["id"]] = 1;
 }
 function reset_mousedown() {
-    for (let i = 0; i < element_count; i ++) {
+    for (let i = 0; i < virtual_size; i ++) {
         element_mousedown[i] = 0;
     }
 }
@@ -854,7 +934,7 @@ function event_mouseup(event) {
     element_mouseup[+event["srcElement"]["id"]] = 1;
 }
 function reset_mouseup() {
-    for (let i = 0; i < element_count; i ++) {
+    for (let i = 0; i < virtual_size; i ++) {
         element_mouseup[i] = 0;
     }
 }
