@@ -85,7 +85,7 @@ let keyboard;
 // Element
 const ROOT = 0;
 let virtual_size = 1;
-let virtual_size = 1; //
+let create_count = 1;   
 let clear_count = 0;
 let element_id;
 
@@ -418,6 +418,9 @@ function create_element(type) {
 
     // Border
     element_border_opacity[id] = 1.0;
+
+    // Text
+    element_text_opacity[id] = 1.0;
     
     /* DYNAMIC ARRAYS */
     element_border_style.push("none");
@@ -431,14 +434,38 @@ function create_element(type) {
 
 
 
-
+// NOT DONE
 /*-----------------
     CLEAR ELEMENT
 -------------------*/
-let empty = document.createElement("div");
 function clear_element(id) {
-    DOM_element[id] = empty;
-    // clear all properties to 0
+
+    // Misc
+    element_cursor_style[id] = "default";
+    element_overflow[id] = "visible";
+    element_clip[id] = "auto";
+
+    // Visibility
+    element_visibility[id] = "hidden";
+    element_opacity[id] = 1.0;
+
+    // Transform
+    element_x[id] = 0.0;
+    element_y[id] = 0.0;
+    element_z_index[id] = 0;
+    element_rotation[id] = 0;
+    element_scale_x[id] = 1.0;
+    element_scale_y[id] = 1.0;
+    element_skew_x[id] = 0.0;
+    element_skew_y[id] = 0.0;
+
+    // Dimensions
+    element_width[id] = 0.0;
+    element_height[id] = 0.0;
+
+    // Background
+    element_background_image[id] = "none";
+
     cleared_element.push(id);
     clear_count += 1;
 }
@@ -779,17 +806,14 @@ function set_text_opacity(id, value) { element_text_opacity[id] = value; }
 
 
 
-// BUFFERS
-function create_element_buffer(type, size) {
-    let buffer = [];
-    for (let i = 0; i < size; i ++) {
-        buffer.push(create_element(type));
-    }
-    return buffer;
-}
 
-function clear_element_buffer(buffer) {}
 
+create_virtual(100);
+
+let test = create_element("div");
+set_visibility(test, "visible");
+
+update_DOM();
 
 
 
