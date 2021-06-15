@@ -13,19 +13,39 @@ DOM_body.style.top = "0px";
     DEFINE VIRTUAL PROPERTIES
 --------------------------------*/
 // ROOT
-let DOM_ROOT = document.createElement("div");
-DOM_ROOT.id = "ROOT";
-DOM_ROOT.style.position = "absolute";
-DOM_ROOT.style.margin = "0px";
-DOM_ROOT.style.padding = "0px";
-DOM_ROOT.style.border = "none";
-DOM_ROOT.style.left = "0px";
-DOM_ROOT.style.top = "0px";
-DOM_ROOT.style.size_x = "100%";
-DOM_ROOT.style.size_y = "100%";
-DOM_ROOT.style.zIndex = "-1";
-DOM_ROOT.style.backgroundColor = "white";
-DOM_body.append(DOM_ROOT);
+let ROOT = document.createElement("div");
+ROOT.id = "ROOT";
+ROOT.style.position = "absolute";
+ROOT.style.margin = "0px";
+ROOT.style.padding = "0px";
+ROOT.style.border = "none";
+ROOT.style.left = "0px";
+ROOT.style.top = "0px";
+ROOT.style.width = "100%";
+ROOT.style.height = "100%";
+ROOT.style.zIndex = "0";
+ROOT.style.backgroundColor = "white";
+DOM_body.append(ROOT);
+
+let ROOT_mousemove = 0;
+let ROOT_mouse_x = 0;
+let ROOT_mouse_y = 0;
+
+let ROOT_mousedown = 0;
+let ROOT_mouseup = 0;
+
+function ROOT_event_mousemove(event) { 
+    ROOT_mousemove = 1;
+    ROOT_mouse_x = event["clientX"];
+    ROOT_mouse_y = event["clientY"];
+}
+function ROOT_event_mousedown(event) { ROOT_mousedown = 1; }
+function ROOT_event_mouseup(event) { ROOT_mouseup = 1; }
+
+ROOT.addEventListener("mousemove", ROOT_event_mousemove);
+ROOT.addEventListener("mousedown", ROOT_event_mousedown);
+ROOT.addEventListener("mouseup", ROOT_event_mouseup);
+
 
 
 // ELEMENT
@@ -46,6 +66,11 @@ let transform_u;
 
 let z;
 let z_u;
+
+// EVENT
+let mousemove;
+let mousedown;
+let mouseup;
 
 
 
@@ -69,12 +94,20 @@ function set_z(id, value) { z[id] = value; z_u[id] = 1; }
 
 
 
+function event_mousemove(event) { mousemove[+event["srcElement"]["id"]] = 1; }
+function event_mousedown(event) { mousedown[+event["srcElement"]["id"]] = 1; }
+function event_mouseup(event) { mouseup[+event["srcElement"]["id"]] = 1; }
+
+function add_event_mousemove(id) { DOM_element[id].addEventListener("mousemove", event_mousemove); }
+function add_event_mousedown(id) { DOM_element[id].addEventListener("mousedown", event_mousedown); }
+function add_event_mouseup(id) { DOM_element[id].addEventListener("mouseup", event_mouseup); }
+
+
 function translate_x() {}
 function translate_y() {}
 function rotate_z() {}
 function translate_z() {}
-function scale_x() {}
-function scale_y() {}
+
 
 
 function create_virtual(size) {
@@ -83,18 +116,22 @@ function create_virtual(size) {
     id = new Int32Array(size);
 
     size_x = new Int32Array(size);
-    size_x_u = new Int8Array(size);
+    size_x_u = new Int32Array(size);
     
     size_y = new Int32Array(size);
-    size_y_u = new Int8Array(size);
+    size_y_u = new Int32Array(size);
     
     x = new Int32Array(size);
     y = new Int32Array(size);
     rotation_z = new Int32Array(size);
-    transform_u = new Int8Array(size);
+    transform_u = new Int32Array(size);
 
     z = new Int32Array(size);
-    z_u = new Int8Array(size);
+    z_u = new Int32Array(size);
+
+    mousemove = new Uint32Array(size);
+    mousedown = new Uint32Array(size);
+    mouseup = new Uint32Array(size);
 
     let i = 0;
     while (i < size) { DOM_element[i] = document.createElement("div"); i += 1; } i = 0;
@@ -155,7 +192,7 @@ function update_DOM() {
             + "rotate(" + rotation_z[i] + "deg)";
             transform_u[i] = 0; 
         } i += 1;
-    } i = 0;
+    }
 
     i = 0;
     while (i < virtual_size) {
@@ -164,11 +201,22 @@ function update_DOM() {
             z_u[i] = 0; 
         } i += 1;
     } 
+
+    
+    i = 0;
+    while (i < virtual_size) { mousemove[i] = 0; i += 1; } i = 0;
+    while (i < virtual_size) { mousedown[i] = 0; i += 1; } i = 0;
+    while (i < virtual_size) { mouseup[i] = 0; i += 1; } 
+    ROOT_mousemove = 0;
+    ROOT_mousedown = 0;
+    ROOT_mouseup = 0;
 }
 
 
 
 create_virtual(100);
+
+
 
 let box_1 = 0;
 let DOM_box_1 = DOM_element[box_1];
@@ -180,6 +228,7 @@ set_rotation_z(box_1, 23);
 DOM_box_1.style.backgroundColor = "rgb(60, 120, 185)";
 DOM_box_1.style.boxShadow = "10px 10px 20px rgb(130, 130, 130)";
 DOM_box_1.style.borderRadius = "50px";
+add_event_mousedown(box_1);
 
 let box_2 = 1;
 let DOM_box_2 = DOM_element[box_2];
@@ -214,6 +263,9 @@ DOM_box_4.style.boxShadow = "1px 0px 10px rgb(75, 75, 75)";
 
 
 function lite() {
+
+    if (ROOT_mousedown === 1) { console.log("ROOT_mousedown"); }
+    if (mousedown[box_1] === 1) { console.log("box_1 mousedown"); }
 
     update_DOM();
     return window.requestAnimationFrame(lite);
