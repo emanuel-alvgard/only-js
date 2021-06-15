@@ -1,3 +1,5 @@
+"use strict";
+
 /*-------------
     DOM BODY
 ---------------*/
@@ -6,6 +8,10 @@ DOM_body.style.margin = "0px";
 DOM_body.style.left = "0px";
 DOM_body.style.top = "0px";
 
+
+/*------------------------------
+    DEFINE VIRTUAL PROPERTIES
+--------------------------------*/
 // ROOT
 let DOM_ROOT = document.createElement("div");
 DOM_ROOT.id = "ROOT";
@@ -25,6 +31,7 @@ DOM_body.append(DOM_ROOT);
 // ELEMENT
 let virtual_size = 0;
 let DOM_element = [];
+let update;
 
 let id;
 let width;
@@ -38,6 +45,7 @@ let rotation;
 function create_virtual(size) {
 
     virtual_size = size;
+    update = new Int8Array(size);
 
     id = new Int32Array(size);
     width = new Int32Array(size);
@@ -55,6 +63,8 @@ function create_virtual(size) {
     while (i < size) { ROOT.append(DOM_element[i]); i += 1; } i = 0;
 }
 
+
+
 function clear_virtual() {
     
     let i = 0;
@@ -63,22 +73,38 @@ function clear_virtual() {
     while (i < virtual_size) { translation_x[i] = 0; i += 1; } i = 0;
     while (i < virtual_size) { translation_y[i] = 0; i += 1; } i = 0;
     while (i < virtual_size) { rotation[i] = 0; i += 1; } i = 0;
+
+    while (i < virtual_size) { update[i] = 1; i += 1; }
 }
+
+
 
 function update_DOM() {
 
     let i = 0;
-    while (i < virtual_size) { DOM_element[i].style.width = width[i] + "px"; i += 1; } i = 0;
-    while (i < virtual_size) { DOM_element[i].style.height = height[i] + "px"; i += 1; } i = 0;
-    while (i < virtual_size) { DOM_element[i].style.transform = "translate(" 
-    + translation_x[i] + "px, "
-    + translation_y[i] + "px) "
-    + "rotate(" + rotation[i] + "deg)"; 
-    i += 1; } i = 0;
+    while (i < virtual_size) {
+        if (update[i] === 1) { 
+            DOM_element[i].style.width = width[i] + "px";  
+        } i += 1;
+    } i = 0;
+    while (i < virtual_size) {
+        if (update[i] === 1) { 
+            DOM_element[i].style.height = height[i] + "px"; 
+        } i += 1;
+    } i = 0;
+    while (i < virtual_size) {
+        if (update[i] === 1) { 
+            DOM_element[i].style.transform = "translate(" 
+            + translation_x[i] + "px, "
+            + translation_y[i] + "px) "
+            + "rotate(" + rotation[i] + "deg)"; 
+        } i += 1;
+    } i = 0;
+
+    while (i < virtual_size) { update[i] = 0; i += 1; }
 }
 
 create_virtual(100);
-
 
 let box_1 = 0;
 let DOM_box_1 = DOM_element[box_1];
@@ -90,6 +116,7 @@ rotation[box_1] = 23;
 DOM_box_1.style.backgroundColor = "rgb(60, 120, 185)";
 DOM_box_1.style.boxShadow = "10px 10px 20px rgb(130, 130, 130)";
 DOM_box_1.style.borderRadius = "50px";
+update[box_1] = 1;
 
 let box_2 = 1;
 let DOM_box_2 = DOM_element[box_2];
@@ -101,7 +128,7 @@ rotation[box_2] = 50;
 DOM_box_2.style.backgroundColor = "rgb(255, 255, 255)";
 DOM_box_2.style.boxShadow = "10px 10px 25px rgb(175, 175, 175)";
 DOM_box_2.style.borderRadius = "150px";
-
+update[box_2] = 1;
 
 let box_3 = 2;
 let DOM_box_3 = DOM_element[box_3];
@@ -113,6 +140,7 @@ rotation[box_3] = 15;
 DOM_box_3.style.backgroundColor = "rgb(255, 255, 255)";
 DOM_box_3.style.boxShadow = "10px 10px 25px rgb(175, 175, 175)";
 DOM_box_3.style.borderRadius = "25px";
+update[box_3] = 1;
 
 
 let box_4 = 3;
@@ -122,8 +150,11 @@ height[box_4] = 75;
 DOM_box_4.style.zIndex = "2";
 DOM_box_4.style.backgroundColor = "rgb(255, 255, 255)";
 DOM_box_4.style.boxShadow = "1px 0px 10px rgb(75, 75, 75)";
+update[box_4] = 1;
+
 
 function lite() {
+
     update_DOM();
     return window.requestAnimationFrame(lite);
 }
