@@ -28,6 +28,8 @@ ROOT.style.backgroundColor = "white";
 DOM_body.append(ROOT);
 
 let ROOT_mousemove = 0;
+let ROOT_mouse_x_previous = 0;
+let ROOT_mouse_y_previous = 0;
 let ROOT_mouse_x = 0;
 let ROOT_mouse_y = 0;
 
@@ -36,6 +38,8 @@ let ROOT_mouseup = 0;
 
 function ROOT_event_mousemove(event) { 
     ROOT_mousemove = 1;
+    ROOT_mouse_x_previous = ROOT_mouse_x;
+    ROOT_mouse_y_previous = ROOT_mouse_y;
     ROOT_mouse_x = event["clientX"];
     ROOT_mouse_y = event["clientY"];
 }
@@ -72,8 +76,12 @@ let mousemove;
 let mousedown;
 let mouseup;
 
+// ACTION
+let draggable;
+let dragged;
 
 
+// GET/SET
 function get_size_x(id) { return size_x[id]; }
 function set_size_x(id, value) { size_x[id] = value; size_x_u[id] = 1; }
 
@@ -93,7 +101,7 @@ function get_z(id) { return z[id]; }
 function set_z(id, value) { z[id] = value; z_u[id] = 1; }
 
 
-
+// EVENT
 function event_mousemove(event) { mousemove[+event["srcElement"]["id"]] = 1; }
 function event_mousedown(event) { mousedown[+event["srcElement"]["id"]] = 1; }
 function event_mouseup(event) { mouseup[+event["srcElement"]["id"]] = 1; }
@@ -102,11 +110,15 @@ function add_event_mousemove(id) { DOM_element[id].addEventListener("mousemove",
 function add_event_mousedown(id) { DOM_element[id].addEventListener("mousedown", event_mousedown); }
 function add_event_mouseup(id) { DOM_element[id].addEventListener("mouseup", event_mouseup); }
 
+// ACTION
+function drag() {}
 
-function translate_x() {}
-function translate_y() {}
-function rotate_z() {}
-function translate_z() {}
+// ANIMATION
+function curve_animation() {}
+function animation_x() {}
+function animation_y() {}
+function animation_rotation_z() {}
+function animate_z() {}
 
 
 
@@ -260,12 +272,22 @@ set_z(box_4, 1);
 DOM_box_4.style.backgroundColor = "rgb(255, 255, 255)";
 DOM_box_4.style.boxShadow = "1px 0px 10px rgb(75, 75, 75)";
 
-
+let drag_test = 0;
 
 function lite() {
 
-    if (ROOT_mousedown === 1) { console.log("ROOT_mousedown"); }
-    if (mousedown[box_1] === 1) { console.log("box_1 mousedown"); }
+    // TEST DRAG
+    if (mousedown[box_1] === 1) { drag_test = 1; }
+    if (drag_test === 1 && ROOT_mousemove === 1) {
+        let new_x = ROOT_mouse_x - ROOT_mouse_x_previous;
+        let new_y = ROOT_mouse_y - ROOT_mouse_y_previous;
+        set_x(box_1, get_x(box_1) + new_x);
+        set_y(box_1, get_y(box_1) + new_y);
+    }
+    if (ROOT_mouseup === 1) { drag_test = 0; }
+    
+    
+    // TEST ANIMATION? 
 
     update_DOM();
     return window.requestAnimationFrame(lite);
