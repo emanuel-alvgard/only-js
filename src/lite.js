@@ -398,18 +398,6 @@ add_link_x(box_1, box_2);
 
 function lite() {
 
-    /* TEST DRAG
-    
-    if (mousedown[box_1] === 1) { drag_test = 1; }
-    if (drag_test === 1 && ROOT_mousemove === 1) {
-        let new_x = ROOT_mouse_x - ROOT_mouse_x_previous;
-        let new_y = ROOT_mouse_y - ROOT_mouse_y_previous;
-        set_x(box_1, get_x(box_1) + new_x);
-        set_y(box_1, get_y(box_1) + new_y);
-    }
-    if (ROOT_mouseup === 1) { drag_test = 0; }
-    */
-
     update_ACTION();
     update_LINKED();
     update_DOM();
