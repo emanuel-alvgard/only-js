@@ -50,7 +50,9 @@ ROOT.addEventListener("mousemove", ROOT_event_mousemove);
 ROOT.addEventListener("mousedown", ROOT_event_mousedown);
 ROOT.addEventListener("mouseup", ROOT_event_mouseup);
 
-
+// PAGE
+let page = new Int32Array(100);
+let page_history = 0;
 
 // ELEMENT
 let DOM_element = [];
@@ -339,68 +341,125 @@ function update_ACTION() {
 
 
 
+create_virtual(1000);
+
+function create_home_page() {
+    
+    clear_virtual();
+    
+    let box_1 = 0;
+    let DOM_box_1 = DOM_element[box_1];
+    let box_2 = 1;
+    let DOM_box_2 = DOM_element[box_2];
+    let box_3 = 2;
+    let DOM_box_3 = DOM_element[box_3];
+    let box_4 = 3;
+    let DOM_box_4 = DOM_element[box_4];
+
+    // box_1
+    set_size_x(box_1, 300);
+    set_size_y(box_1, 300);
+    set_x(box_1, -25);
+    set_y(box_1, 25);
+    set_rotation_z(box_1, 23);
+    DOM_box_1.style.backgroundColor = "rgb(60, 120, 185)";
+    DOM_box_1.style.boxShadow = "10px 10px 20px rgb(130, 130, 130)";
+    DOM_box_1.style.borderRadius = "50px";
+    add_event_mousedown(box_1);
+    add_action_drag(box_1);
+    add_link_x(box_1, box_2);
+
+    // box_2
+    set_size_x(box_2, 700);
+    set_size_y(box_2, 700);
+    set_x(box_2, 700);
+    set_y(box_2, -350);
+    set_rotation_z(box_2, 50);
+    DOM_box_2.style.backgroundColor = "rgb(255, 255, 255)";
+    DOM_box_2.style.boxShadow = "10px 10px 25px rgb(175, 175, 175)";
+    DOM_box_2.style.borderRadius = "150px";
+    add_event_mousedown(box_2);
+    add_action_drag(box_2);
+
+    // box_3
+    set_size_x(box_3, 200);
+    set_size_y(box_3, 200);
+    set_x(box_3, 0);
+    set_y(box_3, 900);
+    set_rotation_z(box_3, 15);
+    DOM_box_3.style.backgroundColor = "rgb(255, 255, 255)";
+    DOM_box_3.style.boxShadow = "10px 10px 25px rgb(175, 175, 175)";
+    DOM_box_3.style.borderRadius = "25px";
+
+    // box_4
+    set_size_x(box_4, 2000);
+    set_size_y(box_4, 75);
+    set_z(box_4, 1);
+    DOM_box_4.style.backgroundColor = "rgb(255, 255, 255)";
+    DOM_box_4.style.boxShadow = "1px 0px 10px rgb(75, 75, 75)";
+}
+
+function create_other_page() {
+    clear_virtual();
+
+    let box_1 = 0;
+    let DOM_box_1 = DOM_element[box_1];
+
+    // box_1
+    set_size_x(box_1, 300);
+    set_size_y(box_1, 300);
+    set_x(box_1, -25);
+    set_y(box_1, 25);
+    set_rotation_z(box_1, 23);
+    DOM_box_1.style.backgroundColor = "rgb(60, 120, 185)";
+    DOM_box_1.style.boxShadow = "10px 10px 20px rgb(130, 130, 130)";
+    DOM_box_1.style.borderRadius = "50px";
+    add_event_mousedown(box_1);
+    add_action_drag(box_1);
+}
 
 
-create_virtual(10000);
 
+// ROUTER
+function router_history(event) { 
+    page[history.state.page_id] = 1;
+    page_history = 1; 
+}
 
+window.onpopstate = router_history;
 
-let box_1 = 0;
-let DOM_box_1 = DOM_element[box_1];
-let box_2 = 1;
-let DOM_box_2 = DOM_element[box_2];
-let box_3 = 2;
-let DOM_box_3 = DOM_element[box_3];
-let box_4 = 3;
-let DOM_box_4 = DOM_element[box_4];
+let router_start = 1;
+function router() {
 
-// box_1
-set_size_x(box_1, 300);
-set_size_y(box_1, 300);
-set_x(box_1, -25);
-set_y(box_1, 25);
-set_rotation_z(box_1, 23);
-DOM_box_1.style.backgroundColor = "rgb(60, 120, 185)";
-DOM_box_1.style.boxShadow = "10px 10px 20px rgb(130, 130, 130)";
-DOM_box_1.style.borderRadius = "50px";
-add_event_mousedown(box_1);
-add_action_drag(box_1);
-add_link_x(box_1, box_2);
-
-// box_2
-set_size_x(box_2, 700);
-set_size_y(box_2, 700);
-set_x(box_2, 700);
-set_y(box_2, -350);
-set_rotation_z(box_2, 50);
-DOM_box_2.style.backgroundColor = "rgb(255, 255, 255)";
-DOM_box_2.style.boxShadow = "10px 10px 25px rgb(175, 175, 175)";
-DOM_box_2.style.borderRadius = "150px";
-add_event_mousedown(box_2);
-add_action_drag(box_2);
-
-// box_3
-set_size_x(box_3, 200);
-set_size_y(box_3, 200);
-set_x(box_3, 0);
-set_y(box_3, 900);
-set_rotation_z(box_3, 15);
-DOM_box_3.style.backgroundColor = "rgb(255, 255, 255)";
-DOM_box_3.style.boxShadow = "10px 10px 25px rgb(175, 175, 175)";
-DOM_box_3.style.borderRadius = "25px";
-
-// box_4
-set_size_x(box_4, 2000);
-set_size_y(box_4, 75);
-set_z(box_4, 1);
-DOM_box_4.style.backgroundColor = "rgb(255, 255, 255)";
-DOM_box_4.style.boxShadow = "1px 0px 10px rgb(75, 75, 75)";
+    if (router_start === 1) {
+        create_home_page();
+        page[0] = 0;
+        history.pushState({'page_id': 0}, "", "");
+        router_start = 0; 
+        return; 
+    }
+    if (page[0] === 1) {
+        create_home_page();
+        page[0] = 0;
+        if (page_history === 1) { page_history = 0; return; }
+        history.pushState({'page_id': 0}, "", ""); 
+        return; 
+    }
+    if (page[1] === 1) {
+        create_other_page(); 
+        page[1] = 0;
+        if (page_history === 1) { page_history = 0; return; }
+        history.pushState({'page_id': 1}, "", "");  
+        return; 
+    }
+}
 
 
 
 
 function lite() {
-
+    
+    router();
     update_ACTION();
     update_LINKED();
     update_DOM();
