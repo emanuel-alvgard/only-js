@@ -77,6 +77,14 @@ let mousemove;
 let mousedown;
 let mouseup;
 
+// LINKED
+let link_x;
+let link_x_current;
+let link_x_previous;
+
+
+// ANIMATION
+
 // ACTION
 let drag;
 
@@ -107,6 +115,10 @@ function set_z(id, value) { z[id] = value; z_u[id] = 1; }
 function get_mousemove(id) { return mousemove[id]; }
 function get_mousedown(id) { return mousedown[id]; }
 function get_mouseup(id) { return mouseup[id]; }
+
+// GET LINKED
+
+// GET ANIMATION
 
 // GET ACTION
 function get_drag(id) { return drag[id]; }
@@ -153,6 +165,13 @@ function create_virtual(size) {
     mousedown = new Int32Array(size);
     mouseup = new Int32Array(size);
 
+    // LINKED
+    link_x = new Int32Array(size);
+    link_x_current = new Int32Array(size);
+    link_x_previous = new Int32Array(size);
+
+    // ANIMATION
+
     // ACTION
     drag = new Int32Array(size);
 
@@ -161,6 +180,7 @@ function create_virtual(size) {
     while (i < size) { DOM_element[i].style.position = "absolute"; i += 1; } i = 0;
     while (i < size) { DOM_element[i].id = i; i += 1; } i = 0;
     while (i < size) { id[i] = i; i += 1; } i = 0;
+    while (i < size) { link_x[i] = -1; i += 1; } i = 0;
     while (i < size) { ROOT.append(DOM_element[i]); i += 1; } i = 0;
 }
 
@@ -187,7 +207,13 @@ function clear_virtual() {
     while (i < virtual_size) { mousedown[i] = 0; i += 1; } i = 0;
     while (i < virtual_size) { mouseup[i] = 0; i += 1; } i = 0;
 
-    while (i < virtual_size) { drag[i] = 0; i += 1; } i = 0;
+    while (i < virtual_size) { link_x[i] = -1; i += 1; } i = 0;
+    while (i < virtual_size) { link_x_current[i] = -1; i += 1; } i = 0;
+    while (i < virtual_size) { link_x_previous[i] = -1; i += 1; } i = 0;
+
+    // animation
+
+    while (i < virtual_size) { drag[i] = -1; i += 1; } i = 0;
 
     while (i < virtual_size) { remove_event_mousemove(i); i += 1; } i = 0;
     while (i < virtual_size) { remove_event_mousedown(i); i += 1; } i = 0;
@@ -245,6 +271,29 @@ function update_DOM() {
     ROOT_mouseup = 0;
 }
 
+
+
+// LINKED // NOT DONE
+function linked_x() {
+    let i = 0;
+    while (i < virtual_size) {
+        if (link_x[i] === -1) { i += 1; continue; }
+        link_x_previous[i] = link_x_current[i];
+        link_x_current[i] = x[link_x[i]];
+        if (link_x_current[i] === link_x_previous[i]) { i += 1; continue; }
+        let _x = link_x_current[i] - link_x_previous[i];
+        set_x(i, x[i] + _x);
+        i += 1;
+    }
+}
+
+function add_link_x(id, target) { link_x[id] = target; }
+
+function remove_link_x(id) { link_x[id] = -1; }
+
+function update_LINKED() {
+    linked_x();
+}
 
 
 
@@ -309,6 +358,7 @@ DOM_box_1.style.borderRadius = "50px";
 add_event_mousedown(box_1);
 add_action_drag(box_1);
 
+
 let box_2 = 1;
 let DOM_box_2 = DOM_element[box_2];
 set_size_x(box_2, 700);
@@ -341,7 +391,10 @@ set_z(box_4, 1);
 DOM_box_4.style.backgroundColor = "rgb(255, 255, 255)";
 DOM_box_4.style.boxShadow = "1px 0px 10px rgb(75, 75, 75)";
 
-let drag_test = 0;
+
+
+add_link_x(box_1, box_2);
+
 
 function lite() {
 
@@ -358,6 +411,7 @@ function lite() {
     */
 
     update_ACTION();
+    update_LINKED();
     update_DOM();
     return window.requestAnimationFrame(lite);
 }
