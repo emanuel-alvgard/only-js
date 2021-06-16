@@ -347,6 +347,14 @@ create_virtual(10000);
 
 let box_1 = 0;
 let DOM_box_1 = DOM_element[box_1];
+let box_2 = 1;
+let DOM_box_2 = DOM_element[box_2];
+let box_3 = 2;
+let DOM_box_3 = DOM_element[box_3];
+let box_4 = 3;
+let DOM_box_4 = DOM_element[box_4];
+
+// box_1
 set_size_x(box_1, 300);
 set_size_y(box_1, 300);
 set_x(box_1, -25);
@@ -357,10 +365,9 @@ DOM_box_1.style.boxShadow = "10px 10px 20px rgb(130, 130, 130)";
 DOM_box_1.style.borderRadius = "50px";
 add_event_mousedown(box_1);
 add_action_drag(box_1);
+add_link_x(box_1, box_2);
 
-
-let box_2 = 1;
-let DOM_box_2 = DOM_element[box_2];
+// box_2
 set_size_x(box_2, 700);
 set_size_y(box_2, 700);
 set_x(box_2, 700);
@@ -372,8 +379,7 @@ DOM_box_2.style.borderRadius = "150px";
 add_event_mousedown(box_2);
 add_action_drag(box_2);
 
-let box_3 = 2;
-let DOM_box_3 = DOM_element[box_3];
+// box_3
 set_size_x(box_3, 200);
 set_size_y(box_3, 200);
 set_x(box_3, 0);
@@ -383,8 +389,7 @@ DOM_box_3.style.backgroundColor = "rgb(255, 255, 255)";
 DOM_box_3.style.boxShadow = "10px 10px 25px rgb(175, 175, 175)";
 DOM_box_3.style.borderRadius = "25px";
 
-let box_4 = 3;
-let DOM_box_4 = DOM_element[box_4];
+// box_4
 set_size_x(box_4, 2000);
 set_size_y(box_4, 75);
 set_z(box_4, 1);
@@ -392,8 +397,6 @@ DOM_box_4.style.backgroundColor = "rgb(255, 255, 255)";
 DOM_box_4.style.boxShadow = "1px 0px 10px rgb(75, 75, 75)";
 
 
-
-add_link_x(box_1, box_2);
 
 
 function lite() {
