@@ -1,3 +1,10 @@
+/* 
+@ TAGS
+ERROR
+ADD
+EXPLORE
+*/
+
 "use strict";
 
 // DEVICE
@@ -69,7 +76,13 @@ ROOT.addEventListener("mousedown", ROOT_event_mousedown);
 ROOT.addEventListener("mouseup", ROOT_event_mouseup);
 
 // TOUCH
-function ROOT_event_touchstart(event) { ROOT_touchstart = 1; }
+function ROOT_event_touchstart(event) { 
+    ROOT_touchstart = 1;
+    ROOT_touch_x_previous = event.touches[0].clientX;
+    ROOT_touch_y_previous = event.touches[0].clientY;
+    ROOT_touch_x = event.touches[0].clientX;
+    ROOT_touch_y = event.touches[0].clientY; 
+}
 function ROOT_event_touchmove(event) {
     ROOT_touchmove = 1;
     ROOT_touch_x_previous = ROOT_touch_x;
@@ -77,7 +90,13 @@ function ROOT_event_touchmove(event) {
     ROOT_touch_x = event.touches[0].clientX;
     ROOT_touch_y = event.touches[0].clientY;
 }
-function ROOT_event_touchend(event) { ROOT_touchend = 1; }
+function ROOT_event_touchend(event) { 
+    ROOT_touchend = 1;
+    ROOT_touch_x_previous = 0;
+    ROOT_touch_y_previous = 0;
+    ROOT_touch_x = 0;
+    ROOT_touch_y = 0; 
+ }
 
 ROOT.addEventListener("touchstart", ROOT_event_touchstart);
 ROOT.addEventListener("touchmove", ROOT_event_touchmove);
@@ -276,7 +295,7 @@ function clear_virtual() {
     while (i < virtual_size) { link_x_current[i] = -1; i += 1; } i = 0;
     while (i < virtual_size) { link_x_previous[i] = -1; i += 1; } i = 0;
 
-    // animation
+    // @ADD animation
 
     while (i < virtual_size) { drag[i] = -1; i += 1; } i = 0;
 
@@ -334,10 +353,16 @@ function update_DOM() {
     i = 0;
     while (i < virtual_size) { mousemove[i] = 0; i += 1; } i = 0;
     while (i < virtual_size) { mousedown[i] = 0; i += 1; } i = 0;
-    while (i < virtual_size) { mouseup[i] = 0; i += 1; } 
+    while (i < virtual_size) { mouseup[i] = 0; i += 1; } i = 0;
+    
+    while (i < virtual_size) { touchstart[i] = 0; i += 1; } i = 0;
+    while (i < virtual_size) { touchmove[i] = 0; i += 1; } i = 0;
+    while (i < virtual_size) { touchend[i] = 0; i += 1; } i = 0;
+
     ROOT_mousemove = 0;
     ROOT_mousedown = 0;
     ROOT_mouseup = 0;
+
     ROOT_touchstart = 0;
     ROOT_touchmove = 0;
     ROOT_touchend = 0;
@@ -410,15 +435,11 @@ function action_drag() {
         i += 1;
     }
 
-
-    // @ERROR
-    // after moving an element the first time it does'nt matter where the next touch happens
-    // it still moves the element
     i = 0
     while (i < virtual_size) {
         if (device_touch === 0) { break; }
         if (drag[i] === 0) { i += 1; continue; }
-        
+
         if (touchstart[i] === 1) { drag[i] = 2; }
         if (drag[i] === 2 && ROOT_touchmove === 1) {
             set_x(i, x[i] + _x);
@@ -468,8 +489,6 @@ function create_home_page() {
     DOM_box_1.style.borderRadius = "50px";
     add_event_mousedown(box_1);
     add_event_touchstart(box_1);
-    add_event_touchmove(box_1);
-    add_event_touchend(box_1);
     add_action_drag(box_1);
     //add_link_x(box_1, box_2);
 
@@ -484,6 +503,7 @@ function create_home_page() {
     DOM_box_2.style.boxShadow = "10px 10px 25px rgb(175, 175, 175)";
     DOM_box_2.style.borderRadius = "150px";
     add_event_mousedown(box_2);
+    add_event_touchstart(box_2);
     add_action_drag(box_2);
 
     // box_3
