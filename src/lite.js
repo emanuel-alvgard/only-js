@@ -587,8 +587,6 @@ function router() {
 
 
 function lite() {
-    
-    window.scrollTo(0, 0);
 
     router();
     update_ACTION();
