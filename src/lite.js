@@ -107,6 +107,8 @@ ROOT.addEventListener("touchend", ROOT_event_touchend);
 // PAGE
 let page = new Int32Array(100);
 let page_history = 0;
+let page_creation = 1;
+let router_creation = 1;
 
 // ELEMENT
 let DOM_element = [];
@@ -261,6 +263,7 @@ function create_virtual(size) {
     while (i < size) { DOM_element[i].id = i; i += 1; } i = 0;
     while (i < size) { id[i] = i; i += 1; } i = 0;
     while (i < size) { link_x[i] = -1; i += 1; } i = 0;
+    while (i < size) { drag[i] = -1; i += 1; } i = 0;
     while (i < size) { ROOT.append(DOM_element[i]); i += 1; } i = 0;
 }
 
@@ -292,8 +295,8 @@ function clear_virtual() {
     while (i < virtual_size) { touchend[i] = 0; i += 1; } i = 0;
 
     while (i < virtual_size) { link_x[i] = -1; i += 1; } i = 0;
-    while (i < virtual_size) { link_x_current[i] = -1; i += 1; } i = 0;
-    while (i < virtual_size) { link_x_previous[i] = -1; i += 1; } i = 0;
+    while (i < virtual_size) { link_x_current[i] = 0; i += 1; } i = 0;
+    while (i < virtual_size) { link_x_previous[i] = 0; i += 1; } i = 0;
 
     // @ADD animation
 
@@ -349,7 +352,7 @@ function update_DOM() {
         i += 1;
     } 
 
-    
+    // CLEAR EVENTS
     i = 0;
     while (i < virtual_size) { mousemove[i] = 0; i += 1; } i = 0;
     while (i < virtual_size) { mousedown[i] = 0; i += 1; } i = 0;
@@ -366,14 +369,25 @@ function update_DOM() {
     ROOT_touchstart = 0;
     ROOT_touchmove = 0;
     ROOT_touchend = 0;
+
+    page_creation = 0;
 }
 
 
 
 // LINKED
 function linked_x() {
-    // @ERROR
-    // see if there's a way to set initial position independent of linking
+    
+    if (page_creation === 1) { 
+        let i = 0;
+        while (i < virtual_size) {    
+            link_x_previous[i] = x[link_x[i]];
+            link_x_current[i] = x[link_x[i]];
+            i += 1;
+        }
+        return;
+    }
+
     let i = 0;
     while (i < virtual_size) {
         if (link_x[i] === -1) { i += 1; continue; }
@@ -424,35 +438,35 @@ function action_drag() {
     let i = 0;
     while (i < virtual_size) {
         if (device_touch === 1) { break; }
-        if (drag[i] === 0) { i += 1; continue; }
+        if (drag[i] === -1) { i += 1; continue; }
         
-        if (mousedown[i] === 1) { drag[i] = 2; }
-        if (drag[i] === 2 && ROOT_mousemove === 1) {
+        if (mousedown[i] === 1) { drag[i] = 1; }
+        if (drag[i] === 1 && ROOT_mousemove === 1) {
             set_x(i, x[i] + _x);
             set_y(i, y[i] + _y);
         }
-        if (ROOT_mouseup === 1) { drag[i] = 1; }
+        if (ROOT_mouseup === 1) { drag[i] = 0; }
         i += 1;
     }
 
     i = 0
     while (i < virtual_size) {
         if (device_touch === 0) { break; }
-        if (drag[i] === 0) { i += 1; continue; }
+        if (drag[i] === -1) { i += 1; continue; }
 
-        if (touchstart[i] === 1) { drag[i] = 2; }
-        if (drag[i] === 2 && ROOT_touchmove === 1) {
+        if (touchstart[i] === 1) { drag[i] = 1; }
+        if (drag[i] === 1 && ROOT_touchmove === 1) {
             set_x(i, x[i] + _x);
             set_y(i, y[i] + _y);
         }
-        if (ROOT_touchend === 1) { drag[i] = 1; }
+        if (ROOT_touchend === 1) { drag[i] = 0; }
         i += 1;
     }
 }
 
-function add_action_drag(id) { drag[id] = 1; }
+function add_action_drag(id) { drag[id] = 0; }
 
-function remove_action_drag(id) { drag[id] = 0; }
+function remove_action_drag(id) { drag[id] = -1; }
 
 function update_ACTION() {
     action_drag();
@@ -481,8 +495,8 @@ function create_home_page() {
     DOM_box_1.style.display = "initial";
     set_size_x(box_1, 300);
     set_size_y(box_1, 300);
-    set_x(box_1, -25);
-    set_y(box_1, 25);
+    set_x(box_1, 0);
+    set_y(box_1, 0);
     set_rotation_z(box_1, 23);
     DOM_box_1.style.backgroundColor = "rgb(60, 120, 185)";
     DOM_box_1.style.boxShadow = "10px 10px 20px rgb(130, 130, 130)";
@@ -490,7 +504,7 @@ function create_home_page() {
     add_event_mousedown(box_1);
     add_event_touchstart(box_1);
     add_action_drag(box_1);
-    //add_link_x(box_1, box_2);
+    add_link_x(box_1, box_2);
 
     // box_2
     DOM_box_2.style.display = "initial";
@@ -557,17 +571,18 @@ function router_history(event) {
 
 window.onpopstate = router_history;
 
-let router_start = 1;
 function router() {
 
-    if (router_start === 1) {
+    if (router_creation === 1) {
+        page_creation = 1;
         create_home_page();
         page[0] = 0;
         history.pushState({'page_id': 0}, "", "");
-        router_start = 0; 
+        router_creation = 0; 
         return; 
     }
     if (page[0] === 1) {
+        page_creation = 1;
         create_home_page();
         page[0] = 0;
         if (page_history === 1) { page_history = 0; return; }
@@ -575,6 +590,7 @@ function router() {
         return; 
     }
     if (page[1] === 1) {
+        page_creation = 1;
         create_other_page(); 
         page[1] = 0;
         if (page_history === 1) { page_history = 0; return; }
@@ -582,8 +598,6 @@ function router() {
         return; 
     }
 }
-
-
 
 
 function lite() {
