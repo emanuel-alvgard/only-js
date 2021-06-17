@@ -60,6 +60,9 @@ let ROOT_touch_x_previous = 0;
 let ROOT_touch_y_previous = 0;
 let ROOT_touchend = 0;
 
+let ROOT_keydown = new Int32Array(100);
+let ROOT_keyup = new Int32Array(100);
+
 // MOUSE
 function ROOT_event_mousemove(event) { 
     ROOT_mousemove = 1;
@@ -101,6 +104,17 @@ function ROOT_event_touchend(event) {
 ROOT.addEventListener("touchstart", ROOT_event_touchstart);
 ROOT.addEventListener("touchmove", ROOT_event_touchmove);
 ROOT.addEventListener("touchend", ROOT_event_touchend);
+
+// @ADD
+// KEYBOARD
+function ROOT_event_keydown(event) {
+    switch (event.key) {
+        case "a": ROOT_keydown[10] = 1; break;
+        case "b": ROOT_keydown[11] = 1; break;
+    }
+}
+
+document.addEventListener("keydown", ROOT_event_keydown);
 
 
 
