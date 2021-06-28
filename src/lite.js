@@ -24,6 +24,7 @@ let DOM_body = document.body;
 DOM_body.style.margin = "0px";
 DOM_body.style.left = "0px";
 DOM_body.style.top = "0px";
+DOM_body.style.overflow = "hidden";
 
 
 /*------------------------------
@@ -109,8 +110,41 @@ ROOT.addEventListener("touchend", ROOT_event_touchend);
 // KEYBOARD
 function ROOT_event_keydown(event) {
     switch (event.key) {
+        
+        // DIGITS
+        case "0": ROOT_keydown[0] = 1; break;
+        case "1": ROOT_keydown[1] = 1; break;
+        case "2": ROOT_keydown[2] = 1; break;
+        case "3": ROOT_keydown[3] = 1; break;
+        case "4": ROOT_keydown[4] = 1; break;
+        case "5": ROOT_keydown[5] = 1; break;
+        case "6": ROOT_keydown[6] = 1; break;
+        case "7": ROOT_keydown[7] = 1; break;
+        case "8": ROOT_keydown[8] = 1; break;
+        case "9": ROOT_keydown[9] = 1; break;
+        
+        //LOWER
         case "a": ROOT_keydown[10] = 1; break;
         case "b": ROOT_keydown[11] = 1; break;
+        case "c": ROOT_keydown[12] = 1; break;
+        case "d": ROOT_keydown[13] = 1; break;
+        case "e": ROOT_keydown[14] = 1; break;
+        case "f": ROOT_keydown[15] = 1; break;
+        case "g": ROOT_keydown[16] = 1; break;
+        case "h": ROOT_keydown[17] = 1; break;
+        case "i": ROOT_keydown[18] = 1; break;
+        case "j": ROOT_keydown[19] = 1; break;
+        case "k": ROOT_keydown[20] = 1; break;
+        case "l": ROOT_keydown[21] = 1; break;
+        case "m": ROOT_keydown[22] = 1; break;
+        case "n": ROOT_keydown[23] = 1; break;
+        case "o": ROOT_keydown[24] = 1; break;
+        case "p": ROOT_keydown[25] = 1; break;
+        case "q": ROOT_keydown[26] = 1; break;
+        case "r": ROOT_keydown[27] = 1; break;
+        case "s": ROOT_keydown[28] = 1; break;
+        case "t": ROOT_keydown[29] = 1; break;
+
     }
 }
 
@@ -385,6 +419,9 @@ function update_DOM() {
     ROOT_touchmove = 0;
     ROOT_touchend = 0;
 
+    while (i < 100) { ROOT_keydown[i] = 0; i += 1; } i = 0;
+    while (i < 100) { ROOT_keyup[i] = 0; i += 1; } i = 0;
+
     page_creation = 0;
 }
 
@@ -531,6 +568,15 @@ function create_home_page() {
     DOM_box_2.style.backgroundColor = "rgb(255, 255, 255)";
     DOM_box_2.style.boxShadow = "10px 10px 25px rgb(175, 175, 175)";
     DOM_box_2.style.borderRadius = "150px";
+    let child = document.createElement("div");
+
+    child.textContent = "HEJ";
+    child.style.fontSize = "52px";
+    child.style.textAlign = "center";
+    child.style.marginTop = "350px";
+    child.style.fontFamily = "Arial Black";
+
+    DOM_box_2.append(child);
     add_event_mousedown(box_2);
     add_event_touchstart(box_2);
     add_action_drag(box_2);
