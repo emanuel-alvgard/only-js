@@ -283,46 +283,47 @@ function create_virtual(size) {
 
 
 
-function clear_virtual() {
+function clear_virtual(offset, size) {
     
-    let i = 0;
-    while (i < virtual_size) { size_x[i] = 0; i += 1; } i = 0;
-    while (i < virtual_size) { size_x_u[i] = 1; i += 1; } i = 0;
+    let range = offset + size;
+    let i = offset;
+    while (i < range) { size_x[i] = 0; i += 1; } i = offset;
+    while (i < range) { size_x_u[i] = 1; i += 1; } i = offset;
 
-    while (i < virtual_size) { size_y[i] = 0; i += 1; } i = 0;
-    while (i < virtual_size) { size_y_u[i] = 1; i += 1; } i = 0;
+    while (i < range) { size_y[i] = 0; i += 1; } i = offset;
+    while (i < range) { size_y_u[i] = 1; i += 1; } i = offset;
 
-    while (i < virtual_size) { x[i] = 0; i += 1; } i = 0;
-    while (i < virtual_size) { y[i] = 0; i += 1; } i = 0;
-    while (i < virtual_size) { rotation_z[i] = 0; i += 1; } i = 0;
-    while (i < virtual_size) { transform_u[i] = 1; i += 1; } i = 0;
+    while (i < range) { x[i] = 0; i += 1; } i = offset;
+    while (i < range) { y[i] = 0; i += 1; } i = offset;
+    while (i < range) { rotation_z[i] = 0; i += 1; } i = offset;
+    while (i < range) { transform_u[i] = 1; i += 1; } i = offset;
 
-    while (i < virtual_size) { z[i] = 0; i += 1; } i = 0;
-    while (i < virtual_size) { z_u[i] = 1; i += 1; } i = 0;
+    while (i < range) { z[i] = 0; i += 1; } i = offset;
+    while (i < range) { z_u[i] = 1; i += 1; } i = offset;
     
-    while (i < virtual_size) { mousemove[i] = 0; i += 1; } i = 0;
-    while (i < virtual_size) { mousedown[i] = 0; i += 1; } i = 0;
-    while (i < virtual_size) { mouseup[i] = 0; i += 1; } i = 0;
+    while (i < range) { mousemove[i] = 0; i += 1; } i = offset;
+    while (i < range) { mousedown[i] = 0; i += 1; } i = offset;
+    while (i < range) { mouseup[i] = 0; i += 1; } i = offset;
 
-    while (i < virtual_size) { touchstart[i] = 0; i += 1; } i = 0;
-    while (i < virtual_size) { touchmove[i] = 0; i += 1; } i = 0;
-    while (i < virtual_size) { touchend[i] = 0; i += 1; } i = 0;
+    while (i < range) { touchstart[i] = 0; i += 1; } i = offset;
+    while (i < range) { touchmove[i] = 0; i += 1; } i = offset;
+    while (i < range) { touchend[i] = 0; i += 1; } i = offset;
 
-    while (i < virtual_size) { link_x[i] = -1; i += 1; } i = 0;
-    while (i < virtual_size) { link_x_current[i] = 0; i += 1; } i = 0;
-    while (i < virtual_size) { link_x_previous[i] = 0; i += 1; } i = 0;
+    while (i < range) { link_x[i] = -1; i += 1; } i = offset;
+    while (i < range) { link_x_current[i] = 0; i += 1; } i = offset;
+    while (i < range) { link_x_previous[i] = 0; i += 1; } i = offset;
 
     // @ADD animation
 
-    while (i < virtual_size) { drag[i] = -1; i += 1; } i = 0;
+    while (i < range) { drag[i] = -1; i += 1; } i = offset;
 
-    while (i < virtual_size) { remove_event_mousemove(i); i += 1; } i = 0;
-    while (i < virtual_size) { remove_event_mousedown(i); i += 1; } i = 0;
-    while (i < virtual_size) { remove_event_mouseup(i); i += 1; } i = 0;
+    while (i < range) { remove_event_mousemove(i); i += 1; } i = offset;
+    while (i < range) { remove_event_mousedown(i); i += 1; } i = offset;
+    while (i < range) { remove_event_mouseup(i); i += 1; } i = offset;
 
-    while (i < virtual_size) { remove_event_touchstart(i); i += 1; } i = 0;
-    while (i < virtual_size) { remove_event_touchmove(i); i += 1; } i = 0;
-    while (i < virtual_size) { remove_event_touchend(i); i += 1; } i = 0;
+    while (i < range) { remove_event_touchstart(i); i += 1; } i = offset;
+    while (i < range) { remove_event_touchmove(i); i += 1; } i = offset;
+    while (i < range) { remove_event_touchend(i); i += 1; } i = offset;
 }
 
 
@@ -494,7 +495,7 @@ create_virtual(100);
 
 function create_home_page() {
     
-    clear_virtual();
+    clear_virtual(0, 10);
     
     let box_1 = 0;
     let DOM_box_1 = DOM_element[box_1];
@@ -556,7 +557,7 @@ function create_home_page() {
 }
 
 function create_other_page() {
-    clear_virtual();
+    clear_virtual(0, 10);
 
     let box_1 = 0;
     let DOM_box_1 = DOM_element[box_1];
