@@ -602,6 +602,8 @@ function create_home_page() {
     */
 }
 
+
+
 function create_other_page() {
     clear_virtual(0, 10);
 
@@ -625,14 +627,14 @@ function create_other_page() {
 
 
 // ROUTER
-function router_history(event) { 
+function controller_history(event) { 
     page[history.state.page_id] = 1;
     page_history = 1; 
 }
 
-window.onpopstate = router_history;
+window.onpopstate = controller_history;
 
-function router() {
+function view_controller() {
 
     if (router_creation === 1) {
         page_creation = 1;
@@ -663,7 +665,7 @@ function router() {
 
 function lite() {
 
-    router();
+    view_controller();
     update_ACTION();
     update_LINKED();
     update_DOM();
