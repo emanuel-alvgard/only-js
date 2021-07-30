@@ -152,11 +152,11 @@ document.addEventListener("keydown", ROOT_event_keydown);
 
 
 
-// PAGE
-let page = new Int32Array(100);
-let page_history = 0;
-let page_creation = 1;
-let router_creation = 1;
+// VIEW
+let view = new Int32Array(100);
+let view_history = 0;
+let view_creation = 1;
+let controller_creation = 1;
 
 // ELEMENT
 let DOM_element = [];
@@ -422,7 +422,7 @@ function update_DOM() {
     while (i < 100) { ROOT_keydown[i] = 0; i += 1; } i = 0;
     while (i < 100) { ROOT_keyup[i] = 0; i += 1; } i = 0;
 
-    page_creation = 0;
+    view_creation = 0;
 }
 
 
@@ -430,7 +430,7 @@ function update_DOM() {
 // LINKED
 function linked_x() {
     
-    if (page_creation === 1) { 
+    if (view_creation === 1) { 
         let i = 0;
         while (i < virtual_size) {    
             link_x_previous[i] = x[link_x[i]];
@@ -628,35 +628,35 @@ function create_other_page() {
 
 // ROUTER
 function controller_history(event) { 
-    page[history.state.page_id] = 1;
-    page_history = 1; 
+    view[history.state.page_id] = 1;
+    view_history = 1; 
 }
 
 window.onpopstate = controller_history;
 
 function view_controller() {
 
-    if (router_creation === 1) {
-        page_creation = 1;
+    if (controller_creation === 1) {
+        view_creation = 1;
         create_home_page();
-        page[0] = 0;
+        view[0] = 0;
         history.pushState({'page_id': 0}, "", "");
-        router_creation = 0; 
+        controller_creation = 0; 
         return; 
     }
     if (page[0] === 1) {
-        page_creation = 1;
+        view_creation = 1;
         create_home_page();
-        page[0] = 0;
-        if (page_history === 1) { page_history = 0; return; }
+        view[0] = 0;
+        if (view_history === 1) { view_history = 0; return; }
         history.pushState({'page_id': 0}, "", ""); 
         return; 
     }
     if (page[1] === 1) {
-        page_creation = 1;
+        view_creation = 1;
         create_other_page(); 
-        page[1] = 0;
-        if (page_history === 1) { page_history = 0; return; }
+        view[1] = 0;
+        if (view_history === 1) { view_history = 0; return; }
         history.pushState({'page_id': 1}, "", "");  
         return; 
     }
