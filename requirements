@@ -1,6 +1,6 @@
-1. Only use typed arrays
+1. Only use typed arrays.
 2. Use type annotations (| +) etc.
-3. Use global variables and reuse them.
-4. Don't use function parameters
-5. Only use while loops
-6. Don't use uninitialized variables
+4. Don't use function parameters.
+5. (while) is 4x faster on Safari and (for) is 4x faster on firefox, use (while).
+6. Don't use uninitialized variables.
+7. Always make a local reference variable to global arrays.
