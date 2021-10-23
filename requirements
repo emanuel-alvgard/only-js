@@ -1,0 +1,6 @@
+1. Only use typed arrays
+2. Use type annotations (| +) etc.
+3. Use global variables and reuse them.
+4. Don't use function parameters
+5. Only use while loops
+6. Don't use uninitialized variables
