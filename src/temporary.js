@@ -927,13 +927,23 @@ main();
 
 
 
+// target
+// progress
+// in_progress
 
 
 
+// Animation alternative 2021/12
+function integer_animation(subject, property, delta, amount, speed, curve, data) {
+    
+  
+}
 
 
 
-
+function animation_remove() {}
+function animation_disable() {}
+function animation_enable() {}
 
 
 
@@ -1020,15 +1030,6 @@ function center_to_point(id, x, y) {
 
 function infront() {}
 function behind() {}
-
-
-
-
-
-
-
-
-
 
 
 
