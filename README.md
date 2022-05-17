@@ -3,9 +3,10 @@ Data Oriented Web Framework.
 
 **Disclamer**
 ------
-The file "runtime.html" is representing a generated output. 
-Hence the runtime is currently developed in a single html file that is in 
-a very experimental stage.
++ This project is currently being developed by a single person and will continue to be so until
+it has passed it's most experimental stage.
++ The file "runtime.html" is representing a generated output. 
+Hence the runtime is currently being programmed in a single html file. 
 
 **Examples**
 ------
@@ -26,4 +27,4 @@ import lt from 'lite.js'
 ------
 *To create a data oriented web framework 
 with as little performance bottlenecks as possible, where 
-JavaScript, HTML and CSS are unified into a coherent, readable and pure interface.*
+JavaScript, HTML and CSS are unified into a coherent and readable interface.*
