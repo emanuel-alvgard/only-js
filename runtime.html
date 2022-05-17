@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>frontend</title>
+</head>
+<body>
+
+    <div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+
+    <script>
+
+        // ASSETS
+        // load all assets and only use references in views and sounds.
+
+    
+        let fonts = {
+            target: 3,
+            loaded: 0,
+        }
+
+        let roboto_400 = new FontFace("roboto_400", "url(https://fonts.gstatic.com/s/roboto/v29/KFOmCnqEu92Fr1Mu4mxK.woff2)");
+        let roboto_mono_700 = new FontFace("roboto_mono_700", "url(https://fonts.gstatic.com/s/robotomono/v21/L0xuDF4xlVMF-BfR8bXMIhJHg45mwgGEFl0_Of2_ROW4.woff2)");
+        let libre_bodoni_700 = new FontFace("libre_bodoni_700", "url(https://fonts.gstatic.com/s/librebodoni/v2/_Xm--H45qDWDYULr5OfyZudXzSBgY2oMBGte6GpY8WvTcQ.woff2)");
+        async function font(f, r) {
+            await f.load();
+            document.fonts.add(f);
+            r.loaded += 1;
+        }
+
+        font(roboto_400, fonts);
+        font(roboto_mono_700, fonts);
+        font(libre_bodoni_700, fonts);
+
+        // @TODO
+        //update_views() executes like this: animate, link, lock. Then the update_dom() does the rest.
+
+        let time = performance.now();
+        let delta = 0;
+
+
+        // @DONE
+        function init_dom() {
+            
+            let dom = { 
+                load: 1,
+                
+                width: document.documentElement.clientWidth,
+                height: document.documentElement.clientHeight,
+                
+                h: document.head,
+                b: document.body,
+                e: [] 
+            }
+
+            dom.b.style.margin = "0px";
+            dom.b.style.padding = "0px";
+            dom.b.style.left = "0px";
+            dom.b.style.top = "0px";
+            dom.b.style.overflow = "hidden";
+
+            let p = document.body.children[0];
+            let c = p.children;
+            dom.e.push(p);
+            
+            for (let i = 0; i < c.length; i++) {
+                dom.e.push(c[i]);
+            }
+            for (let i = 0; i < dom.e.length; i++) {
+                dom.e[i].style.position = "absolute";
+                dom.e[i].style.margin = "0px";
+                dom.e[i].style.padding = "0px";
+                dom.e[i].style.border = "none";
+                dom.e[i].style.left = "0px";
+                dom.e[i].style.top = "0px";
+                dom.e[i].style.width = "0px";
+                dom.e[i].style.height = "0px";
+                dom.e[i].style.zIndex = "0";
+                dom.e[i].style.overflow = "hidden";
+                dom.e[i].style.overflowWrap = "break-word";
+            }
+
+            return dom;
+        }
+
+        // FLOAT
+        let x0 = 0; // position
+        let x1 = 1; // dimension
+        let x2 = 2; // rotation
+        let x3 = 3; // scale
+
+        let y0 = 4;
+        let y1 = 5;
+        let y2 = 6;
+        let y3 = 7;
+
+        let z0 = 8;
+        let z1 = 9;
+        let z2 = 10;
+        let z3 = 11;
+
+        let opac = 12;
+        let bl = 13;
+        let cont = 14;
+        let satu = 15;
+        let gray = 16;
+        let brig = 17;
+        let sepi = 18;
+
+        let red = 19;
+        let green = 20;
+        let blue = 21;
+
+        let t_red = 22;
+        let t_green = 23;
+        let t_blue = 24;
+        let t_size = 25;
+        
+        /*
+        let b_x0_red = 26;
+        let b_x0_green = 27;
+        let b_x0_blue = 28;
+        let b_x0_size = 29;
+
+        let b_x1_red = 30;
+        let b_x1_green = 31;
+        let b_x1_blue = 32;
+        let b_x1_size = 33;
+
+        let b_y0_red = 34;
+        let b_y0_green = 35;
+        let b_y0_blue = 36;
+        let b_y0_size = 37;
+
+        let b_y1_red = 38;
+        let b_y1_green = 39;
+        let b_y1_blue = 40;
+        let b_y1_size = 41;
+
+        let b_x0_y0_radius = 42;
+        let b_x1_y0_radius = 43;
+        let b_x1_y1_radius = 44;
+        let b_x0_y1_radius = 45;
+
+        let s_red = 46;
+        let s_green = 47;
+        let s_blue = 48;
+        let s_size = 49;
+        let s_radius = 50;
+        */
+
+        // STRING
+        let text = 0;
+        let t_align = 1;
+        let t_font = 2;
+        //let b_x0 = 3;
+        //let b_x1 = 4;
+        //let b_y0 = 5;
+        //let b_y1 = 6;
+
+        // @ADD clip-path properties
+        
+        // @HERE 
+        function init_type(size, floats, strings) {
+
+            let t = {
+                
+                state: new Int32Array(size), // view state
+
+                // FLOAT
+                f32_s: [], // property state
+                f32_c: [], // property current frame
+                f32_p: [], // property previous frame
+
+                // LOCK NUMBER
+                loa: [], // active
+                lop: [], // property
+                lot: [], // target
+                loo: [], // offset
+                lomi: [], // min
+                loma: [], // max
+
+                // LINK NUMBER
+                lia: [], // active
+                lip: [], // property
+                lit: [], // target
+                limu: [], // multiplier
+                limi: [], // min
+                lima: [], // max
+
+                // ANIMATE NUMBER
+                // Static
+                ast: [], // start
+                aen: [], // end
+                ati: [], // time
+                ade: [], // delay
+                acu: [], // curve
+
+                // Dynamic
+                ar: [], // running RENAME to active?
+                ap: [], // progress
+                at: [], // timer
+                as: [], // sample
+                ad: [], // done
+
+                // STRING
+                str_s: [],
+                str_c: [],
+                str_p: []
+            }
+
+            // FLOAT
+            for (let i = 0; i < floats; i++) {
+                
+                t.f32_s.push(new Int8Array(size));
+                t.f32_c.push(new Float32Array(size));
+                t.f32_p.push(new Float32Array(size));
+
+                // LOCK
+                t.loa.push(new Int8Array(size));
+                t.lop.push(new Int8Array(size));
+                t.lot.push(new Int32Array(size));
+                t.loo.push(new Float32Array(size));
+                t.lomi.push(new Float32Array(size));
+                t.lomi[i].fill(-1);
+                t.loma.push(new Float32Array(size));
+                t.loma[i].fill(-1); 
+
+                // LINK
+                t.lia.push(new Int8Array(size));
+                t.lip.push(new Int8Array(size));
+                t.lit.push(new Int32Array(size));
+                t.limu.push(new Float32Array(size));
+                t.limi.push(new Float32Array(size));
+                t.limi[i].fill(-1);
+                t.lima.push(new Float32Array(size));
+                t.limi[i].fill(-1);
+
+                // ANIMATION
+                t.ast.push(new Float32Array(size));
+                t.aen.push(new Float32Array(size));
+                t.ati.push(new Float32Array(size));
+                t.ade.push(new Int32Array(size));
+                t.acu.push(new Array(size));
+                
+                t.ar.push(new Int8Array(size));
+                t.ap.push(new Float32Array(size));
+                t.at.push(new Float64Array(size));
+                t.as.push(new Int32Array(size));
+                t.ad.push(new Int8Array(size));
+            }
+
+            // STRING
+            for (let i = 0; i < strings; i++) {
+                t.str_s.push(new Array(size));
+                t.str_s[i].fill("");
+                t.str_c.push(new Array(size));
+                t.str_c[i].fill("");
+                t.str_p.push(new Array(size));
+                t.str_p[i].fill("");
+            }
+
+            return t;
+        }
+
+
+
+
+
+
+        // INIT
+        let dom = init_dom();
+        //let audio = init_audio();
+        
+        // VEIWS
+        let v = init_type(dom.e.length, 51, 7);
+
+        // TRANSFORM
+        v.f32_c[x3].fill(1.0);
+        v.f32_c[y3].fill(1.0);
+        v.f32_c[z3].fill(1.0);
+            
+        // FILTER
+        v.f32_c[opac].fill(100.0);
+        v.f32_c[cont].fill(100.0);
+        v.f32_c[satu].fill(100.0);
+        v.f32_c[brig].fill(100.0);
+
+        // SOUNDS
+        //let s = init_type(audio.e.length, 0, 0);
+
+        // audio test
+
+        let test = new AudioContext;
+        let oc = test.createOscillator();
+        oc.type = "triangle";
+        oc.frequency = 100;
+        oc.connect(test.destination);
+        oc.start();
+        dom.e[2].addEventListener("mousedown", function() {
+            test.resume();
+        });
+        dom.e[2].addEventListener("mouseup", function() {
+            test.suspend();
+        });
+
+        let audio = 0; 
+        let frequency = 1;
+        let volume = 2;
+        let speed = 3;
+
+
+
+
+
+
+        // GET VALUE
+        function num(t, i, p) { return t.f32_c[p][i]; }
+        function str(t, i, p) { return t.str_c[p][i]; }
+
+        // SET VALUE
+        function _num(t, i, p, j) { t.f32_c[p][i] = j; }
+        function _str(t, i, p, j) { t.str_c[p][i] = j; }
+
+        // GET STATE
+        function num_(t, i, p) { return t.f32_s[p][i]; }
+        function str_(t, i, p) { return t.str_s[p][i]; }
+
+
+
+
+        // @DONE
+        function lock(t, su, sp, ta, tp, offset, min, max) {
+            t.loa[sp][su] = 1;        
+            t.lop[sp][su] = tp;
+            t.lot[sp][su] = ta;
+            t.loo[sp][su] = offset;
+            t.lomi[sp][su] = min;
+            t.loma[sp][su] = max;
+            return;
+        }
+
+        // @DONE
+        function _lock(t, su, sp) {
+            t.loa[sp][su] = 0; 
+            return;
+        }
+
+        function update_locks(t) {
+            for (let i = 0; i < t.loa.length; i++) {
+                for (let j = 0; j < t.loa[i].length; j++) {
+                    if (t.loa[i][j] === 0) { continue; } // ACTIVE
+                    t.f32_c[i][j] = t.f32_c[t.lop[i][j]][t.lot[i][j]] + t.loo[i][j]; // SET VALUE
+                    if (t.lomi[i][j] !== -1 && t.f32_c[i][j] < t.lomi[i][j]) { t.f32_c[i][j] = t.lomi[i][j]; } // MIN
+                    else if (t.loma[i][j] !== -1 && t.f32_c[i][j] > t.loma[i][j]) { t.f32_c[i][j] = t.loma[i][j]; } // MAX
+                }
+            }
+            return;
+        }
+
+        // @DONE
+        function link(t, su, sp, ta, tp, mult, min, max) {
+            t.lia[sp][su] = 1;            
+            t.lip[sp][su] = tp;
+            t.lit[sp][su] = ta;
+            t.limu[sp][su] = mult;
+            t.limi[sp][su] = min;
+            t.lima[sp][su] = max;
+            return;
+        }
+
+        // @DONE
+        function _link(t, su, sp) {
+            t.lia[sp][su] = 0; 
+            return;
+        }
+      
+        // @NOT
+        function update_links(t) {
+
+            if (v.f32_c[tp][t] < v.f32_p[tp][t]) { v.f32_c[sp][s] -= ((v.f32_p[tp][t] - v.f32_c[tp][t]) * mult); }
+            else if (v.f32_c[tp][t] > v.f32_p[tp][t]) { v.f32_c[sp][s] += ((v.f32_c[tp][t] - v.f32_p[tp][t]) * mult); }
+
+            if (min !== null && v.f32_c[sp][s] < min) { v.f32_c[sp][s] = min; }
+            else if (max !== null && v.f32_c[sp][s] > max) { v.f32_c[sp][s] = max; }
+            return;
+        }
+
+        // @DONE
+        function lerp(p0, p1, i) {
+            return ((p1 - p0) * i) + p0; 
+        }
+
+        // @DONE
+        function quad(p0, p1, p2, i) {
+            let l0 = lerp(p0, p1, i);
+            let l1 = lerp(p1, p2, i);
+            return lerp(l0, l1, i);
+        }
+
+        // @DONE
+        function cube(p0, p1, p2, p3, i) {
+            let q0 = quad(p0, p1, p2, i);
+            let q1 = quad(p1, p2, p3, i);
+            return lerp(q0, q1, i);
+        }
+        
+        // @DONE // refactor into update function??
+        function anim(sp, s, start, end, time, delay, curve) {
+
+            if (v.ar[sp][s] === 0) {
+                v.ad[sp][s] = 0;
+                v.ar[sp][s] = 1;
+                v.ap[sp][s] = 0.0;
+                v.at[sp][s] = 0 - delay;
+                v.f32_c[sp][s] = start;
+            } 
+
+            // INVERT
+            let dir = 1;
+            let st = start;
+            let en = end;
+            if (end < start) { st = end; en = start; dir = -1; }
+            let di = en - st;
+
+            // CALCULATE
+            v.at[sp][s] += delta;
+            if (v.at[sp][s] < 0) { return; }
+            let cr = 0;
+            if (curve.length === 2) { cr = lerp(curve[0], curve[1], v.at[sp][s] / time); } 
+            else if (curve.length === 3) { cr = quad(curve[0], curve[1], curve[2], v.at[sp][s] / time); }
+            else if (curve.length === 4) { cr = cube(curve[0], curve[1], curve[2], curve[3], v.at[sp][s] / time); }
+            let pr = ((di / time) * cr) * delta;
+            v.ap[sp][s] += pr;
+            v.f32_c[sp][s] += (pr * dir);
+
+            // DONE
+            if (v.ap[sp][s] >= di || v.at[sp][s] >= (time + delta)) { 
+                v.f32_c[sp][s] = end;
+                v.ar[sp][s] = 0;
+                v.ad[sp][s] = 1;
+            }
+        }
+
+        function _anim() {}
+
+        function anim_() {}
+
+        // @NOT
+        function update_anims(type) {
+            
+            // INVERT
+            let dir = 1;
+            let st = start;
+            let en = end;
+            if (end < start) { st = end; en = start; dir = -1; }
+            let di = en - st;
+
+            // CALCULATE
+            v.at[sp][s] += delta;
+            if (v.at[sp][s] < 0) { return; }
+            let cr = 0;
+            if (curve.length === 2) { cr = lerp(curve[0], curve[1], v.at[sp][s] / time); } 
+            else if (curve.length === 3) { cr = quad(curve[0], curve[1], curve[2], v.at[sp][s] / time); }
+            else if (curve.length === 4) { cr = cube(curve[0], curve[1], curve[2], curve[3], v.at[sp][s] / time); }
+            let pr = ((di / time) * delta) * cr;
+            v.ap[sp][s] += pr;
+            v.f32_c[sp][s] += (pr * dir);
+
+            // DONE
+            if (v.ap[sp][s] >= di || v.at[sp][s] >= time) { 
+                v.f32_c[sp][s] = end;
+                v.ar[sp][s] = 0;
+                v.ad[sp][s] = 1;
+            }
+        }
+
+
+        function round(n) {
+            return n + (n>0?0.5:-0.5) << 0;
+        }
+
+
+        function update_dom(dom) {
+
+            let i = 0;
+            let len = dom.e.length;
+
+            // @ADD if a view contains text it's width and height = "auto"?
+            // @ADD if x0 is > rt.width || x1 < 0 do not render display: none (first time then skip rendering subsequent frames)
+            // @ADD if y0 is > rt.height || y1 < make element display: none (first time then skip rendering subsequent frames)
+
+            // TRANSFORM 
+            while (i < len) {
+                
+                let update = 0;
+
+                if (v.f32_c[x0][i] !== v.f32_p[x0][i]) { update = 1; }
+                else if (v.f32_c[y0][i] !== v.f32_p[y0][i]) { update = 1; }
+                else if (v.f32_c[z2][i] !== v.f32_p[z2][i]) { update = 1; } 
+                else if (v.f32_c[x3][i] !== v.f32_p[x3][i]) { update = 1; }   
+                
+                if (update === 1) {
+                    dom.e[i].style.transform = 
+                        "translate(" + v.f32_c[x0][i] + 
+                        "px, " + v.f32_c[y0][i] + "px) " + 
+                        "rotate(" + v.f32_c[z2][i] + "deg)" + 
+                        "scale(" + v.f32_c[x3][i] + ", " + v.f32_c[y3][i] + ")";
+                } 
+                i += 1; 
+            } 
+            
+            // WIDTH
+            i = 0;
+            while (i < len) { 
+                if ((v.f32_c[x1][i] - v.f32_c[x0][i]) !== (v.f32_p[x1][i] - v.f32_p[x0][i])) {
+                    dom.e[i].style.width = (v.f32_c[x1][i] - v.f32_c[x0][i]) + "px";
+                }
+                i += 1;
+            } 
+            
+            // HEIGHT
+            i = 0;
+            while (i < len) {
+                if ((v.f32_c[y1][i] - v.f32_c[y0][i]) !== (v.f32_p[y1][i] - v.f32_p[y0][i])) { 
+                    dom.e[i].style.height = (v.f32_c[y1][i]- v.f32_c[y0][i]) + "px";
+                } 
+                i += 1;
+            } 
+            
+            // FILTER
+            i = 0;
+            while (i < len) {
+                
+                let update = 0;
+                let opacity = "";
+                let blur = "";
+                let contrast = "";
+                let saturate = "";
+                let grayscale = "";
+                let brightness = "";
+                let sepia = "";
+
+                if (v.f32_c[opac][i] !== v.f32_p[opac][i]) { opacity = "opacity(" + v.f32_c[opac][i] + "%) "; update = 1; }
+                if (v.f32_c[bl][i] !== v.f32_p[bl][i]) { blur = "blur(" + v.f32_c[bl][i] + "px) "; update = 1; }
+                if (v.f32_c[cont][i] !== v.f32_p[cont][i]) { contrast = "contrast(" + v.f32_c[cont][i] + "%) "; update = 1; }
+                if (v.f32_c[satu][i] !== v.f32_p[satu][i]) { saturate = "saturate(" + v.f32_c[satu][i] + "%) "; update = 1; }
+                if (v.f32_c[gray][i] !== v.f32_p[gray][i]) { grayscale = "grayscale(" + v.f32_c[gray][i] + "%) "; update = 1; }
+                if (v.f32_c[brig][i] !== v.f32_p[brig][i]) { brightness = "brightness(" + v.f32_c[brig][i] + "%) "; update = 1; }
+                if (v.f32_c[sepi][i] !== v.f32_p[sepi][i]) { sepia = "sepia(" + v.f32_c[sepi][i] + "%) "; update = 1; }
+                if (update === 1) { dom.e[i].style.filter = opacity + blur + contrast + saturate + grayscale + brightness + sepia; }    
+                i += 1; 
+            }
+            
+            // BACKGROUND COLOR
+            i = 0;
+            while (i < len) {
+                let update = 0;
+                if (v.f32_c[red][i] !== v.f32_p[red][i]) { update = 1; }
+                if (v.f32_c[green][i] !== v.f32_p[green][i]) { update = 1; }
+                if (v.f32_c[blue][i] !== v.f32_p[blue][i]) { update = 1; }
+                if (update === 1) { 
+                    dom.e[i].style.backgroundColor =
+                        "rgb(" + 
+                        v.f32_c[red][i] + "," +
+                        v.f32_c[green][i] + "," +
+                        v.f32_c[blue][i] + ")";
+                }
+                i += 1;
+            }
+
+            // TEXT
+            i = 0;
+            while (i < len) { 
+                if (v.str_c[text][i] !== v.str_p[text][i]) {
+                    dom.e[i].textContent = v.str_c[text][i];
+                }
+                i += 1;
+            }
+
+            // TEXT ALIGN
+            i = 0;
+            while (i < len) {
+                if (v.str_c[text][i] === "") { i += 1; continue; }
+                if (v.str_c[t_align][i] !== v.str_p[t_align][i]) { 
+                    dom.e[i].style.textAlign = v.str_c[t_align][i];
+                }
+                i += 1;
+            }
+
+            // TEXT FONT
+            i = 0;
+            while (i < len) {
+                if (v.str_c[text][i] === "") { i += 1; continue; }
+                if (v.str_c[t_font][i] !== v.str_p[t_font][i]) { 
+                    dom.e[i].style.fontFamily = v.str_c[t_font][i];
+                }
+                i += 1;
+            }
+
+            // TEXT COLOR
+            i = 0;
+            while (i < len) {
+                if (v.str_c[text][i] === "") { i += 1; continue; }
+                let update = 0;
+                if (v.f32_c[t_red][i] !== v.f32_p[t_red][i]) { update = 1; }
+                if (v.f32_c[t_green][i] !== v.f32_p[t_green][i]) { update = 1; }
+                if (v.f32_c[t_blue][i] !== v.f32_p[t_blue][i]) { update = 1; }
+                if (update === 1) { 
+                    dom.e[i].style.color =
+                        "rgb(" + 
+                        v.f32_c[t_red][i] + "," +
+                        v.f32_c[t_green][i] + "," +
+                        v.f32_c[t_blue][i] + ")";
+                }
+                i += 1;
+            }
+
+            // TEXT SIZE
+            i = 0;
+            while (i < len) {
+                if (v.str_c[text][i] === "") { i += 1; continue; }
+                if (v.f32_c[t_size][i] !== v.f32_p[t_size][i]) { 
+                    dom.e[i].style.fontSize = v.f32_c[t_size][i] + "px";
+                }
+                i += 1;
+            }
+
+            // BORDER LEFT
+
+            // BORDER RIGHT
+
+            // BORDER TOP
+
+            // BORDER BOTTOM
+
+            // SHADOW
+
+            // CLEAR EVENTS
+            dom.load = 0;
+        }
+
+        function clear_dom(dom) {}
+
+
+        function update_views(rt) {
+
+            let viewport = 0;
+            let header = 1;
+            let card = 2;
+            let card_bot = 3;
+            let card_title = 4;
+
+            _num(v, viewport, x1, rt.width);
+            _num(v, viewport, y1, rt.height);
+
+            let curve_line = [0.0, 2.0];
+            let curve_quad = [3.0, 0.0, 0.0];
+            let curve_cube = [2.5, 1.0, 0.5, 0.0];
+
+            // STATE
+            if (v.state[card] === 0 && v.ad[x0][card] === 1) { v.state[card] = 1; }
+            else if (v.state[card] === 1 && v.ad[y0][card] === 1) { v.state[card] = 2; }
+            else if (v.state[card] === 2 && v.ad[x0][card] === 1) { v.state[card] = 3; }
+            else if (v.state[card] === 3 && v.ad[y0][card] === 1) { v.state[card] = 0; }
+
+            // LOAD (event)
+            if (rt.load === 1) {
+                v.f32_c[x0][card] = 300;
+                rt.e[card].style.borderStyle = "none";
+                rt.e[card].style.borderRadius = "15px";
+                //rt.e[card].style.boxShadow = "0px 0.5px 7px rgb(175, 175, 175)";
+
+                rt.e[card_bot].style.borderStyle = "none";
+                rt.e[card_bot].style.borderRadius = "0px 0px 15px 15px";
+                rt.e[card_bot].style.backgroundColor = "rgb(100, 100, 100)";
+
+                rt.e[header].style.borderStyle = "none";
+                rt.e[header].style.boxShadow = "0px 0.5px 7px rgb(175, 175, 175)";
+
+
+
+                _str(v, card_title, text, "this is a test to see if it works like expected. Well it seems to be working somewhat.");
+                _str(v, card_title, t_align, "center");
+                _str(v, card_title, t_font, "roboto_400");
+
+                _num(v, card, red, 200);
+                _num(v, card, green, 200);
+                _num(v, card, blue, 200);
+                _num(v, card, y0, 200);
+            }
+
+            // LAYOUT
+            lock(v, card_title, x0, card, x0, 25, -1, -1);
+            lock(v, card_title, x1, card, x1, -25, -1, -1);
+            lock(v, card_title, y0, card_title, y1, -60, -1, -1);
+            lock(v, card_title, y1, card_bot, y0, -25, -1, -1);
+
+            //lock(v, card, y0, viewport, y0, 300, -1, -1);
+            lock(v, card, x1, card, x0, 300, -1, -1);
+            lock(v, card, y1, card, y0, 500, -1, -1);
+
+            if (v.state[card] === 0) { anim(x0, card, 200, 500, 500, 500, curve_cube); }
+            else if (v.state[card] === 1) { anim(y0, card, 200, 500, 500, 500, curve_cube); }
+            else if (v.state[card] === 2) { anim(x0, card, 500, 200, 500, 500, curve_cube); }
+            else if (v.state[card] === 3) { anim(y0, card, 500, 200, 500, 500, curve_cube); }
+
+            lock(v, card_bot, x0, card, x0, 0, -1, -1);
+            lock(v, card_bot, x1, card, x1, 0, -1, -1);
+            lock(v, card_bot, y1, card, y1, 0, -1, -1);
+            let a = (num(v, card, y1) - num(v, card, y0)) / 2;
+            lock(v, card_bot, y0, card, y0, a, -1, -1);
+
+            lock(v, header, x1, viewport, x1, 0, -1, -1);
+            lock(v, header, y1, viewport, y0, 100, -1, -1);
+
+            //update_anims(v);
+            //update_links(v);
+            update_locks(v);
+        }
+
+        function clear_views() {
+            
+            // FLOAT
+            for (let i = 0; i < v.f32_c.length; i++) {
+                for (let j = 0; j < v.f32_c[i].length; j++) { 
+                    if (v.f32_c[i][j] !== v.f32_p[i][j]) { v.f32_p[i][j] = v.f32_c[i][j]; }
+                }
+            }
+
+            // STRING
+            for (let i = 0; i < v.str_c.length; i++) {
+                for (let j = 0; j < v.str_c[i].length; j++) { 
+                    if (v.str_c[i][j] !== v.str_p[i][j]) { v.str_p[i][j] = v.str_c[i][j]; }
+                }
+            }
+            // CLEAR EVENTS
+        }
+
+        function main() {
+
+            // @INVESTIGATE
+            dom.width = document.documentElement.clientWidth;
+            dom.height = document.documentElement.clientHeight;
+
+            let new_time = performance.now();
+            delta = new_time - time;
+            time = new_time;
+            
+            if (fonts.loaded === fonts.target) {
+                update_views(dom);
+                update_dom(dom);
+                clear_views();
+                clear_dom(dom);
+            }
+
+            window.requestAnimationFrame(main);
+        }
+
+        main();
+        
+    </script>
+</body>
+</html>
