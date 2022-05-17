@@ -4,7 +4,8 @@ Data Oriented Web Framework.
 **Disclamer**
 ------
 The file "runtime.html" is representing a generated output. 
-Hence the runtime is currently developed in a single html file.
+Hence the runtime is currently developed in a single html file that is in 
+a very experimental stage.
 
 **Examples**
 ------
