@@ -1,7 +1,7 @@
 # lite.js 
 Data Oriented Web Framework.
 
-**Disclamer**
+**Disclaimer**
 ------
 + This project is currently being developed by a single person and will continue to be so until
 it has passed it's most experimental stage.
