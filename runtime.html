@@ -168,11 +168,12 @@
                 acu: [], // curve
 
                 // Dynamic
-                ar: [], // running RENAME to active?
+                aa: [], // active
+                ar: [], // running
+                ad: [], // done
                 ap: [], // progress
                 at: [], // timer
                 as: [], // sample
-                ad: [], // done
 
                 // STRING
                 str_s: [],
@@ -212,11 +213,12 @@
                 t.ade.push(new Int32Array(size));
                 t.acu.push(new Array(size));
                 
+                t.aa.push(new Int8Array(size));
                 t.ar.push(new Int8Array(size));
+                t.ad.push(new Int8Array(size));
                 t.ap.push(new Float32Array(size));
                 t.at.push(new Float64Array(size));
                 t.as.push(new Int32Array(size));
-                t.ad.push(new Int8Array(size));
             }
 
             // STRING
@@ -370,74 +372,70 @@
             let q1 = quad(p1, p2, p3, i);
             return lerp(q0, q1, i);
         }
-        
-        // @DONE // refactor into update function??
-        function anim(sp, s, start, end, time, delay, curve) {
 
-            if (v.ar[sp][s] === 0) {
-                v.ad[sp][s] = 0;
-                v.ar[sp][s] = 1;
-                v.ap[sp][s] = 0.0;
-                v.at[sp][s] = 0 - delay;
-                v.f32_c[sp][s] = start;
+        // @
+        function anim(t, s, p, start, end, time, delay, curve) {
+
+            if (t.aa[p][s] === 0) {
+                
+                t.ast[p][s] = start;
+                t.aen[p][s] = end;
+                t.ati[p][s] = time;
+                t.ade[p][s] = delay;
+                t.acu[p][s] = curve;
+                
+                t.aa[p][s] = 1;
+                t.ar[p][s] = 1;
+                t.ad[p][s] = 0;
+                t.ap[p][s] = 0.0;
+                t.at[p][s] = 0.0 - delay;
+                t.f32_c[p][s] = start;
             } 
-
-            // INVERT
-            let dir = 1;
-            let st = start;
-            let en = end;
-            if (end < start) { st = end; en = start; dir = -1; }
-            let di = en - st;
-
-            // CALCULATE
-            v.at[sp][s] += delta;
-            if (v.at[sp][s] < 0) { return; }
-            let cr = 0;
-            if (curve.length === 2) { cr = lerp(curve[0], curve[1], v.at[sp][s] / time); } 
-            else if (curve.length === 3) { cr = quad(curve[0], curve[1], curve[2], v.at[sp][s] / time); }
-            else if (curve.length === 4) { cr = cube(curve[0], curve[1], curve[2], curve[3], v.at[sp][s] / time); }
-            let pr = ((di / time) * cr) * delta;
-            v.ap[sp][s] += pr;
-            v.f32_c[sp][s] += (pr * dir);
-
-            // DONE
-            if (v.ap[sp][s] >= di || v.at[sp][s] >= (time + delta)) { 
-                v.f32_c[sp][s] = end;
-                v.ar[sp][s] = 0;
-                v.ad[sp][s] = 1;
-            }
+            return;
         }
 
-        function _anim() {}
+        function _anim(t, s, p) {
 
-        function anim_() {}
+        }
+
+        function anim_(t, s, p) {
+
+        }
 
         // @NOT
-        function update_anims(type) {
-            
-            // INVERT
-            let dir = 1;
-            let st = start;
-            let en = end;
-            if (end < start) { st = end; en = start; dir = -1; }
-            let di = en - st;
+        function update_anims(t) {
 
-            // CALCULATE
-            v.at[sp][s] += delta;
-            if (v.at[sp][s] < 0) { return; }
-            let cr = 0;
-            if (curve.length === 2) { cr = lerp(curve[0], curve[1], v.at[sp][s] / time); } 
-            else if (curve.length === 3) { cr = quad(curve[0], curve[1], curve[2], v.at[sp][s] / time); }
-            else if (curve.length === 4) { cr = cube(curve[0], curve[1], curve[2], curve[3], v.at[sp][s] / time); }
-            let pr = ((di / time) * delta) * cr;
-            v.ap[sp][s] += pr;
-            v.f32_c[sp][s] += (pr * dir);
+            for (let i = 0; i < t.ar.length; i++) {
+                for (let j = 0; j < t.ar[i].length; j++) {
 
-            // DONE
-            if (v.ap[sp][s] >= di || v.at[sp][s] >= time) { 
-                v.f32_c[sp][s] = end;
-                v.ar[sp][s] = 0;
-                v.ad[sp][s] = 1;
+                    if (t.aa[i][j] === 0 || t.ar[i][j] === 0) { continue; }
+                    
+                    // INVERT
+                    let dir = 1;
+                    let st = t.ast[i][j];
+                    let en = t.aen[i][j];
+                    if (en < st) { st = t.aen[i][j]; en = t.ast[i][j]; dir = -1; }
+                    let di = en - st;
+
+                    // CALCULATE
+                    t.at[i][j] += delta;
+                    if (t.at[i][j] < 0) { return; }
+                    let cr = 0;
+                    if (t.acu[i][j].length === 2) { cr = lerp(t.acu[i][j][0], t.acu[i][j][1], t.at[i][j] / (t.ati[i][j] + delta)); } 
+                    else if (t.acu[i][j].length === 3) { cr = quad(t.acu[i][j][0], t.acu[i][j][1], t.acu[i][j][2], t.at[i][j] / (t.ati[i][j] + delta)); }
+                    else if (t.acu[i][j].length === 4) { cr = cube(t.acu[i][j][0], t.acu[i][j][1], t.acu[i][j][2], t.acu[i][j][3], t.at[i][j] / (t.ati[i][j] + delta)); }
+                    let pr = ((di / t.ati[i][j]) * cr) * delta;
+                    t.ap[i][j] += pr;
+                    t.f32_c[i][j] += (pr * dir);
+
+                    // DONE
+                    if (t.ap[i][j] >= di || t.at[i][j] >= t.ati[i][j] + delta) { 
+                        t.f32_c[i][j] = t.aen[i][j];
+                        t.aa[i][j] = 0;
+                        t.ar[i][j] = 0;
+                        t.ad[i][j] = 1;
+                    }
+                }
             }
         }
 
@@ -650,9 +648,9 @@
                 _str(v, card_title, t_align, "center");
                 _str(v, card_title, t_font, "roboto_400");
 
-                _num(v, card_title, red, 200);
-                _num(v, card_title, green, 0);
-                _num(v, card_title, blue, 0);
+                //_num(v, card_title, red, 200);
+                //_num(v, card_title, green, 0);
+                //_num(v, card_title, blue, 0);
 
                 _num(v, card, red, 200);
                 _num(v, card, green, 200);
@@ -670,10 +668,22 @@
             lock(v, card, x1, v, card, x0, 300, -1, -1);
             lock(v, card, y1, v, card, y0, 500, -1, -1);
 
-            if (v.state[card] === 0) { anim(x0, card, 200, 500, 500, 500, curve_cube); }
-            else if (v.state[card] === 1) { anim(y0, card, 200, 500, 500, 500, curve_cube); }
-            else if (v.state[card] === 2) { anim(x0, card, 500, 200, 500, 500, curve_cube); }
-            else if (v.state[card] === 3) { anim(y0, card, 500, 200, 500, 500, curve_cube); }
+            if (v.state[card] === 0) { 
+                anim(v, card, x0, 200, 500, 1000, 0, curve_quad); 
+                anim(v, card_title, opac, 0, 100, 1000, 0, curve_quad); 
+            }
+            else if (v.state[card] === 1) { 
+                anim(v, card, y0, 200, 500, 1000, 0, curve_quad);
+                anim(v, card_title, opac, 100, 0, 1000, 0, curve_quad);
+            }
+            else if (v.state[card] === 2) { 
+                anim(v, card, x0, 500, 200, 1000, 0, curve_quad);
+                anim(v, card_title, opac, 0, 100, 1000, 0, curve_quad);
+            }
+            else if (v.state[card] === 3) { 
+                anim(v, card, y0, 500, 200, 1000, 0, curve_quad); 
+                anim(v, card_title, opac, 100, 0, 1000, 0, curve_quad);
+            }
 
             lock(v, card_bot, x0, v, card, x0, 0, -1, -1);
             lock(v, card_bot, x1, v, card, x1, 0, -1, -1);
@@ -684,7 +694,7 @@
             lock(v, header, x1, v, viewport, x1, 0, -1, -1);
             lock(v, header, y1, v, viewport, y0, 100, -1, -1);
 
-            //update_anims(v);
+            update_anims(v);
             update_locks(v);
         }
 
