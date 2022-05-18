@@ -139,7 +139,7 @@
 
             let t = {
                 
-                state: new Int32Array(size),
+                state: new Int32Array(size), // change to event?
                 render: new Int8Array(size), 
 
                 // FLOAT
@@ -166,11 +166,12 @@
                 ati: [], // time
                 ade: [], // delay
                 acu: [], // curve
+                aev: [], // event
 
                 // Dynamic
                 aa: [], // active
                 ar: [], // running
-                ad: [], // done
+                ae: [], // event
                 ap: [], // progress
                 at: [], // timer
                 as: [], // sample
@@ -212,10 +213,11 @@
                 t.ati.push(new Float32Array(size));
                 t.ade.push(new Int32Array(size));
                 t.acu.push(new Array(size));
+                t.aev.push(new Int32Array(size));
                 
                 t.aa.push(new Int8Array(size));
                 t.ar.push(new Int8Array(size));
-                t.ad.push(new Int8Array(size));
+                t.ae.push(new Int8Array(size));
                 t.ap.push(new Float32Array(size));
                 t.at.push(new Float64Array(size));
                 t.as.push(new Int32Array(size));
@@ -289,7 +291,14 @@
 
 
         // GET VALUE
-        function num(t, i, p) { return t.f32_c[p][i]; }
+        // @
+        function num(t, s, p) { 
+            if (t.loa[p][s] === 1) {
+                // resolve lock
+            }    
+            return t.f32_c[p][s]; 
+        }
+
         function str(t, i, p) { return t.str_c[p][i]; }
 
         // SET VALUE
@@ -374,35 +383,29 @@
         }
 
         // @
-        function anim(t, s, p, start, end, time, delay, curve) {
+        function anim(t, s, p, start, end, time, delay, curve, event) {
 
-            if (t.aa[p][s] === 0) {
-                
-                t.ast[p][s] = start;
-                t.aen[p][s] = end;
-                t.ati[p][s] = time;
-                t.ade[p][s] = delay;
-                t.acu[p][s] = curve;
-                
-                t.aa[p][s] = 1;
-                t.ar[p][s] = 1;
-                t.ad[p][s] = 0;
-                t.ap[p][s] = 0.0;
-                t.at[p][s] = 0.0 - delay;
-                t.f32_c[p][s] = start;
-            } 
-            return;
+            t.ast[p][s] = start;
+            t.aen[p][s] = end;
+            t.ati[p][s] = time;
+            t.ade[p][s] = delay;
+            t.acu[p][s] = curve;
+            t.aev[p][s] = event;
+            
+            t.aa[p][s] = 1;
+            t.ar[p][s] = 1;
+            t.ae[p][s] = 0;
+            t.ap[p][s] = 0.0;
+            t.at[p][s] = 0.0 - delay;
+            t.f32_c[p][s] = start;
         }
 
         function _anim(t, s, p) {
-
+            if (t.aa[p][s] === 1) { t.aa[p][s] = 0; }
+            else { t.aa[p][s] = 1; }
         }
 
-        function anim_(t, s, p) {
-
-        }
-
-        // @NOT
+        // @DONE
         function update_anims(t) {
 
             for (let i = 0; i < t.ar.length; i++) {
@@ -419,7 +422,7 @@
 
                     // CALCULATE
                     t.at[i][j] += delta;
-                    if (t.at[i][j] < 0) { return; }
+                    if (t.at[i][j] < 0) { continue; }
                     let cr = 0;
                     if (t.acu[i][j].length === 2) { cr = lerp(t.acu[i][j][0], t.acu[i][j][1], t.at[i][j] / (t.ati[i][j] + delta)); } 
                     else if (t.acu[i][j].length === 3) { cr = quad(t.acu[i][j][0], t.acu[i][j][1], t.acu[i][j][2], t.at[i][j] / (t.ati[i][j] + delta)); }
@@ -433,8 +436,17 @@
                         t.f32_c[i][j] = t.aen[i][j];
                         t.aa[i][j] = 0;
                         t.ar[i][j] = 0;
-                        t.ad[i][j] = 1;
+                        t.ae[i][j] = t.aev[i][j];
                     }
+                }
+            }
+        }
+
+        // @DONE
+        function clear_anims(t) {
+            for (let i = 0; i < t.ae.length; i++) {
+                for (let j = 0; j < t.ae[i].length; j++) {
+                    t.ae[i][j] = 0;
                 }
             }
         }
@@ -622,13 +634,7 @@
             let curve_quad = [3.0, 0.0, 0.0];
             let curve_cube = [2.5, 1.0, 0.5, 0.0];
 
-            // STATE
-            if (v.state[card] === 0 && v.ad[x0][card] === 1) { v.state[card] = 1; }
-            else if (v.state[card] === 1 && v.ad[y0][card] === 1) { v.state[card] = 2; }
-            else if (v.state[card] === 2 && v.ad[x0][card] === 1) { v.state[card] = 3; }
-            else if (v.state[card] === 3 && v.ad[y0][card] === 1) { v.state[card] = 0; }
-
-            // LOAD (event)
+            // FIRST LOAD
             if (rt.load === 1) {
                 v.f32_c[x0][card] = 300;
                 rt.e[card].style.borderStyle = "none";
@@ -656,44 +662,60 @@
                 _num(v, card, green, 200);
                 _num(v, card, blue, 200);
                 _num(v, card, y0, 200);
+
+                // LAYOUT
+                lock(v, card_title, x0, v, card, x0, 25, -1, -1);
+                lock(v, card_title, x1, v, card, x1, -25, -1, -1);
+                lock(v, card_title, y0, v, card_title, y1, -60, -1, -1);
+                lock(v, card_title, y1, v, card, y0, -25, -1, -1);
+
+                //lock(v, card, y0, viewport, y0, 300, -1, -1);
+                lock(v, card, x1, v, card, x0, 300, -1, -1);
+                lock(v, card, y1, v, card, y0, 500, -1, -1);
+
+                
+                lock(v, card_bot, x0, v, card, x0, 0, -1, -1);
+                lock(v, card_bot, x1, v, card, x1, 0, -1, -1);
+                lock(v, card_bot, y1, v, card, y1, 0, -1, -1);
+                
+
+                lock(v, header, x1, v, viewport, x1, 0, -1, -1);
+                lock(v, header, y1, v, viewport, y0, 100, -1, -1);
+
+                anim(v, card, x0, 200, 500, 3000, 500, curve_quad, 2);
+                anim(v, card_title, opac, 0, 100, 3000, 500, curve_quad, 0);
+                anim(v, card_bot, blue, 100, 200, 2000, 500, curve_quad, 0);
             }
 
-            // LAYOUT
-            lock(v, card_title, x0, v, card, x0, 25, -1, -1);
-            lock(v, card_title, x1, v, card, x1, -25, -1, -1);
-            lock(v, card_title, y0, v, card_title, y1, -60, -1, -1);
-            lock(v, card_title, y1, v, card, y0, -25, -1, -1);
-
-            //lock(v, card, y0, viewport, y0, 300, -1, -1);
-            lock(v, card, x1, v, card, x0, 300, -1, -1);
-            lock(v, card, y1, v, card, y0, 500, -1, -1);
-
-            if (v.state[card] === 0) { 
-                anim(v, card, x0, 200, 500, 1000, 0, curve_quad); 
-                anim(v, card_title, opac, 0, 100, 1000, 0, curve_quad); 
+            
+            if (v.ae[y0][card] === 1) { 
+                anim(v, card, x0, 200, 500, 2000, 500, curve_quad, 2);
+                anim(v, card_title, opac, 0, 100, 2000, 500, curve_quad, 0);
+                anim(v, card_bot, blue, 100, 200, 2000, 500, curve_quad, 0);
             }
-            else if (v.state[card] === 1) { 
-                anim(v, card, y0, 200, 500, 1000, 0, curve_quad);
-                anim(v, card_title, opac, 100, 0, 1000, 0, curve_quad);
+            else if (v.ae[x0][card] === 2) { 
+                anim(v, card, y0, 200, 500, 2000, 500, curve_quad, 3);
+                anim(v, card_title, opac, 100, 0, 2000, 500, curve_quad, 0);
+                anim(v, card_bot, green, 100, 200, 2000, 500, curve_quad, 0);
             }
-            else if (v.state[card] === 2) { 
-                anim(v, card, x0, 500, 200, 1000, 0, curve_quad);
-                anim(v, card_title, opac, 0, 100, 1000, 0, curve_quad);
+            else if (v.ae[y0][card] === 3) { 
+                anim(v, card, x0, 500, 200, 2000, 500, curve_quad, 4);
+                anim(v, card_title, opac, 0, 100, 2000, 500, curve_quad, 0);
+                anim(v, card_bot, red, 100, 200, 2000, 500, curve_quad, 0);
             }
-            else if (v.state[card] === 3) { 
-                anim(v, card, y0, 500, 200, 1000, 0, curve_quad); 
-                anim(v, card_title, opac, 100, 0, 1000, 0, curve_quad);
+            else if (v.ae[x0][card] === 4) { 
+                anim(v, card, y0, 500, 200, 2000, 500, curve_quad, 1);
+                anim(v, card_title, opac, 100, 0, 2000, 500, curve_quad, 0);
             }
 
-            lock(v, card_bot, x0, v, card, x0, 0, -1, -1);
-            lock(v, card_bot, x1, v, card, x1, 0, -1, -1);
-            lock(v, card_bot, y1, v, card, y1, 0, -1, -1);
+            update_locks(v);
+            
+            // @ADD
+            // make so that get function takes locks into account
             let a = (num(v, card, y1) - num(v, card, y0)) / 2;
             lock(v, card_bot, y0, v, card, y0, a, -1, -1);
 
-            lock(v, header, x1, v, viewport, x1, 0, -1, -1);
-            lock(v, header, y1, v, viewport, y0, 100, -1, -1);
-
+            clear_anims(v);
             update_anims(v);
             update_locks(v);
         }
@@ -713,7 +735,6 @@
                     if (v.str_c[i][j] !== v.str_p[i][j]) { v.str_p[i][j] = v.str_c[i][j]; }
                 }
             }
-            // CLEAR EVENTS
         }
 
         function main() {
@@ -734,6 +755,7 @@
             }
 
             window.requestAnimationFrame(main);
+
         }
 
         main();
