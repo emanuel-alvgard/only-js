@@ -40,9 +40,6 @@
         font(roboto_mono_700, fonts);
         font(libre_bodoni_700, fonts);
 
-        // @TODO
-        //update_views() executes like this: animate, link, lock. Then the update_dom() does the rest.
-
         let time = performance.now();
         let delta = 0;
 
@@ -123,57 +120,27 @@
         let t_green = 23;
         let t_blue = 24;
         let t_size = 25;
-        
-        /*
-        let b_x0_red = 26;
-        let b_x0_green = 27;
-        let b_x0_blue = 28;
-        let b_x0_size = 29;
-
-        let b_x1_red = 30;
-        let b_x1_green = 31;
-        let b_x1_blue = 32;
-        let b_x1_size = 33;
-
-        let b_y0_red = 34;
-        let b_y0_green = 35;
-        let b_y0_blue = 36;
-        let b_y0_size = 37;
-
-        let b_y1_red = 38;
-        let b_y1_green = 39;
-        let b_y1_blue = 40;
-        let b_y1_size = 41;
-
-        let b_x0_y0_radius = 42;
-        let b_x1_y0_radius = 43;
-        let b_x1_y1_radius = 44;
-        let b_x0_y1_radius = 45;
-
-        let s_red = 46;
-        let s_green = 47;
-        let s_blue = 48;
-        let s_size = 49;
-        let s_radius = 50;
-        */
 
         // STRING
         let text = 0;
         let t_align = 1;
         let t_font = 2;
-        //let b_x0 = 3;
-        //let b_x1 = 4;
-        //let b_y0 = 5;
-        //let b_y1 = 6;
 
         // @ADD clip-path properties
+
+        function fill_array(a, b) {
+            for (let i = 0; i < a.length; i++) {
+                a[i] = b;
+            }
+        }
         
         // @HERE 
         function init_type(size, floats, strings) {
 
             let t = {
                 
-                state: new Int32Array(size), // view state
+                state: new Int32Array(size),
+                render: new Int8Array(size), 
 
                 // FLOAT
                 f32_s: [], // property state
@@ -182,19 +149,15 @@
 
                 // LOCK NUMBER
                 loa: [], // active
-                lop: [], // property
-                lot: [], // target
-                loo: [], // offset
+                lot: [], // type
+                lopr: [], // property
+                lota: [], // target
+                loof: [], // offset
                 lomi: [], // min
                 loma: [], // max
 
-                // LINK NUMBER
-                lia: [], // active
-                lip: [], // property
-                lit: [], // target
-                limu: [], // multiplier
-                limi: [], // min
-                lima: [], // max
+                lodp: [], // defer property
+                lodt: [], // defer target
 
                 // ANIMATE NUMBER
                 // Static
@@ -217,6 +180,8 @@
                 str_p: []
             }
 
+            fill_array(t.render, 1);
+
             // FLOAT
             for (let i = 0; i < floats; i++) {
                 
@@ -226,23 +191,19 @@
 
                 // LOCK
                 t.loa.push(new Int8Array(size));
-                t.lop.push(new Int8Array(size));
-                t.lot.push(new Int32Array(size));
-                t.loo.push(new Float32Array(size));
+                t.lot.push(new Array(size));
+                t.lopr.push(new Int8Array(size));
+                t.lota.push(new Int32Array(size));
+                t.loof.push(new Float32Array(size));
                 t.lomi.push(new Float32Array(size));
-                t.lomi[i].fill(-1);
+                fill_array(t.lomi[i], -1);
                 t.loma.push(new Float32Array(size));
-                t.loma[i].fill(-1); 
-
-                // LINK
-                t.lia.push(new Int8Array(size));
-                t.lip.push(new Int8Array(size));
-                t.lit.push(new Int32Array(size));
-                t.limu.push(new Float32Array(size));
-                t.limi.push(new Float32Array(size));
-                t.limi[i].fill(-1);
-                t.lima.push(new Float32Array(size));
-                t.limi[i].fill(-1);
+                fill_array(t.loma[i], -1);
+                
+                t.lodp.push(new Int32Array(size));
+                t.lodt.push(new Int32Array(size));
+                fill_array(t.lodp[i], -1);
+                fill_array(t.lodt[i], -1);
 
                 // ANIMATION
                 t.ast.push(new Float32Array(size));
@@ -261,11 +222,11 @@
             // STRING
             for (let i = 0; i < strings; i++) {
                 t.str_s.push(new Array(size));
-                t.str_s[i].fill("");
+                fill_array(t.str_s[i], "");
                 t.str_c.push(new Array(size));
-                t.str_c[i].fill("");
+                fill_array(t.str_c[i], "");
                 t.str_p.push(new Array(size));
-                t.str_p[i].fill("");
+                fill_array(t.str_p[i], "");
             }
 
             return t;
@@ -281,21 +242,24 @@
         //let audio = init_audio();
         
         // VEIWS
-        let v = init_type(dom.e.length, 51, 7);
+        let v = init_type(dom.e.length, 26, 3);
 
         // TRANSFORM
-        v.f32_c[x3].fill(1.0);
-        v.f32_c[y3].fill(1.0);
-        v.f32_c[z3].fill(1.0);
+        fill_array(v.f32_c[x3], 1.0);
+        fill_array(v.f32_c[y3], 1.0);
+        fill_array(v.f32_c[z3], 1.0);
             
         // FILTER
-        v.f32_c[opac].fill(100.0);
-        v.f32_c[cont].fill(100.0);
-        v.f32_c[satu].fill(100.0);
-        v.f32_c[brig].fill(100.0);
+        fill_array(v.f32_c[opac], 100.0);
+        fill_array(v.f32_c[cont], 100.0);
+        fill_array(v.f32_c[satu], 100.0);
+        fill_array(v.f32_c[brig], 100.0);
 
         // SOUNDS
         //let s = init_type(audio.e.length, 0, 0);
+
+        // BOUNDS
+        //let b = init_type(10, 6, 0);
 
         // audio test
 
@@ -338,13 +302,14 @@
 
 
         // @DONE
-        function lock(t, su, sp, ta, tp, offset, min, max) {
-            t.loa[sp][su] = 1;        
-            t.lop[sp][su] = tp;
-            t.lot[sp][su] = ta;
-            t.loo[sp][su] = offset;
-            t.lomi[sp][su] = min;
-            t.loma[sp][su] = max;
+        function lock(st, su, sp, tt, ta, tp, offset, min, max) {
+            st.loa[sp][su] = 1;
+            st.lot[sp][su] = tt;        
+            st.lopr[sp][su] = tp;
+            st.lota[sp][su] = ta;
+            st.loof[sp][su] = offset;
+            st.lomi[sp][su] = min;
+            st.loma[sp][su] = max;
             return;
         }
 
@@ -357,56 +322,33 @@
         // @DONE
         function update_locks(t) {
             
-            let defer_p = [];
-            let defer_t = [];
+            let defer = 0;
             
             for (let i = 0; i < t.loa.length; i++) {
                 for (let j = 0; j < t.loa[i].length; j++) {
                     if (t.loa[i][j] === 0) { continue; } // ACTIVE
-                    if (i < t.lop[i][j]) { defer_p.push(i); defer_t.push(j); continue; } // DEFER
-                    t.f32_c[i][j] = t.f32_c[t.lop[i][j]][t.lot[i][j]] + t.loo[i][j]; // SET VALUE
+                    if (i < t.lopr[i][j]) { t.lodp[defer] = i; t.lodt[defer] = j; defer += 1; continue; } // DEFER
+                    t.f32_c[i][j] = t.lot[i][j].f32_c[t.lopr[i][j]][t.lota[i][j]] + t.loof[i][j]; // SET VALUE
                     if (t.lomi[i][j] !== -1 && t.f32_c[i][j] < t.lomi[i][j]) { t.f32_c[i][j] = t.lomi[i][j]; } // MIN
                     else if (t.loma[i][j] !== -1 && t.f32_c[i][j] > t.loma[i][j]) { t.f32_c[i][j] = t.loma[i][j]; } // MAX
                 }
             }
 
-            
-            for (let d = (defer_p.length - 1); d >= 0; d--) {
-                let i = defer_p[d];
-                let j = defer_t[d];
-                t.f32_c[i][j] = t.f32_c[t.lop[i][j]][t.lot[i][j]] + t.loo[i][j]; // SET VALUE
+            // DEFER
+            for (let d = (defer - 1); d >= 0; d--) {
+                
+                let i = t.lodp[d];
+                let j = t.lodt[d];
+                
+                t.f32_c[i][j] = t.lot[i][j].f32_c[t.lopr[i][j]][t.lota[i][j]] + t.loof[i][j]; // SET VALUE
                 if (t.lomi[i][j] !== -1 && t.f32_c[i][j] < t.lomi[i][j]) { t.f32_c[i][j] = t.lomi[i][j]; } // MIN
                 else if (t.loma[i][j] !== -1 && t.f32_c[i][j] > t.loma[i][j]) { t.f32_c[i][j] = t.loma[i][j]; } // MAX
+                
+                // RESET DEFER
+                t.lodp[d] = -1;
+                t.lodt[d] = -1;
             }
             
-            return;
-        }
-
-        // @DONE
-        function link(t, su, sp, ta, tp, mult, min, max) {
-            t.lia[sp][su] = 1;            
-            t.lip[sp][su] = tp;
-            t.lit[sp][su] = ta;
-            t.limu[sp][su] = mult;
-            t.limi[sp][su] = min;
-            t.lima[sp][su] = max;
-            return;
-        }
-
-        // @DONE
-        function _link(t, su, sp) {
-            t.lia[sp][su] = 0; 
-            return;
-        }
-      
-        // @NOT
-        function update_links(t) {
-
-            if (v.f32_c[tp][t] < v.f32_p[tp][t]) { v.f32_c[sp][s] -= ((v.f32_p[tp][t] - v.f32_c[tp][t]) * mult); }
-            else if (v.f32_c[tp][t] > v.f32_p[tp][t]) { v.f32_c[sp][s] += ((v.f32_c[tp][t] - v.f32_p[tp][t]) * mult); }
-
-            if (min !== null && v.f32_c[sp][s] < min) { v.f32_c[sp][s] = min; }
-            else if (max !== null && v.f32_c[sp][s] > max) { v.f32_c[sp][s] = max; }
             return;
         }
 
@@ -510,11 +452,17 @@
             let i = 0;
             let len = dom.e.length;
 
-            // @ADD if a view contains text it's width and height = "auto"?
-            // @ADD if x0 is > rt.width || x1 < 0 do not render display: none (first time then skip rendering subsequent frames)
-            // @ADD if y0 is > rt.height || y1 < make element display: none (first time then skip rendering subsequent frames)
+            // RENDER
+            while (i < len) {
+                if (v.f32_c[x0][i] > (dom.width + 100.0)) { v.render[i] = 0; }
+                else if (v.f32_c[y0][i] > (dom.height + 100.0)) { v.render[i] = 0; }
+                else if (v.f32_c[x1][i] < -100.0) { v.render[i] = 0; }
+                else if (v.f32_c[y1][i] < -100.0) { v.render[i] = 0; }
+                i += 1;
+            }
 
             // TRANSFORM 
+            i = 0;
             while (i < len) {
                 
                 let update = 0;
@@ -524,7 +472,7 @@
                 else if (v.f32_c[z2][i] !== v.f32_p[z2][i]) { update = 1; } 
                 else if (v.f32_c[x3][i] !== v.f32_p[x3][i]) { update = 1; }   
                 
-                if (update === 1) {
+                if (update === 1 && v.render[i] === 1) {
                     dom.e[i].style.transform = 
                         "translate(" + v.f32_c[x0][i] + 
                         "px, " + v.f32_c[y0][i] + "px) " + 
@@ -650,13 +598,7 @@
                 i += 1;
             }
 
-            // BORDER LEFT
-
-            // BORDER RIGHT
-
-            // BORDER TOP
-
-            // BORDER BOTTOM
+            fill_array(v.render, 1);
 
             // SHADOW
 
@@ -719,31 +661,30 @@
             }
 
             // LAYOUT
-            lock(v, card_title, x0, card, x0, 25, -1, -1);
-            lock(v, card_title, x1, card, x1, -25, -1, -1);
-            lock(v, card_title, y0, card_title, y1, -60, -1, -1);
-            lock(v, card_title, y1, card, y0, -25, -1, -1);
+            lock(v, card_title, x0, v, card, x0, 25, -1, -1);
+            lock(v, card_title, x1, v, card, x1, -25, -1, -1);
+            lock(v, card_title, y0, v, card_title, y1, -60, -1, -1);
+            lock(v, card_title, y1, v, card, y0, -25, -1, -1);
 
             //lock(v, card, y0, viewport, y0, 300, -1, -1);
-            lock(v, card, x1, card, x0, 300, -1, -1);
-            lock(v, card, y1, card, y0, 500, -1, -1);
+            lock(v, card, x1, v, card, x0, 300, -1, -1);
+            lock(v, card, y1, v, card, y0, 500, -1, -1);
 
             if (v.state[card] === 0) { anim(x0, card, 200, 500, 500, 500, curve_cube); }
             else if (v.state[card] === 1) { anim(y0, card, 200, 500, 500, 500, curve_cube); }
             else if (v.state[card] === 2) { anim(x0, card, 500, 200, 500, 500, curve_cube); }
             else if (v.state[card] === 3) { anim(y0, card, 500, 200, 500, 500, curve_cube); }
 
-            lock(v, card_bot, x0, card, x0, 0, -1, -1);
-            lock(v, card_bot, x1, card, x1, 0, -1, -1);
-            lock(v, card_bot, y1, card, y1, 0, -1, -1);
+            lock(v, card_bot, x0, v, card, x0, 0, -1, -1);
+            lock(v, card_bot, x1, v, card, x1, 0, -1, -1);
+            lock(v, card_bot, y1, v, card, y1, 0, -1, -1);
             let a = (num(v, card, y1) - num(v, card, y0)) / 2;
-            lock(v, card_bot, y0, card, y0, a, -1, -1);
+            lock(v, card_bot, y0, v, card, y0, a, -1, -1);
 
-            lock(v, header, x1, viewport, x1, 0, -1, -1);
-            lock(v, header, y1, viewport, y0, 100, -1, -1);
+            lock(v, header, x1, v, viewport, x1, 0, -1, -1);
+            lock(v, header, y1, v, viewport, y0, 100, -1, -1);
 
             //update_anims(v);
-            //update_links(v);
             update_locks(v);
         }
 
