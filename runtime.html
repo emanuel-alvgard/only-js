@@ -354,15 +354,31 @@
             return;
         }
 
+        // @DONE
         function update_locks(t) {
+            
+            let defer_p = [];
+            let defer_t = [];
+            
             for (let i = 0; i < t.loa.length; i++) {
                 for (let j = 0; j < t.loa[i].length; j++) {
                     if (t.loa[i][j] === 0) { continue; } // ACTIVE
+                    if (i < t.lop[i][j]) { defer_p.push(i); defer_t.push(j); continue; } // DEFER
                     t.f32_c[i][j] = t.f32_c[t.lop[i][j]][t.lot[i][j]] + t.loo[i][j]; // SET VALUE
                     if (t.lomi[i][j] !== -1 && t.f32_c[i][j] < t.lomi[i][j]) { t.f32_c[i][j] = t.lomi[i][j]; } // MIN
                     else if (t.loma[i][j] !== -1 && t.f32_c[i][j] > t.loma[i][j]) { t.f32_c[i][j] = t.loma[i][j]; } // MAX
                 }
             }
+
+            
+            for (let d = (defer_p.length - 1); d >= 0; d--) {
+                let i = defer_p[d];
+                let j = defer_t[d];
+                t.f32_c[i][j] = t.f32_c[t.lop[i][j]][t.lot[i][j]] + t.loo[i][j]; // SET VALUE
+                if (t.lomi[i][j] !== -1 && t.f32_c[i][j] < t.lomi[i][j]) { t.f32_c[i][j] = t.lomi[i][j]; } // MIN
+                else if (t.loma[i][j] !== -1 && t.f32_c[i][j] > t.loma[i][j]) { t.f32_c[i][j] = t.loma[i][j]; } // MAX
+            }
+            
             return;
         }
 
@@ -692,6 +708,10 @@
                 _str(v, card_title, t_align, "center");
                 _str(v, card_title, t_font, "roboto_400");
 
+                _num(v, card_title, red, 200);
+                _num(v, card_title, green, 0);
+                _num(v, card_title, blue, 0);
+
                 _num(v, card, red, 200);
                 _num(v, card, green, 200);
                 _num(v, card, blue, 200);
@@ -702,7 +722,7 @@
             lock(v, card_title, x0, card, x0, 25, -1, -1);
             lock(v, card_title, x1, card, x1, -25, -1, -1);
             lock(v, card_title, y0, card_title, y1, -60, -1, -1);
-            lock(v, card_title, y1, card_bot, y0, -25, -1, -1);
+            lock(v, card_title, y1, card, y0, -25, -1, -1);
 
             //lock(v, card, y0, viewport, y0, 300, -1, -1);
             lock(v, card, x1, card, x0, 300, -1, -1);
