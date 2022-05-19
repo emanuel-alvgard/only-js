@@ -48,10 +48,22 @@
         function init_dom() {
             
             let dom = { 
+                
                 load: 1,
+                mouse_down: [],
+                mouse_up: [],
+                key_down: [],
+                key_up: [],
+                touch_start: 0,
+                touch_end: 0,
+                toucn_move: 0,
                 
                 width: document.documentElement.clientWidth,
                 height: document.documentElement.clientHeight,
+                mouse_x: 0,
+                mouse_y: 0,
+                touch_x: 0,
+                touch_y: 0,
                 
                 h: document.head,
                 b: document.body,
@@ -87,6 +99,68 @@
 
             return dom;
         }
+
+
+        // OBS!!
+        // ALL THIS SHOULD BE INSIDE OF init_dom() !!!!
+        /*
+        function ROOT_event_mousedown(event) { 
+            ROOT_mousedown = 1; 
+            // add alternatives for different mouse buttons
+        }
+        function ROOT_event_mouseup(event) { ROOT_mouseup = 1; }
+
+        document.addEventListener("mousedown", ROOT_event_mousedown);
+        .addEventListener("mouseup", ROOT_event_mouseup);
+        */
+
+        /* TOUCH
+        function ROOT_event_touchstart(event) { 
+            ROOT_touchstart = 1;
+            ROOT_touch_x_previous = event.touches[0].clientX;
+            ROOT_touch_y_previous = event.touches[0].clientY;
+            ROOT_touch_x = event.touches[0].clientX;
+            ROOT_touch_y = event.touches[0].clientY; 
+        }
+        function ROOT_event_touchmove(event) {
+            ROOT_touchmove = 1;
+            ROOT_touch_x_previous = ROOT_touch_x;
+            ROOT_touch_y_previous = ROOT_touch_y;
+            ROOT_touch_x = event.touches[0].clientX;
+            ROOT_touch_y = event.touches[0].clientY;
+        }
+        function ROOT_event_touchend(event) { 
+            ROOT_touchend = 1;
+            ROOT_touch_x_previous = 0;
+            ROOT_touch_y_previous = 0;
+            ROOT_touch_x = 0;
+            ROOT_touch_y = 0; 
+        }
+
+        ROOT.addEventListener("touchstart", ROOT_event_touchstart);
+        ROOT.addEventListener("touchmove", ROOT_event_touchmove);
+        ROOT.addEventListener("touchend", ROOT_event_touchend);
+        */
+
+        /* @ADD
+        // KEYBOARD
+        dom.d.addEventListener("keydown", function (event) {
+            
+            switch (event.key) {
+                
+                // DIGITS
+                //case "0": ROOT_keydown[0] = 1; break;
+                //case "1": ROOT_keydown[1] = 1; break;
+                // get charCode - some fixed offset.
+                // first check charCode range to find utf characters etc.
+
+            }
+        });
+        */
+
+
+
+
 
         // FLOAT
         let x0 = 0; // position
@@ -139,6 +213,7 @@
 
             let t = {
                 
+                events: [],
                 state: new Int32Array(size), // change to event?
                 render: new Int8Array(size), 
 
@@ -235,6 +310,8 @@
 
             return t;
         }
+
+
 
 
 
