@@ -57,8 +57,8 @@
             let dom = { 
                 
                 load: 1,
-                mouse_down: [],
-                mouse_up: [],
+                mouse_down: new Int8Array(3),
+                mouse_up: new Int8Array(3),
                 key_down: [],
                 key_up: [],
                 touch_start: 0,
@@ -74,14 +74,14 @@
                 
                 h: document.head,
                 b: document.body,
-                e: [] 
+                e: []
             }
 
             dom.b.style.margin = "0px";
             dom.b.style.padding = "0px";
             dom.b.style.left = "0px";
             dom.b.style.top = "0px";
-            dom.b.style.overflow = "hidden";
+            //dom.b.style.overflow = "hidden";
 
             let p = document.body.children[0];
             let c = p.children;
@@ -100,30 +100,52 @@
                 dom.e[i].style.width = "0px";
                 dom.e[i].style.height = "0px";
                 dom.e[i].style.zIndex = "0";
-                dom.e[i].style.overflow = "hidden";
+                //dom.e[i].style.overflow = "hidden";
                 dom.e[i].style.overflowWrap = "break-word";
             }
+
+            // EVENTS
+            document.addEventListener("mousedown", function (event) {
+                dom.mouse_down[event.button] = 1;
+            });
+            document.addEventListener("mouseup", function (event) {
+                dom.mouse_up[event.button] = 1;
+            });
+
+            document.addEventListener("touchstart", function (event) {
+                // add event.touches.length for multi touch
+                dom.touch_start = 1;
+            });
+
+            document.addEventListener("keydown", function (event) {
+            
+                //console.log(event.key.charCodeAt(0));
+
+                /*
+                switch (event.key) {
+                
+                // DIGITS
+                //case "0": ROOT_keydown[0] = 1; break;
+                //case "1": ROOT_keydown[1] = 1; break;
+                // get charCode - some fixed offset.
+                // first check charCode range to find utf characters etc.
+
+                }*/
+            });
 
             return dom;
         }
 
 
+
+
+
+
         // OBS!!
         // ALL THIS SHOULD BE INSIDE OF init_dom() !!!!
-        /*
-
+        
         // ondrop (on_file_drop)
         // ondragover (on_file_drag)
-
-        function ROOT_event_mousedown(event) { 
-            ROOT_mousedown = 1; 
-            // add alternatives for different mouse buttons
-        }
-        function ROOT_event_mouseup(event) { ROOT_mouseup = 1; }
-
-        document.addEventListener("mousedown", ROOT_event_mousedown);
-        .addEventListener("mouseup", ROOT_event_mouseup);
-        */
 
         /* TOUCH
         function ROOT_event_touchstart(event) { 
@@ -155,18 +177,6 @@
 
         /* @ADD
         // KEYBOARD
-        dom.d.addEventListener("keydown", function (event) {
-            
-            switch (event.key) {
-                
-                // DIGITS
-                //case "0": ROOT_keydown[0] = 1; break;
-                //case "1": ROOT_keydown[1] = 1; break;
-                // get charCode - some fixed offset.
-                // first check charCode range to find utf characters etc.
-
-            }
-        });
         */
 
 
@@ -360,7 +370,7 @@
         oc.type = "triangle";
         oc.frequency = 100;
         oc.connect(test.destination);
-        oc.start();
+        //oc.start();
         dom.e[2].addEventListener("mousedown", function() {
             test.resume();
         });
@@ -704,8 +714,14 @@
             dom.load = 0;
         }
 
-        function clear_dom(dom) {}
+        function clear_dom(dom) {
 
+            // CLEAR EVENTS
+            dom.load = 0;
+            fill_array(dom.mouse_down, 0);
+            fill_array(dom.mouse_up, 0);
+            dom.touch_start = 0;
+        }
 
         function update_views(rt) {
 
@@ -759,7 +775,7 @@
 
                 //lock(v, card, y0, viewport, y0, 300, -1, -1);
                 lock(v, card, x1, v, card, x0, 300, -1, -1);
-                lock(v, card, y1, v, card, y0, 500, -1, -1);
+                lock(v, card, y1, v, card, y0, 2000, -1, -1);
 
                 
                 lock(v, card_bot, x0, v, card, x0, 0, -1, -1);
