@@ -525,18 +525,19 @@
                     // CALCULATE
                     t.at[i][j] += delta;
                     if (t.at[i][j] < 0) { continue; }
-                    let cr = 0;
-                    if (t.acu[i][j].length === 2) { cr = lerp(t.acu[i][j][0], t.acu[i][j][1], t.at[i][j] / t.ati[i][j]); } 
-                    else if (t.acu[i][j].length === 3) { cr = quad(t.acu[i][j][0], t.acu[i][j][1], t.acu[i][j][2], t.at[i][j] / t.ati[i][j]); }
-                    else if (t.acu[i][j].length === 4) { cr = cube(t.acu[i][j][0], t.acu[i][j][1], t.acu[i][j][2], t.acu[i][j][3], t.at[i][j] / t.ati[i][j]); }
-                    //cr *= 1.2; // based on ati @HERE
-                    let pr = ((di / t.ati[i][j]) * cr) * delta;
-                    if (pr < 0.01) { pr = 0.01; }
+                    let pt = t.at[i][j] / (t.ati[i][j] + (delta * (t.acu[i][j].length * 0.5)));
+                    if (pt < 0) { pt = 0; }
+                    let cu = 0.0;
+                    if (t.acu[i][j].length === 2) { cu = lerp(t.acu[i][j][0], t.acu[i][j][1], pt); } 
+                    else if (t.acu[i][j].length === 3) { cu = quad(t.acu[i][j][0], t.acu[i][j][1], t.acu[i][j][2], pt); }
+                    else if (t.acu[i][j].length === 4) { cu = cube(t.acu[i][j][0], t.acu[i][j][1], t.acu[i][j][2], t.acu[i][j][3], pt); }
+                    let pr = ((di / t.ati[i][j]) * cu) * delta;
+                    if (pr < 0) { pr = 0.01; }
                     t.ap[i][j] += pr;
                     t.f32_c[i][j] += (pr * dir);
 
                     // DONE
-                    if (t.ap[i][j] >= di || t.at[i][j] >= t.ati[i][j]) { 
+                    if (t.ap[i][j] >= di) { 
                         t.f32_c[i][j] = t.aen[i][j];
                         t.aa[i][j] = 0;
                         t.ar[i][j] = 0;
@@ -731,9 +732,9 @@
             dom.touch_start = 0;
         }
 
-        let curve_line = [1.0, 1.0];
+        let curve_line = [2.0, 0.0];
         let curve_quad = [3.0, 0.0, 0.0];
-        let curve_cube = [2.5, 1.0, 0.5, 0.0];
+        let curve_cube = [4.0, 0.0, 0.0, 0.0];
 
         function update_views(rt) {
 
@@ -748,7 +749,7 @@
 
             // FIRST LOAD
             if (rt.load === 1) {
-                anim(v, 0, opac, 0, 100, 200, 0, curve_line, 0);
+                anim(v, 0, opac, 0, 100, 2000, 0, curve_cube, 0);
 
                 v.f32_c[x0][card] = 300;
                 rt.e[card].style.borderStyle = "none";
@@ -783,7 +784,7 @@
 
                 //lock(v, card, y0, viewport, y0, 300, -1, -1);
                 lock(v, card, x1, v, card, x0, 300, -1, -1);
-                lock(v, card, y1, v, card, y0, 2000, -1, -1);
+                //lock(v, card, y1, v, card, y0, 2000, -1, -1);
 
                 
                 lock(v, card_bot, x0, v, card, x0, 0, -1, -1);
@@ -791,35 +792,37 @@
                 lock(v, card_bot, y1, v, card, y1, 0, -1, -1);
                 
                 lock(v, header, x1, v, viewport, x1, 0, -1, -1);
-                anim(v, header, y1, 0, 100, 300, 0, curve_quad, 0);
+                anim(v, header, y1, 0, 100, 500, 0, curve_cube, 0);
 
-                anim(v, card, x0, 200, 500, 3000, 500, curve_quad, 2);
-                anim(v, card_title, opac, 0, 100, 3000, 500, curve_quad, 0);
-                anim(v, card_bot, blue, 100, 200, 2000, 500, curve_quad, 0);
+                anim(v, card, x0, 200, 500, 3000, 500, curve_cube, 2);
+                anim(v, card, y1, 500, 1000, 2000, 500, curve_cube, 1);
+                anim(v, card_title, opac, 0, 100, 3000, 500, curve_cube, 0);
+                anim(v, card_bot, blue, 100, 200, 2000, 500, curve_cube, 0);
             }
 
             
             if (v.ae[y0][card] === 1) { 
-                anim(v, card, x0, 200, 500, 2000, 500, curve_quad, 2);
-                _lock(v, card, y1);
-                anim(v, card, y1, 500, 1000, 2000, 500, curve_quad, 1);
-                anim(v, card_title, opac, 0, 100, 2000, 500, curve_quad, 0);
-                anim(v, card_bot, blue, 100, 200, 2000, 500, curve_quad, 0);
+                anim(v, card, x0, 200, 500, 2000, 500, curve_cube, 2);
+                anim(v, card, y1, 500, 1000, 2000, 500, curve_cube, 1);
+                anim(v, card_title, opac, 0, 100, 2000, 500, curve_cube, 0);
+                anim(v, card_bot, blue, 100, 200, 2000, 500, curve_cube, 0);
             }
             else if (v.ae[x0][card] === 2) { 
-                anim(v, card, y0, 200, 500, 2000, 500, curve_quad, 3);
-                anim(v, card_title, opac, 100, 0, 2000, 500, curve_quad, 0);
-                anim(v, card_bot, green, 100, 200, 2000, 500, curve_quad, 0);
+                anim(v, card, y0, 200, 500, 2000, 500, curve_cube, 3);
+                anim(v, card_title, opac, 100, 0, 2000, 500, curve_cube, 0);
+                anim(v, card_bot, green, 100, 200, 2000, 500, curve_cube, 0);
             }
             else if (v.ae[y0][card] === 3) { 
-                anim(v, card, x0, 500, 200, 2000, 500, curve_quad, 4);
-                anim(v, card_title, opac, 0, 100, 2000, 500, curve_quad, 0);
-                anim(v, card_bot, red, 100, 200, 2000, 500, curve_quad, 0);
+                anim(v, card, x0, 500, 200, 2000, 500, curve_cube, 4);
+                anim(v, card_title, opac, 0, 100, 2000, 500, curve_cube, 0);
+                anim(v, card_bot, red, 100, 200, 2000, 500, curve_cube, 0);
             }
             else if (v.ae[x0][card] === 4) { 
-                anim(v, card, y0, 500, 200, 2000, 500, curve_quad, 1);
-                anim(v, card_title, opac, 100, 0, 2000, 500, curve_quad, 0);
+                anim(v, card, y0, 500, 200, 2000, 500, curve_cube, 1);
+                anim(v, card, y1, 1000, 500, 2000, 500, curve_cube, 1);
+                anim(v, card_title, opac, 100, 0, 2000, 500, curve_cube, 0);
             }
+            
 
             update_locks(v);
             
@@ -864,7 +867,6 @@
             
             if (fonts.loaded === fonts.target) {
                 update_views(dom);
-                console.log(v.at[y1][1]);
                 update_dom(dom);
                 clear_views();
                 clear_dom(dom);
