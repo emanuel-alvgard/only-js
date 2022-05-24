@@ -526,15 +526,17 @@
                     t.at[i][j] += delta;
                     if (t.at[i][j] < 0) { continue; }
                     let cr = 0;
-                    if (t.acu[i][j].length === 2) { cr = lerp(t.acu[i][j][0], t.acu[i][j][1], t.at[i][j] / (t.ati[i][j] + delta)); } 
-                    else if (t.acu[i][j].length === 3) { cr = quad(t.acu[i][j][0], t.acu[i][j][1], t.acu[i][j][2], t.at[i][j] / (t.ati[i][j] + delta)); }
-                    else if (t.acu[i][j].length === 4) { cr = cube(t.acu[i][j][0], t.acu[i][j][1], t.acu[i][j][2], t.acu[i][j][3], t.at[i][j] / (t.ati[i][j] + delta)); }
+                    if (t.acu[i][j].length === 2) { cr = lerp(t.acu[i][j][0], t.acu[i][j][1], t.at[i][j] / t.ati[i][j]); } 
+                    else if (t.acu[i][j].length === 3) { cr = quad(t.acu[i][j][0], t.acu[i][j][1], t.acu[i][j][2], t.at[i][j] / t.ati[i][j]); }
+                    else if (t.acu[i][j].length === 4) { cr = cube(t.acu[i][j][0], t.acu[i][j][1], t.acu[i][j][2], t.acu[i][j][3], t.at[i][j] / t.ati[i][j]); }
+                    //cr *= 1.2; // based on ati @HERE
                     let pr = ((di / t.ati[i][j]) * cr) * delta;
+                    if (pr < 0.01) { pr = 0.01; }
                     t.ap[i][j] += pr;
                     t.f32_c[i][j] += (pr * dir);
 
                     // DONE
-                    if (t.ap[i][j] >= di || t.at[i][j] >= t.ati[i][j] + delta) { 
+                    if (t.ap[i][j] >= di || t.at[i][j] >= t.ati[i][j]) { 
                         t.f32_c[i][j] = t.aen[i][j];
                         t.aa[i][j] = 0;
                         t.ar[i][j] = 0;
@@ -729,7 +731,7 @@
             dom.touch_start = 0;
         }
 
-        let curve_line = [0.0, 2.0];
+        let curve_line = [1.0, 1.0];
         let curve_quad = [3.0, 0.0, 0.0];
         let curve_cube = [2.5, 1.0, 0.5, 0.0];
 
@@ -788,9 +790,8 @@
                 lock(v, card_bot, x1, v, card, x1, 0, -1, -1);
                 lock(v, card_bot, y1, v, card, y1, 0, -1, -1);
                 
-
                 lock(v, header, x1, v, viewport, x1, 0, -1, -1);
-                anim(v, header, y1, 0, 100, 1000, 0, curve_quad, 0);
+                anim(v, header, y1, 0, 100, 300, 0, curve_quad, 0);
 
                 anim(v, card, x0, 200, 500, 3000, 500, curve_quad, 2);
                 anim(v, card_title, opac, 0, 100, 3000, 500, curve_quad, 0);
@@ -863,6 +864,7 @@
             
             if (fonts.loaded === fonts.target) {
                 update_views(dom);
+                console.log(v.at[y1][1]);
                 update_dom(dom);
                 clear_views();
                 clear_dom(dom);
