@@ -536,7 +536,6 @@
                     else if (t.acu[i][j].length === 3) { cu = quad(t.acu[i][j][0], t.acu[i][j][1], t.acu[i][j][2], pt); }
                     else if (t.acu[i][j].length === 4) { cu = cube(t.acu[i][j][0], t.acu[i][j][1], t.acu[i][j][2], t.acu[i][j][3], pt); }
                     let pr = ((di / t.ati[i][j]) * cu) * delta;
-                    console.log(cu);
                     t.ap[i][j] += pr;
                     t.f32_c[i][j] += (pr * dir);
 
@@ -737,9 +736,9 @@
             dom.touch_start = 0;
         }
 
-        let curve_line = [1.9, 0.1];
-        let curve_quad = [2.8, 0.1, 0.1];
-        let curve_cube = [3.7, 0.1, 0.1, 0.1];
+        let curve_line = [2.0, 0.0];
+        let curve_quad = [3.0, 0.0, 0.0]; // 2.9
+        let curve_cube = [3.5, 0.1, 0.1, 0.1];
 
         function update_views(rt) {
 
@@ -797,7 +796,7 @@
                 lock(v, card_bot, y1, v, card, y1, 0, -1, -1);
                 
                 lock(v, header, x1, v, viewport, x1, 0, -1, -1);
-                anim(v, header, y1, 0, 100, 500, 0, curve_cube, 0);
+                anim(v, header, y1, 0, 100, 500, 0, curve_quad, 0);
                 /*
                 anim(v, card, x0, 200, 500, 3000, 500, curve_cube, 2);
                 anim(v, card, y1, 500, 1000, 2000, 500, curve_cube, 1);
