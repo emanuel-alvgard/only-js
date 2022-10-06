@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="robots" content="index, nofollow">
+
+    <title>Taxrepay</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="/public/app.css">
+</head>
+
+<body>
+    <div class="runtime-root" style="opacity:0">
+
+        <!-- HEADER -->
+        <img class="logo" src="/public/images/logo.svg">
+        <img class="facebook" src="/public/images/facebook.png">
+        <img class="twitter" src="/public/images/twitter.png">
+        <img class="youtube" src="/public/images/youtube.png">
+
+        <!-- MENU -->
+        <img class="menu" src="/public/images/menu.png">
+        <div class="panel"></div>
+        <img class="close" src="/public/images/close.png">
+
+        <!-- WELCOME -->
+        <img class="s1-bg" src="/public/images/welcome_bg.jpg">
+        <h1 class="s1-title">Få tillbaka utdelningsskatt!</h1>
+        <p class="s1-text">Har du aktier i Norge eller Finland på ett ISK konto? Då är du berättigad till
+            skatteåtebäring.</p>
+        <button class="s1-b bt">Hjälp mig!</button>
+
+        <!-- INFO -->
+        <div class="s2-bg"></div>
+        <img class="s2-img" src="/public/images/info_img.jpg">
+        <h1 class="s2-title">Vi är en modern skattekonsult</h1>
+        <h3 class="s2-sub">Inte bara kapitalförsäkringskunder ska kunna få återbäring</h3>
+        <p class="s2-text">Vi grundades med ett enda syfte: att hjälpa privat-, och företagskunder att få tillbaka skatt
+            på utdelning från länder med en högre skattesats än den svenska schablonskatten på ISK depåer.</p>
+
+        <!-- REFERENCE -->
+        <div class="s4-bg"></div>
+        <div class="s4-rect"></div>
+        <button class="s4-b"></button>
+        <div class="s4-quote">"</div>
+        <h3 class="s4-text">Tjänsten löser verkligen ett problem. Gemene man orkar inte sätta in sig i allt fikonspråk
+            och ansöka. Det känns skönt att någon annan gör jobbet.</h3>
+        <h5 class="s4-person">Kent Erikssson, Aktieägare i Nordea</h5>
+
+
+        <!-- POINTS -->
+        <div class="s3-bg"></div>
+        <h1 class="s3-title">Hur funkar det</h1>
+        <div class="s3-p1">01</div>
+        <div class="s3-p2">02</div>
+        <div class="s3-p3">03</div>
+        <h3 class="s3-text-1">Ombudsavtal med BankID</h3>
+        <h3 class="s3-text-2">Vi påbörjar dialog med din Bank och ansöker om återbäring</h3>
+        <h3 class="s3-text-3">Du får pengarna insatta på ditt konto och får då en faktura av oss</h3>
+        <button class="s3-b bt">Hjälp mig!</button>
+
+        <!-- FORM -->
+        <div class="s5-bg"></div>
+        <h1 class="s5-title">Få hjälp nu!</h1>
+        <h3 class="s5-sub">Fyll i nedanstående information så sköter vi resten.</h3>
+        <iframe class="s5-video" src="https://player.vimeo.com/video/751363351?h=579231be71&title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+        
+
+        <!-- label -->
+        <label for="type" class="l-type lbl">Typ*</label>
+        <label for="name" class="l-name lbl">Namn*</label>
+        <label for="org" class="l-org lbl">Organisationsnummer*</label>
+        <label for="email" class="l-email lbl">Email*</label>
+        <label class="l-country lbl">Har du norska och/eller finska aktier?*</label>
+        <label for="norway" class="l-norway lbl">Norge</label>
+        <label for="finland" class="l-finland lbl">Finland</label>
+        <label for="norway-finland" class="l-norway-finland lbl">Norge och Finland</label>
+        <label for="bank" class="l-bank lbl">Bank där vi har vårt ISK konto*</label>
+        <label for="person" class="l-person lbl">Personnummer*</label>
+        <label for="policy" class="l-policy lbl">
+            <span class="policy-t">Jag godkänner att mina uppgifter behandlas enligt TaxRepays </span><u class="policy-b">integritetspolicy*</u>
+        </label>
+
+        <!-- field -->
+        <form class="type-form">
+            <select name="type" class="f-type fld">
+                <option value="private">Privat</option>
+                <option value="company">Företag</option>
+            </select>
+        </form>
+
+        <input type="text" name="name" class="f-name fld" placeholder="Förnamn Efternamn">
+        <input type="text" name="org" class="f-org fld" placeholder="10 siffror">
+        <input type="text" name="email" class="f-email fld">
+
+        <input type="checkbox" name="norway" class="f-norway fld">
+        <input type="checkbox" name="finland" class="f-finland fld">
+        <input type="checkbox" name="norway-finland" class="f-norway-finland fld">
+
+        <form class="bank-form">
+            <select name="bank" class="f-bank fld">
+                <option value="none">Välj ett alternativ</option>
+                <option value="nordea">Nordea</option>
+                <option value="swedbank">Swedbank</option>
+                <option value="seb">SEB</option>
+                <option value="handelsbanken">Handelsbanken</option>
+                <option value="avanza">Avanza</option>
+                <option value="länsförsäkringar">Länsförsäkringar</option>
+                <option value="nordnet">Nordnet</option>
+                <option value="aktieinvest">Aktieinvest</option>
+                <option value="danske Bank">Danske Bank</option>
+            </select>
+        </form>
+
+        <input type="text" name="person" class="f-person fld">
+        <input type="checkbox" name="policy" class="f-policy fld">
+
+        <button class="sign">Signera med BankID</button>
+
+        <!-- TABLE (PRICE) -->
+
+        <!-- keys -->
+        <div class="key-1 grid">Nivå</div>
+        <div class="key-2 grid">Skatt att få tillbaka/årsvis</div>
+        <div class="key-3 grid">Avgift</div>
+        <div class="key-4 grid">Avgiftsberäkning</div>
+
+        <!-- key-1 values -->
+        <div class="value-1-1 grid">1</div>
+        <div class="value-1-2 grid">2</div>
+        <div class="value-1-3 grid">3</div>
+        <div class="value-1-4 grid">4</div>
+
+        <!-- key-2 values -->
+        <div class="value-2-1 grid">100 - 1000 kr</div>
+        <div class="value-2-2 grid">1000 - 100 000 kr</div>
+        <div class="value-2-3 grid">100 000 - 1 000 000 kr</div>
+        <div class="value-2-4 grid">1 000 000 + kr</div>
+
+        <!-- key-3 values -->
+        <div class="value-3-1 grid">60 - 150 kr</div>
+        <div class="value-3-2 grid">150 - 1500 kr</div>
+        <div class="value-3-3 grid">1500 - 1950 kr</div>
+        <div class="value-3-4 grid">1950 kr</div>
+
+        <!-- key-4 values -->
+        <div class="value-4-1 grid">Ökar med 10 kr för varje ökning med 100 kr</div>
+        <div class="value-4-2 grid">Ökar med 75 kr för varje ökning med 10 0000 kr</div>
+        <div class="value-4-3 grid">Ökar med 50 kr för varje ökning med 100 000 kr</div>
+        <div class="value-4-4 grid">Fast avgift</div>
+
+        <!-- FOOTER -->
+        <div class="footer"></div>
+        <h6 class="copyright">© 2022 TaxRepay AB</h6>
+
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="/public/runtime.js"></script>
+    <script src="/public/app.js"></script>
+    
+    <script src="/public/scripts/view.js"></script>
+    <script src="/public/scripts/desktop.js"></script>
+    <script src="/public/scripts/mobile.js"></script>
+    
+    <script src="/public/scripts/util.js"></script>
+    <script src="/public/scripts/qrcode.min.js"></script>
+    <script src="/public/scripts/form.js"></script>
+    <script src="/public/scripts/sign.js"></script>
+
+
+    <!-- Start of Tawk.to Script -->
+    <script type="text/javascript" async>
+        var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+        (function () {
+            var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+            s1.async = true;
+            s1.src = 'https://embed.tawk.to/630873e554f06e12d890df5c/1gbcg9et5';
+            s1.charset = 'UTF-8';
+            s1.setAttribute('crossorigin', '*');
+            s0.parentNode.insertBefore(s1, s0);
+        })();
+    </script>
+    <!-- End of Tawk.to Script -->
+
+</body>
+
+</html>
