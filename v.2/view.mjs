@@ -188,3 +188,8 @@ function AOS_grid(items, top, left, column_width, row_height, column_gap, row_ga
 // FOOTER
 const footer = e("footer");
 const copyright = e("copyright");
+
+
+export {
+    footer
+}

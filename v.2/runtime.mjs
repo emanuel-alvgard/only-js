@@ -229,7 +229,7 @@ function _element(context, id, type="div") {
 
 
 // @
-function runtime_setup(context) {
+export function setup(context) {
 
     context.view = {
 
@@ -396,11 +396,11 @@ function _update(context) {
 
 
 // @DONE
-function runtime_execute(context) {
+export function run(context) {
 
     _update(context);
 
-    window.requestAnimationFrame(() => { runtime_execute(context); });
+    window.requestAnimationFrame(() => { run(context); });
 }
 
 
