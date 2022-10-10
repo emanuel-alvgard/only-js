@@ -47,15 +47,6 @@ font(oswald_bold);
 
 
 
-
-
-
-
-
-
-
-
-
 // @DONE
 function _min(object, property, value=null) {
     if (value !== null) {
@@ -133,47 +124,58 @@ function _element(context, id, type="div") {
         mouse_up: 0,
 
         // DATA
-        tags: {}, // add, remove
+        _tag: { id: [] },
         _left: 0,
         _top: 0,
         _width: 0,
         _height: 0,
         _font_size: 0,
         _font_type: null,
+        _padding_left: 0,
+        _padding_right: 0,
+        _padding_top: 0,
+        _padding_bottom: 0,
 
         // INTERFACE
+        tag(object) { this._tag.id.push(object.id); return this; },
 
         // dimension
         width(w=null, min=null, max=null) {
-            if (w !== null) { this._width = w; } 
+            if (w !== null) { 
+                this._width = w; 
+                _min(this, "_width", min);
+                _max(this, "_width", max);
+                return this;
+            } 
             if (this._width === 0) { return html[index].clientWidth; }
-            _min(this, "_width", min);
-            _max(this, "_width", max);
-            return this._width; 
+            else { return this._width; }
         },
         height(h=null, min=null, max=null) { 
-            if (h !== null) { this._height = h; } 
+            if (h !== null) { 
+                this._height = h; 
+                _min(this, "_height", min);
+                _max(this, "_height", max);
+                return this; 
+            }
             if (this._height === 0) { return html[index].clientHeight; }
-            _min(this, "_height", min);
-            _max(this, "_height", max);
-            return this._height;  
+            else { return this._height; }
         },
 
         // position
         left(l=null, min=null, max=null) { 
-            if (l !== null) { this._left = l; } 
+            if (l !== null) { this._left = l; return this; } 
             return this._left; 
         },
         top(t=null, min=null, max=null) { 
-            if (t !== null) { this._top = t; }
+            if (t !== null) { this._top = t; return this; }
             return this._top; 
         },
         right(r=null, min=null, max=null) {
-            if (r !== null) { this._left = r - this.width(); }
+            if (r !== null) { this._left = r - this.width(); return this; }
             return this._left + this.width(); 
         },
         bottom(b=null, min=null, max=null) {
-            if (b !== null) { this._top = b - this.height(); }
+            if (b !== null) { this._top = b - this.height(); return this; }
             return this._top + this.height(); 
         },
 
@@ -203,7 +205,14 @@ function _element(context, id, type="div") {
         },
 
 
-        // font
+        // text
+        padding(left=null, right=null, top=null, bottom=null) {
+            if (left !== null) { this._padding_left = left; }
+            if (right !== null) { this._padding_right = right; }
+            if (top !== null) { this._padding_top = top; }
+            if (bottom !== null) { this._padding_bottom = bottom; }
+        },
+
         font(size=null, type=null, min=null, max=null) {
             if (size !== null) { this._font_size = size; }
             if (type !== null) { this._font_type = type; }
@@ -229,7 +238,43 @@ function _element(context, id, type="div") {
 
 
 // @
-export function setup(context) {
+function _tag(context, id) {
+
+    // check if tag exists, if not create new object, else return existing object
+
+    let tag = context.view._tag;
+    let elements = context.view._element.object;
+
+    let index = tag.object.length;
+
+    tag.id.push(id);
+    tag.object.push({
+        
+        id: id,
+
+        padding(left=null, right=null, top=null, bottom=null) {
+
+            for (let i=0; i < elements.length; i++) {
+
+                let j = elements[i]._tag.id.indexOf(this.id);
+                if (j === -1) { continue; }
+                
+                if (left !== null) { elements[i]._padding_left = left; }
+                if (right !== null) { elements[i]._padding_right = right; }
+                if (top !== null) { elements[i]._padding_top = top; }
+                if (bottom !== null) { elements[i]._padding_bottom = bottom; }
+                
+            }
+        },
+    });
+    
+    return tag.object[index];
+}
+
+
+
+// @
+function runtime_setup(context) {
 
     context.view = {
 
@@ -261,9 +306,15 @@ export function setup(context) {
             object: []
         },
 
+        _tag: {
+            id: [], 
+            object: []
+        },
+
         // INTERFACE
         layout(func, format=null) { return _layout(context, func, format); },
         element(id, type="div") { return _element(context, id, type); },
+        tag(id) { return _tag(context, id); },
         html(id, type="div") { return _html(context, id, type); },
         show() {},
         hide() {},
@@ -374,6 +425,12 @@ function _update(context) {
         html[i].style.left = element[i]._left + "px";
         html[i].style.top = element[i]._top + "px";
         
+        // text
+        html[i].style.paddingLeft = element[i]._padding_left + "px";
+        html[i].style.paddingRight = element[i]._padding_right + "px";
+        html[i].style.paddingTop = element[i]._padding_top + "px";
+        html[i].style.paddingBottom = element[i]._padding_bottom + "px";
+
         if (element[i]._font_size !== 0) { html[i].style.fontSize = element[i]._font_size + "px"; }
         if (element[i]._font_type !== null) { html[i].style.fontFamily = element[i]._font_type; }
 
