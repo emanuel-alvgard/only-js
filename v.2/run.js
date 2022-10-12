@@ -51,13 +51,13 @@ console.log(process.platform);
 
 function callback(error) { if (error !== null) { console.log(error); } }
 
-let start_db = cp_builtin.exec(command_db, callback);
+//let start_db = cp_builtin.exec(command_db, callback);
 let start_app = cp_builtin.exec(command_app, callback);
 let start_chrome;
 if (mode === "dev") { start_chrome = cp_builtin.exec(command_chrome, callback); }
 
 setTimeout(() => {
-    start_db.kill();
+    //start_db.kill();
     start_app.kill();
     if (mode === "dev") { start_chrome.kill(); }
     process.exit();

@@ -1,5 +1,4 @@
-import * as runtime from "./runtime.mjs";
-import * as view from "./view.mjs";
+import * as runtime from "./runtime/runtime.mjs";
 
 const CONTEXT = {
     view: 0,
@@ -9,3 +8,4 @@ const CONTEXT = {
 
 runtime.setup(CONTEXT);
 runtime.run(CONTEXT);
+

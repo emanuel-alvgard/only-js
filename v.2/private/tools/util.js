@@ -314,7 +314,7 @@ async function wait(task, error, condition=(t)=>{}) {
 function filetype(s) {
     for (let i = (s.length -1); i > 0; i--) {
         if (s[i] === ".") {
-            return s.substring(i, s.length);
+            return s.substring(i+1, s.length);
         }
     }
     return "unknown";

@@ -4,10 +4,19 @@ const util = require("../tools/util.js");
 // @DONE
 async function route(context, incoming) { // @ADD config
 
+    const types = {
+        mjs: "text/javascript",
+        html: "text/html",
+        svg: "image/svg+xml"
+    }
+
     let path = "..";  
-    let type = util.filetype(incoming.url);
+    let file_type = util.filetype(incoming.url);
     let content_type = "";
-    if (type === ".svg") { content_type = "image/svg+xml"; }
+    if (file_type in types) { content_type = types[file_type]; }
+
+    console.log(incoming.url);
+    console.log(content_type);
 
     switch (incoming.url) {
         case "/robots.txt": path += "/public/robots.txt"; break;
