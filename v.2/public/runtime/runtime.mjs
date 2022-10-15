@@ -18,68 +18,53 @@ export function setup(context) {
 
     context.runtime = {
     
+        views: {},
         systems: [],
-        views: [],
 
-        view(target) {
+        view(id, target) {
+            
+            if (id in views) { return views[id]; }
+            views[id] = {
+        
+                // DATA
+                _target: target,
+        
+                // ELEMENTS
+                _element: {},
+                _tag: {},
+        
+                // INTERFACE
+                element(id, type) { return _element(context, id, type); },
+                tag(id) { return _tag(context, id); },
+                show() {},
+                hide() {},
+                remove() {}
+        
+            }
+
+            switch(target) {
+                case "html":
+                    
+                    // EVENTS
+                    LOAD: 1,
+                    FORMAT_SWITCH: 0,
+                    ORIENTATION_SWITCH: 0,
+
+                    // DATA
+                    views[id].root = document.getElementsByClassName("runtime-root")[0],
+                    width: document.documentElement.clientWidth,
+                    height: window.innerHeight,
+                    scroll_y: window.scrollY,
+                    format: "",
+                    orientation: "",
+            }
 
         },
 
         system(func) {
-
+            systems.push(func);
         }
     }
-
-    /*
-    context.view = {
-
-        // EVENTS
-        LOAD: 1,
-        FORMAT_SWITCH: 0,
-        ORIENTATION_SWITCH: 0,
-
-        // DATA
-        target: "html",
-        root: document.getElementsByClassName("runtime-root")[0],
-        width: document.documentElement.clientWidth,
-        height: window.innerHeight,
-        scroll_y: window.scrollY,
-        format: "",
-        orientation: "",
-
-        _layout: { // change into controllers? and move out to context
-            format: [], // change into a trigger function that returns a boolean 
-            func: [] 
-        },
-
-        _html: {
-            id: [],
-            object: []
-        },
-
-        _element: {
-            id: [],
-            object: []
-        },
-
-        _tag: {
-            id: [], 
-            object: []
-        },
-
-        // INTERFACE
-        layout(func, format=null) { return _layout(context, func, format); },
-        element(id, type) { return _element(context, id, type); },
-        tag(id) { return _tag(context, id); },
-        html(id, type) { return _html(context, id, type); },
-        show() {},
-        hide() {},
-        remove() {}
-
-    }
-    */
-
-    return;
 }
 
 
