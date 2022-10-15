@@ -55,7 +55,7 @@ function _html(context, id, type) {
 
 
 // @DONE
-function _element(context, id, type="div") {
+function _element(context, id, type) {
 
     let element = context.view._element;
     let exist = element.id.indexOf(id);
@@ -70,6 +70,7 @@ function _element(context, id, type="div") {
     element.object.push({
         
         // EVENTS
+        update: 0,
         mouse_hover: 0,
         mouse_down: 0,
         mouse_up: 0,
@@ -131,14 +132,31 @@ function _element(context, id, type="div") {
         },
 
         // extension
-        extend_bottom(y=null, min=null, max=null) {
-            if (y !== null) { this.height(y - this.top(), min, max);}
-            return this.height();
+        extend_left(l=null, min=null, max=null) {
+            if (l !== null) { 
+                this.width(l - this.right(), min, max);
+                this.left(l);
+                return this; }
+            return this.bottom();
         },
-        
+
+        extend_top(t=null, min=null, max=null) {
+            if (t !== null) { 
+                this.height(t - this.bottom(), min, max); 
+                this.top(t);
+                return this; 
+            }
+            return this.bottom();
+        },
+
         extend_right(r=null, min=null, max=null) {
-            if (r !== null) { this.width(r - this.left(), min, max);}
-            return this.width();
+            if (r !== null) { this.width(r - this.left(), min, max); return this; }
+            return this.right();
+        },
+
+        extend_bottom(b=null, min=null, max=null) {
+            if (b !== null) { this.height(b - this.top(), min, max); return this; }
+            return this.bottom();
         },
 
         // local
@@ -147,11 +165,11 @@ function _element(context, id, type="div") {
 
         // global
         center_x(x=null, min=null, max=null) {
-            if (x !== null) { this._left = x - this.mid_x(); } 
+            if (x !== null) { this._left = x - this.mid_x(); return this; } 
             return this._left + this.mid_x(); 
         },
         center_y(y=null, min=null, max=null) { 
-            if (y !== null) { this._top = y - this.mid_y(); }
+            if (y !== null) { this._top = y - this.mid_y(); return this; }
             return this._top + this.mid_y(); 
         },
 

@@ -1,3 +1,23 @@
+function _html_tree(context, html) {
+
+    for (let i=0; i < html.length; i++) {
+        
+        let object = html[i].classList;
+        if (object.length === 0) { continue; }
+        _element(context, object[0]); // change to .id later
+        
+        if (html[i].children.length > 0 ) { 
+            _html_tree(context, html[i].children); 
+        }
+    }
+    return;
+}
+
+_html_tree(context, context.view.root.children);
+context.view.root.style.opacity = "1.0";
+
+
+
 // @DONE
 function _update(context) {
     
@@ -85,7 +105,7 @@ function _update(context) {
 
 
         // RESET EVENTS
-        view.PAGE_LOAD = 0;
+        view.LOAD = 0;
         view.FORMAT_SWITCH = 0;
         view.ORIENTATION_SWITCH = 0;
 
