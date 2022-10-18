@@ -1,3 +1,5 @@
+import * as animation from "animation.mjs";
+
 // @DONE
 function _min(object, property, value=null) {
     if (value !== null) {
@@ -77,6 +79,8 @@ function _element(context, id, type) {
 
         // DATA
         _tag: { id: [] },
+        _anim: {},
+
         _left: 0,
         _top: 0,
         _width: 0,
@@ -90,6 +94,7 @@ function _element(context, id, type) {
 
         // INTERFACE
         tag(object) { this._tag.id.push(object.id); return this; },
+        anim() { return animation.anim(this); },
 
         // dimension
         width(w=null, min=null, max=null) {

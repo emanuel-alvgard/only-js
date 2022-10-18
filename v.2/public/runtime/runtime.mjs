@@ -9,10 +9,6 @@
 
 
 
-
-
-
-
 // @
 export function setup(context) {
 
@@ -42,6 +38,7 @@ export function setup(context) {
         
             }
 
+            /*
             switch(target) {
                 case "html":
                     
@@ -58,6 +55,7 @@ export function setup(context) {
                     format: "",
                     orientation: "",
             }
+            */
 
         },
 
