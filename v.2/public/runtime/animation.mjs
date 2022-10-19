@@ -1,3 +1,7 @@
+const l = function(string) { console.log(string) }
+
+
+
 // @DONE
 function round(n) {
     return n + (n>0?0.5:-0.5) << 0;
@@ -106,10 +110,7 @@ function anim(element, key, property, start, end, time, delay=null, curve=null, 
 }
 
 
-
-
-
-
+l("test")
 
 
 
@@ -166,6 +167,53 @@ function clear_anims(t) {
 }
 
 // @DONE
-function round(n) {
+function _round(n) {
     return n + (n>0?0.5:-0.5) << 0;
 }
+
+
+let e = document.createElement("div");
+e.style.position = "absolute";
+e.style.backgroundColor = "black";
+e.style.width = "100px";
+e.style.height = "100px";
+document.body.append(e);
+
+let e_left = 0.0;
+
+const tot_time = 1000;
+let distance = 50.0
+let speed = (distance / tot_time) * 1000;
+
+let delta = 0.0;
+let prev_time = performance.now();
+
+let timer = 0.0;
+
+const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
+
+function test() {
+
+    //if (counter === 10) { return; }
+
+    let time = performance.now();
+    delta = (time - prev_time) / 1000;
+    timer += (time - prev_time)
+    prev_time = time;
+
+    if (timer >= tot_time) { l(e_left); 
+        e_left = distance;
+        e.style.transform = "translate("+ e_left + "px,0px)";
+        return; 
+    }
+    e_left += (speed * _cube(0.0, 2.0, 2.0, 0.0, clamp(timer / tot_time, 0, 1))) * delta; 
+    e.style.transform = "translate("+ e_left + "px,0px)";
+
+    //l(e_left)
+
+    //l(timer)
+
+    window.requestAnimationFrame(test);
+}
+
+test();
