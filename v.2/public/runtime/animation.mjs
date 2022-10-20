@@ -1,9 +1,10 @@
 const l = function(string) { console.log(string) }
 
-
+// @DONE
+const _clamp = (num, min, max) => Math.min(Math.max(num, min), max);
 
 // @DONE
-function round(n) {
+function _round(n) {
     return n + (n>0?0.5:-0.5) << 0;
 }
 
@@ -44,14 +45,18 @@ function anim(element, key, property, start, end, time, delay=null, curve=null, 
     }
 
     let _anim = {
+        
         _start: start,
         _end: end,
         _time: time,
         _delay: delay,
         _curve: curve,
         _event: event,
+        
         _direction: 0,
         _distance: 0.0,
+        _speed: 0.0,
+        _curve_func: null,
 
         _delay_timer: 0.0,
         _run_timer: 0.0,
@@ -75,22 +80,26 @@ function anim(element, key, property, start, end, time, delay=null, curve=null, 
             return this;
         },
         update() {
+
+            // @ADD start, stop, pause, and reset anim data on stop or done
             
             let delta = context.runtime.delta;
             
             // DELAY
-            this._delay_timer += delta;
-            if (this._delay_timer < this._delay) { return; }
-
-            // PROGRESS
-            
-
+            this._delay_timer += delta * 1000;
+            if (this._delay_timer >= this._delay) { return; }
+        
             // DONE
-            if ((element[property]() >= this._progress) || this._run_timer >= this.time) {
-                // reset this
-                // trigger event if not null
+            if (this.run_timer >= this._time) { 
+                element[property](this._end);
+                if (this._event !== null) {
+                    element[this._event] = true;
+                }
+                return; 
             }
 
+            // PROGRESS
+            this._progress += (this._speed * this._cruve_func(this._curve, (this.run_timer / this._time))) * delta; 
         },
         remove() {}
     }
@@ -104,74 +113,38 @@ function anim(element, key, property, start, end, time, delay=null, curve=null, 
         _anim._distance = end - start;
     }
 
-    //this[key] = _anim; // add this object into element._anim object.
+    _anim._speed = (_anim._distance / _anim._time) * 1000;
+
+    switch (curve.length) {
+        case 2: _anim._curve_func = function(curve, i) { _line(curve[0], curve[1], _clamp(i, 0, 1)); }; break;
+        case 3: _anim._curve_func = function(curve, i) { _quad(curve[0], curve[1], curve[2], _clamp(i, 0, 1)); }; break;
+        case 4: _anim._curve_func = function(curve, i) { _cube(curve[0], curve[1], curve[2], curve[3], _clamp(i, 0, 1)); }; break;
+    }
+
+    element._anim[key] = _anim;
 
     return _anim;
 }
 
 
-l("test")
 
 
 
-// @HERE
-// iterates over every elements anim_array and updates animations accordingly.
-function update_anims(t) {
-
-    for (let i = 0; i < t.aa.length; i++) {
-        for (let j = 0; j < t.aa[i].length; j++) {
-
-            if (t.aa[i][j] === 0) { continue; }
-            
-            // INVERT
-            let dir = 1;
-            let st = t.ast[i][j];
-            let en = t.aen[i][j];
-            if (en < st) { st = t.aen[i][j]; en = t.ast[i][j]; dir = -1; }
-            let di = en - st;
-
-            // DELAY
-            t.ad[i][j] += delta;
-            if (t.ad[i][j] < t.ade[i][j]) { continue; }
-            
-            // CALCULATE
-            let pt = t.at[i][j] / t.ati[i][j];
-            t.at[i][j] += delta;
-            let cu = 0.0;
-            if (t.acu[i][j].length === 2) { cu = lerp(t.acu[i][j][0], t.acu[i][j][1], pt); } 
-            else if (t.acu[i][j].length === 3) { cu = quad(t.acu[i][j][0], t.acu[i][j][1], t.acu[i][j][2], pt); }
-            else if (t.acu[i][j].length === 4) { cu = cube(t.acu[i][j][0], t.acu[i][j][1], t.acu[i][j][2], t.acu[i][j][3], pt); }
-            let pr = ((di / t.ati[i][j]) * cu) * delta;
-            t.ap[i][j] += pr;
-            t.f32_c[i][j] += (pr * dir);
-
-            // DONE
-            if (t.ap[i][j] >= di || t.at[i][j] >= t.ati[i][j]) { 
-                t.f32_c[i][j] = t.aen[i][j];
-                t.aa[i][j] = 0;
-                t.ar[i][j] = 0;
-                t.ae[i][j] = t.aev[i][j];
-                console.log(t.at[i][j]);
-            }
-        }
-    }
-}
-
-// @DONE
-function clear_anims(t) {
-    for (let i = 0; i < t.ae.length; i++) {
-        for (let j = 0; j < t.ae[i].length; j++) {
-            t.ae[i][j] = 0;
-        }
-    }
-}
-
-// @DONE
-function _round(n) {
-    return n + (n>0?0.5:-0.5) << 0;
-}
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+// @TEST
 let e = document.createElement("div");
 e.style.position = "absolute";
 e.style.backgroundColor = "black";
@@ -182,7 +155,7 @@ document.body.append(e);
 let e_left = 0.0;
 
 const tot_time = 1000;
-let distance = 50.0
+let distance = 100.0
 let speed = (distance / tot_time) * 1000;
 
 let delta = 0.0;
@@ -190,7 +163,6 @@ let prev_time = performance.now();
 
 let timer = 0.0;
 
-const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
 
 function test() {
 
@@ -206,12 +178,8 @@ function test() {
         e.style.transform = "translate("+ e_left + "px,0px)";
         return; 
     }
-    e_left += (speed * _cube(0.0, 2.0, 2.0, 0.0, clamp(timer / tot_time, 0, 1))) * delta; 
+    e_left += (speed * _cube(0.0, 0.0, 3.5, 0.5, _clamp(timer / tot_time, 0, 1))) * delta; 
     e.style.transform = "translate("+ e_left + "px,0px)";
-
-    //l(e_left)
-
-    //l(timer)
 
     window.requestAnimationFrame(test);
 }
