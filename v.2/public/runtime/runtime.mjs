@@ -7,7 +7,7 @@
 // nice system for fetching and using fonts
 // most common css properties to runtime
 
-
+import * as view_module from "./view.mjs";
 
 // @
 export function setup(context) {
@@ -15,52 +15,50 @@ export function setup(context) {
     context.runtime = {
     
         views: {},
-        systems: [],
+        systems: {},
 
         view(id, target) {
             
-            if (id in views) { return views[id]; }
-            views[id] = {
+            if (id in this.views) { return this.views[id]; }
+            
+            let view = {
         
                 // DATA
                 _target: target,
-        
-                // ELEMENTS
-                _element: {},
-                _tag: {},
+                elements: {},
+                tags: {},
         
                 // INTERFACE
-                element(id, type) { return _element(context, id, type); },
-                tag(id) { return _tag(context, id); },
-                show() {},
-                hide() {},
-                remove() {}
-        
+                element(id, type) { return view_module.element(this, context, id, type); },
+                tag(id) { return _tag(this, context, id); }
             }
 
-            /*
+            
             switch(target) {
                 case "html":
-                    
-                    // EVENTS
-                    LOAD: 1,
-                    FORMAT_SWITCH: 0,
-                    ORIENTATION_SWITCH: 0,
+                    view._target = {
+                        
+                        // EVENTS
+                        LOAD: 1,
+                        FORMAT_SWITCH: 0,
+                        ORIENTATION_SWITCH: 0,
 
-                    // DATA
-                    views[id].root = document.getElementsByClassName("runtime-root")[0],
-                    width: document.documentElement.clientWidth,
-                    height: window.innerHeight,
-                    scroll_y: window.scrollY,
-                    format: "",
-                    orientation: "",
+                        // DATA
+                        root: document.body.append(document.createElement("div").classList.add("runtime-root")),
+                        width: document.documentElement.clientWidth,
+                        height: window.innerHeight,
+                        scroll_y: window.scrollY,
+                        format: "",
+                        orientation: "",
+
+                    }; break;
             }
-            */
-
+            
+            this.views[id] = view;
+            return;
         },
 
-        system(func) {
-            systems.push(func);
+        system(id, func) {
         }
     }
 }
@@ -78,40 +76,6 @@ export function run(context) {
 
     window.requestAnimationFrame(() => { run(context); });
 }
-
-
-
-
-// @ADD
-
-/*
-let animation = {
-    
-    element: 0,
-    property: "",
-    start: 0,
-    end: 0,
-    time: 0,
-    delay: 0,
-    curve: [],
-    event: 0,
-
-    running: 0,
-    timer: 0,
-    progress: 0,
-    sample: 0
-};
-
-// CALCULATING DELTA FOR ANIMATIONS
-    let previous_cycle = perfomance.now();
-    setInterval(() => {
-        let current_cycle = performance.now();
-        delta = current_cycle - previous_cycle;
-        previous_cycle = current_cycle;
-    });
-
-
-*/
 
 
 
