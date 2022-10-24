@@ -210,6 +210,19 @@ export function element(context, id, type) {
 }
 
 
+// @TEST @NOT
+function _tag_property(elements, property) {
+    
+    for (let i=0; i < elements.length; i++) {
+
+        let j = elements[i]._tag.id.indexOf(this.id);
+        if (j === -1) { continue; }
+        
+        elements[i][property]();
+        
+    }
+}
+
 
 // @
 export function tag(context, id) {
