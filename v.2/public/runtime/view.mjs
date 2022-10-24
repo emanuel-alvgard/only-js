@@ -57,7 +57,7 @@ function _html(context, id, type) {
 
 
 // @DONE
-export function element(context, id, type) {
+export function element(context, view, id, type) {
 
     let element = context.view._element;
     let exist = element.id.indexOf(id);
@@ -225,7 +225,7 @@ function _tag_property(elements, property) {
 
 
 // @
-export function tag(context, id) {
+export function tag(context, view, id) {
 
     // check if tag exists, if not create new object, else return existing object
 

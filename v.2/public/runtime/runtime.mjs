@@ -29,8 +29,8 @@ export function setup(context) {
                 tags: {},
         
                 // INTERFACE
-                element(id, type) { return view_module.element(this, context, id, type); },
-                tag(id) { return _tag(this, context, id); }
+                element(id, type) { return view_module.element(context, this, id, type); },
+                tag(id) { return _tag(context, this, id); }
             }
 
             
