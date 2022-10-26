@@ -6,63 +6,66 @@
 // fixed_top
 // nice system for fetching and using fonts
 // most common css properties to runtime
-
+import * as dom_module from "./dom.mjs";
 import * as view_module from "./view.mjs";
 
 // @
 export function setup(context) {
 
+    if (runtime in context) { return; }
+
     context.runtime = {
     
-        views: {},
-        systems: {},
+        // EVENTS
+        SETUP: true,
 
-        view(id, target) {
+        // DATA
+        _views: {},
+        _systems: {},
+
+        // INTERFACE
+        view(id, target="dom") {
             
-            if (id in this.views) { return this.views[id]; }
+            if (id in this._views) { return this._views[id]; }
             
             let view = {
         
                 // DATA
-                _target: target,
-                elements: {},
-                tags: {},
+                target,
+                _elements: {},
+                _tags: {},
         
                 // INTERFACE
-                element(id, type) { return view_module.element(context, this, id, type); },
-                tag(id) { return _tag(context, this, id); }
+                element(id, type="div") {
+                    if (id in this._elements) { return this._elements[id]; } 
+                    this._target.element(id, type);
+                    //return view_module.element(context, this, id, type); 
+                },
+                tag(id) { 
+                    if (id in this._tags) { return this._tags[id]; } 
+                    return view_module.tag(context, this, id); 
+                }
             }
 
+            // a target must expose setup() and update()
             
-            switch(target) {
-                case "html":
-                    view._target = {
-                        
-                        // EVENTS
-                        LOAD: 1,
-                        FORMAT_SWITCH: 0,
-                        ORIENTATION_SWITCH: 0,
-
-                        // DATA
-                        root: document.body.append(document.createElement("div").classList.add("runtime-root")),
-                        width: document.documentElement.clientWidth,
-                        height: window.innerHeight,
-                        scroll_y: window.scrollY,
-                        format: "",
-                        orientation: "",
-
-                    }; break;
-            }
             
-            this.views[id] = view;
-            return;
+            this._views[id] = view;
+            return view;
         },
 
-        system(id, func) {
+        system(id, update) {
         }
     }
 }
 
+
+
+function _collect() {} // collect current view target state
+
+function _update() {} // execute all systems to update view state
+
+function _render() {} // render view state onto view target
 
 
 
@@ -70,9 +73,9 @@ export function setup(context) {
 // @DONE
 export function run(context) {
 
-    // collect render target state
-    // execute all systems
-    // update all render targets
+    _collect();
+    _update();
+    _render();
 
     window.requestAnimationFrame(() => { run(context); });
 }
@@ -80,13 +83,22 @@ export function run(context) {
 
 
 
+
+
 // app 
     // context
+        // views
+            // elements
+            // sounds
+        // systems
+
+
+
     // internal interface
         // graphics interface
-            // view
-                // layout
-                // element
+            // views
+                // elements
+                // tags
         // audio interface
     // external interface
         // http

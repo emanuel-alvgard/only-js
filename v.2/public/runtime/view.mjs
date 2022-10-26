@@ -1,4 +1,4 @@
-import * as animation from "animation.mjs";
+//import * as animation from "animation.mjs";
 
 // @DONE
 function _min(object, property, value=null) {
@@ -20,7 +20,7 @@ function _max(object, property, value=null) {
 
 
 
-// @DONE
+// @NOT
 function _layout(context, func, format=null) {
     context.view._layout.format.push(format);
     context.view._layout.func.push(func);
@@ -28,42 +28,12 @@ function _layout(context, func, format=null) {
 }
 
 
-// @DONE
-function _html(context, id, type) {
-    
-    let html = context.view._html;
-    let exist = html.id.indexOf(id);
-    if (exist !== -1) { return html.object[exist]; }
-
-    let root = context.view.root;
-    exist = root.getElementsByClassName(id);
-    let object;
-
-    if (exist.length === 0) { 
-        object = document.createElement(type);
-        object.classList.add(id);
-        root.append(object);
-    }
-    else {
-        object = exist[0];
-    }
-
-    html.id.push(id);
-    html.object.push(object);
-
-    return object; 
-
-}
 
 
-// @DONE
+// @NOT
 export function element(context, view, id, type) {
 
-    let element = context.view._element;
-    let exist = element.id.indexOf(id);
-    if (exist !== -1) { return element.object[exist]; }
-
-    _html(context, id, type);
+    //_html(context, id, type);
 
     let html = context.view._html.object;
     let index = element.object.length;
@@ -79,7 +49,7 @@ export function element(context, view, id, type) {
 
         // DATA
         _tag: { id: [] },
-        _anim: {},
+        _anims: {},
 
         _left: 0,
         _top: 0,
@@ -94,7 +64,10 @@ export function element(context, view, id, type) {
 
         // INTERFACE
         tag(object) { this._tag.id.push(object.id); return this; },
-        anim() { return animation.anim(this); },
+        anim(id) { 
+            if (id in this._anims) { return this._anims[id]; }
+            return animation.anim(this); 
+        },
 
         // dimension
         width(w=null, min=null, max=null) {
@@ -224,7 +197,7 @@ function _tag_property(elements, property) {
 }
 
 
-// @
+// @NOT
 export function tag(context, view, id) {
 
     // check if tag exists, if not create new object, else return existing object

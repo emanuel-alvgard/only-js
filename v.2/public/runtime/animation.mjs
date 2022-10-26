@@ -38,13 +38,9 @@ function _cube(p0, p1, p2, p3, i) {
 // button.anim("1").update();
 // button.anim("1").remove();
 
-function anim(element, key, property, start, end, time, delay=null, curve=null, event=null) {
+function anim(element, id, property, start, end, time, delay=null, curve=null, event=null) {
 
-    if (key in this._anim) {
-        return _anim[key];
-    }
-
-    let _anim = {
+    let anim = {
         
         _start: start,
         _end: end,
@@ -105,25 +101,25 @@ function anim(element, key, property, start, end, time, delay=null, curve=null, 
     }
 
     if (end < start) { 
-        _anim._direction = -1; 
-        _anim._distance = start - end;
+        anim._direction = -1; 
+        anim._distance = start - end;
     }
     else {
-        _anim._direction = 1; 
-        _anim._distance = end - start;
+        anim._direction = 1; 
+        anim._distance = end - start;
     }
 
-    _anim._speed = (_anim._distance / _anim._time) * 1000;
+    anim._speed = (anim._distance / anim._time) * 1000;
 
     switch (curve.length) {
-        case 2: _anim._curve_func = function(curve, i) { _line(curve[0], curve[1], _clamp(i, 0, 1)); }; break;
-        case 3: _anim._curve_func = function(curve, i) { _quad(curve[0], curve[1], curve[2], _clamp(i, 0, 1)); }; break;
-        case 4: _anim._curve_func = function(curve, i) { _cube(curve[0], curve[1], curve[2], curve[3], _clamp(i, 0, 1)); }; break;
+        case 2: anim._curve_func = function(curve, i) { _line(curve[0], curve[1], _clamp(i, 0, 1)); }; break;
+        case 3: anim._curve_func = function(curve, i) { _quad(curve[0], curve[1], curve[2], _clamp(i, 0, 1)); }; break;
+        case 4: anim._curve_func = function(curve, i) { _cube(curve[0], curve[1], curve[2], curve[3], _clamp(i, 0, 1)); }; break;
     }
 
-    element._anim[key] = _anim;
+    element.anim[id] = anim;
 
-    return _anim;
+    return anim;
 }
 
 

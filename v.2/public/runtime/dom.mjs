@@ -1,3 +1,4 @@
+/*
 function _html_tree(context, html) {
 
     for (let i=0; i < html.length; i++) {
@@ -15,14 +16,16 @@ function _html_tree(context, html) {
 
 _html_tree(context, context.view.root.children);
 context.view.root.style.opacity = "1.0";
+*/
 
 
 
-// @DONE
-function _update(context) {
+// @NOT
+function _update(view) {
     
     let view = context.view;
 
+    // COLLECT
     // EVENTS / DATA
     // format
     if (view.width < 1000) {
@@ -79,6 +82,7 @@ function _update(context) {
     }
     
 
+    // UPDATE
     // ELEMENTS
     let element = view._element.object;
     let html = view._html.object;
@@ -113,3 +117,43 @@ function _update(context) {
         element[i].mouse_up = 0;
     }
 }
+
+
+
+export function setup(view) {
+    switch(target) { // move into dom.mjs a
+        case "dom":
+            view._target = {
+                
+                // EVENTS
+                SETUP: true,
+                FORMAT_SWITCH: false,
+                ORIENTATION_SWITCH: false,
+
+                // DATA
+                root: document.createElement("div"),
+                width: document.documentElement.clientWidth,
+                height: window.innerHeight,
+                scroll_y: window.scrollY,
+                format: "",
+                orientation: "",
+                _elements: {},
+
+                element(id, type) {
+                    this._elements[id] = this.root.append(document.createElement(type));
+                },
+
+                collect() {},
+
+                render() { _update(view); }
+
+            };
+            
+            document.body.append(view._target.root);
+            
+        break;
+    }
+}
+
+
+
