@@ -19,38 +19,23 @@ function _max(object, property, value=null) {
 }
 
 
+// switch "this" for "e"
+// @
+export function element(view, id) {
 
-// @NOT
-function _layout(context, func, format=null) {
-    context.view._layout.format.push(format);
-    context.view._layout.func.push(func);
-    return;
-}
-
-
-
-
-// @NOT
-export function element(context, view, id, type) {
-
-    //_html(context, id, type);
-
-    let html = context.view._html.object;
-    let index = element.object.length;
-
-    element.id.push(id);
-    element.object.push({
+    let e = {
         
         // EVENTS
-        update: 0,
-        mouse_hover: 0,
-        mouse_down: 0,
-        mouse_up: 0,
+        update: false,
+        mouse_hover: false,
+        mouse_down: false,
+        mouse_up: false,
 
         // DATA
         _tag: { id: [] },
         _anims: {},
 
+        _visible: true,
         _left: 0,
         _top: 0,
         _width: 0,
@@ -63,7 +48,7 @@ export function element(context, view, id, type) {
         _padding_bottom: 0,
 
         // INTERFACE
-        tag(object) { this._tag.id.push(object.id); return this; },
+        tag(object) { this._tag.id.push(object.id); return this; }, // @NOT
         anim(id) { 
             if (id in this._anims) { return this._anims[id]; }
             return animation.anim(this); 
@@ -75,6 +60,7 @@ export function element(context, view, id, type) {
                 this._width = w; 
                 _min(this, "_width", min);
                 _max(this, "_width", max);
+                this.update = true;
                 return this;
             } 
             if (this._width === 0) { return html[index].clientWidth; }
@@ -85,6 +71,7 @@ export function element(context, view, id, type) {
                 this._height = h; 
                 _min(this, "_height", min);
                 _max(this, "_height", max);
+                this.update = true;
                 return this; 
             }
             if (this._height === 0) { return html[index].clientHeight; }
@@ -93,19 +80,19 @@ export function element(context, view, id, type) {
 
         // position
         left(l=null, min=null, max=null) { 
-            if (l !== null) { this._left = l; return this; } 
+            if (l !== null) { this._left = l; this.update = true; return this; } 
             return this._left; 
         },
         top(t=null, min=null, max=null) { 
-            if (t !== null) { this._top = t; return this; }
+            if (t !== null) { this._top = t; this.update = true; return this; }
             return this._top; 
         },
         right(r=null, min=null, max=null) {
-            if (r !== null) { this._left = r - this.width(); return this; }
+            if (r !== null) { this._left = r - this.width(); this.update = true; return this; }
             return this._left + this.width(); 
         },
         bottom(b=null, min=null, max=null) {
-            if (b !== null) { this._top = b - this.height(); return this; }
+            if (b !== null) { this._top = b - this.height(); this.update = true; return this; }
             return this._top + this.height(); 
         },
 
@@ -114,6 +101,7 @@ export function element(context, view, id, type) {
             if (l !== null) { 
                 this.width(l - this.right(), min, max);
                 this.left(l);
+                this.update = true;
                 return this; }
             return this.bottom();
         },
@@ -122,20 +110,25 @@ export function element(context, view, id, type) {
             if (t !== null) { 
                 this.height(t - this.bottom(), min, max); 
                 this.top(t);
+                this.update = true;
                 return this; 
             }
             return this.bottom();
         },
 
         extend_right(r=null, min=null, max=null) {
-            if (r !== null) { this.width(r - this.left(), min, max); return this; }
+            if (r !== null) { this.width(r - this.left(), min, max); this.update = true; return this; }
             return this.right();
         },
 
         extend_bottom(b=null, min=null, max=null) {
-            if (b !== null) { this.height(b - this.top(), min, max); return this; }
+            if (b !== null) { this.height(b - this.top(), min, max); this.update = true; return this; }
             return this.bottom();
         },
+
+        // fixed
+        fixed_top() {},
+        fixed_left() {},
 
         // local
         mid_x() { return this.width() / 2; },
@@ -143,43 +136,38 @@ export function element(context, view, id, type) {
 
         // global
         center_x(x=null, min=null, max=null) {
-            if (x !== null) { this._left = x - this.mid_x(); return this; } 
+            if (x !== null) { this._left = x - this.mid_x(); this.update = true; return this; } 
             return this._left + this.mid_x(); 
         },
         center_y(y=null, min=null, max=null) { 
-            if (y !== null) { this._top = y - this.mid_y(); return this; }
+            if (y !== null) { this._top = y - this.mid_y(); this.update = true; return this; }
             return this._top + this.mid_y(); 
         },
 
 
         // text
         padding(left=null, right=null, top=null, bottom=null) {
-            if (left !== null) { this._padding_left = left; }
-            if (right !== null) { this._padding_right = right; }
-            if (top !== null) { this._padding_top = top; }
-            if (bottom !== null) { this._padding_bottom = bottom; }
+            if (left !== null) { this._padding_left = left; this.update = true; }
+            if (right !== null) { this._padding_right = right; this.update = true; }
+            if (top !== null) { this._padding_top = top; this.update = true; }
+            if (bottom !== null) { this._padding_bottom = bottom; this.update = true; }
         },
 
         font(size=null, type=null, min=null, max=null) {
-            if (size !== null) { this._font_size = size; }
-            if (type !== null) { this._font_type = type; }
+            if (size !== null) { this._font_size = size; this.update = true; }
+            if (type !== null) { this._font_type = type; this.update = true; }
             _min(this, "_font_size", min);
             _max(this, "_font_size", max);
         },
 
         // visibility
-        show() { html[index].style.display = "initial"; return this; },
-        hide() { html[index].style.display = "none"; return this; }
+        show() { this._visible = true; this.update = true; return this; },
+        hide() { this._visible = false; this.update = true; return this; }
 
-    });
+    }
 
-    html[index].onmouseover = () => { element.object[index].mouse_hover = 1; }
-    html[index].onmouseleave = () => {  element.object[index].mouse_hover = 0; }
-    html[index].onmousedown = () => { element.object[index].mouse_down = 1; }
-    html[index].onmouseup = () => { element.object[index].mouse_up = 1; }
-
-    return element.object[index];
-
+    view._elements[id] = e;
+    return e;
 }
 
 

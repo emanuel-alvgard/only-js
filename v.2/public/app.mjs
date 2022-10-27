@@ -9,6 +9,5 @@ const system = CONTEXT.runtime.system;
 
 system("test", test);
 
-
 run(CONTEXT);
 
