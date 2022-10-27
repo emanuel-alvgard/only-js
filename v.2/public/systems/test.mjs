@@ -6,7 +6,7 @@ export function setup(context) {
 
     CONTEXT = context;
     start = context.runtime.view("start");
-    button = start.element("button");
+    //button = start.element("button");
     console.log(context);
 }
 
