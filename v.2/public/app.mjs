@@ -1,16 +1,14 @@
-import * as runtime_module from "./runtime/runtime.mjs";
-import * as test_system from "./systems/test_system.mjs";
+import "./utils/loading.mjs";
+import { setup, run } from "./runtime/runtime.mjs";
+import * as test from "./systems/test.mjs";
 
 const CONTEXT = {}
 
-runtime_module.setup(CONTEXT);
+setup(CONTEXT);
+const system = CONTEXT.runtime.system;
 
-CONTEXT.runtime.system("test", test_system.update);
-
-main.element("test");
-
-console.log(CONTEXT.runtime.view("main"));
+system("test", test);
 
 
-//runtime_module.run(CONTEXT);
+run(CONTEXT);
 

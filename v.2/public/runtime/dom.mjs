@@ -22,8 +22,6 @@ context.view.root.style.opacity = "1.0";
 
 // @NOT
 function _update(view) {
-    
-    let view = context.view;
 
     // COLLECT
     // EVENTS / DATA

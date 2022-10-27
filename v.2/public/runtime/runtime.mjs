@@ -12,7 +12,7 @@ import * as view_module from "./view.mjs";
 // @
 export function setup(context) {
 
-    if (runtime in context) { return; }
+    if ("runtime" in context) { return; }
 
     context.runtime = {
     
@@ -38,7 +38,7 @@ export function setup(context) {
                 // INTERFACE
                 element(id, type="div") {
                     if (id in this._elements) { return this._elements[id]; } 
-                    this._target.element(id, type);
+                    //this._target.element(id, type);
                     //return view_module.element(context, this, id, type); 
                 },
                 tag(id) { 
@@ -54,18 +54,19 @@ export function setup(context) {
             return view;
         },
 
-        system(id, update) {
+        system(id, sys) {
+            sys.setup(context);
         }
     }
 }
 
 
 
-function _collect() {} // collect current view target state
+function _collect(context) {} // collect current view target state
 
-function _update() {} // execute all systems to update view state
+function _update(context) {} // execute all systems to update view state
 
-function _render() {} // render view state onto view target
+function _render(context) {} // render view state onto view target
 
 
 
@@ -73,9 +74,9 @@ function _render() {} // render view state onto view target
 // @DONE
 export function run(context) {
 
-    _collect();
-    _update();
-    _render();
+    _collect(context);
+    _update(context);
+    _render(context);
 
     window.requestAnimationFrame(() => { run(context); });
 }
