@@ -1,13 +1,13 @@
 {
     "db": {
         "path": "/db",
-        "port": 10201,
-        "domain": "admin.taxrepay.se",
-        "token": "ZtIuUFg6sBxbjmAI15oTVpCV8ZwGu6N9"
+        "port": 3001,
+        "domain": "",
+        "token": ""
     },
     "app": {
         "path": "/private",
-        "port": 10200,
-        "domain": "taxrepay.dev.crossnet.net"
+        "port": 3000,
+        "domain": ""
     }
 }
