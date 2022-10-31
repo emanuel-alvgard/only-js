@@ -1,4 +1,3 @@
-import "./utils/loading.mjs";
 import { setup, run } from "./runtime/runtime.mjs";
 import * as test from "./systems/test.mjs";
 
