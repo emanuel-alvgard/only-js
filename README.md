@@ -1,17 +1,22 @@
-# lite.js 
+# only.js 
 Data Oriented Web Framework.
 
 **Disclaimers**
 ------
 + This project is currently being developed by a single person and will continue to be so until
 it has passed it's most experimental stage.
-+ The file "runtime.html" is representing a generated output. 
-Hence the runtime is currently being programmed in a single html file. 
 
 **Examples**
 ------
 ```javascript
-import lt from 'lite.js'
+
+let home = runtime.view("home")
+
+let b1 = home.element("b1", "button")
+
+b1.width(100).height(25)
+
+
 ```
 **Features**
 ------
@@ -19,9 +24,8 @@ import lt from 'lite.js'
 + Superb runtime performance
 + Pure JavaScript (no template syntax)
 + Zero dependencies
-+ Virtually no additional garbage collection (except from requestAnimationFrame)
++ Very low amount of garbage collection
 + Virtual DOM with a flat hierarchy
-+ Avoids JIT deoptimization
 
 **Vision**
 ------
