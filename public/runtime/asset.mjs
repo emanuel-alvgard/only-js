@@ -1,6 +1,9 @@
 // @DONE
 async function asset(url) {
 
+    // check url file type to determine which action to take when resource gets fetched.
+    //
+
     let done = false;
 
     let request = new XMLHttpRequest();
@@ -23,6 +26,8 @@ async function asset(url) {
     return request.response;
 }
 
+
+// move this into asset()
 async function font(id, asset) {
     
     let f = new FontFace(id, asset);
@@ -32,4 +37,5 @@ async function font(id, asset) {
 }
 
 font("oswald", await asset("/public/assets/oswald_bold.woff2"));
+
 
