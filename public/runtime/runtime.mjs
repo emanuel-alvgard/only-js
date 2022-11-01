@@ -1,7 +1,7 @@
-import * as dom_module from "./dom.mjs";
-import * as view_module from "./view.mjs";
+import * as dom from "./dom.mjs";
+import * as virtual from "./virtual.mjs";
 
-// @DONE
+// @
 export function setup(context) {
 
     if ("runtime" in context) { return; }
@@ -16,35 +16,16 @@ export function setup(context) {
         _systems: {},
 
         // INTERFACE
-        view(id) {
+        view(id, api) {
 
             if (id in context.runtime._views) { return context.runtime._views[id]; }
             
-            let view = {
-        
-                // DATA
-                _entities: {},
-                _elements: {},
-                _tags: {},
-        
-                // INTERFACE
-                entity(id, type="div") { // rename to virtual
-                    if (id in view._elements) { return view._elements[id]; }
-                    let virtual = view_module.element(view, id);
-                    view.target(id, type, virtual);
-                    return virtual;
-                },
-                element() {}, // always creates virtual element and dom element
-                tag(id) { 
-                    if (id in view._tags) { return view._tags[id]; } 
-                    return view_module.tag(context, view, id); 
-                },
-                collect() {},
-                update() {}
-            }
+            let view;
 
-            // RENDER TARGET // @REMOVE make view always be a dom view
-            if (target === "dom") { dom_module.setup(view); }
+            // RENDERING API
+            if (api === "dom") { dom.setup(view); }
+            else if (api === "webgl") {}
+            else if (api === "webgpu") {}
             
             context.runtime._views[id] = view;
             return view;

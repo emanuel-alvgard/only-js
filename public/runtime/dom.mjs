@@ -1,4 +1,4 @@
-// @DONE
+// @
 function _collect(view) {
 
     // format
@@ -37,7 +37,7 @@ function _collect(view) {
 
 
 
-// @DONE
+// @
 function _update(view) {
 
     // @ADD adjust all output values according to viewport transformation
@@ -88,8 +88,56 @@ function _update(view) {
 
 
 
-// @DONE
+// @HERE
 export function setup(view) {
+
+    view = {
+
+        SETUP: true,
+        FORMAT_SWITCH: false,
+        ORIENTATION_SWITCH: false,
+
+        viewport: null,
+        root: document.createElement("div"),
+        width: document.documentElement.clientWidth,
+        height: window.innerHeight,
+        scroll_y: window.scrollY,
+        format: "",
+        orientation: "",
+
+        _virtual: {},
+        _real: {},
+        _groups: {},
+
+        virtual() {},
+        
+        real (id, type, virtual) {
+        
+            let element = document.createElement(type);
+    
+            element.style.position = "absolute";
+            element.style.margin = "0px";
+    
+            element.onmouseover = () => { virtual.mouse_hover = true; }
+            element.onmouseleave = () => {  virtual.mouse_hover = false; }
+            element.onmousedown = () => { virtual.mouse_down = true; }
+            element.onmouseup = () => { virtual.mouse_up = true; }
+    
+            this._elements[id] = element;
+            view.root.append(element);
+        },
+
+        entity() {},
+
+        group() {},
+
+        collect() {},
+
+        update() {}
+
+    }
+
+
 
     // EVENTS
     view.SETUP = true;
@@ -97,7 +145,7 @@ export function setup(view) {
     view.ORIENTATION_SWITCH = false;
 
     // DATA
-    view.viewport = null;
+    view.viewport = null; // whatever virtual entity's transform, and other post processing settings if present, if null there's no transformation
     view.root = document.createElement("div"),
     view.width = document.documentElement.clientWidth;
     view.height = window.innerHeight;
@@ -105,23 +153,41 @@ export function setup(view) {
     view.format = "";
     view.orientation = "";
 
-    document.body.style.margin = "0px"
+    document.body.style.margin = "0px" // put stuff like this inside app.html
 
-    view.target = (id, type, virtual) => {
+    view.real = (id, type, virtual) => {
         
-        let node = document.createElement(type);
+        let element = document.createElement(type);
 
-        node.style.position = "absolute";
-        node.style.margin = "0px";
+        // set everything explicitly here
+        element.style.position = "absolute";
+        element.style.margin = "0px";
 
-        node.onmouseover = () => { virtual.mouse_hover = true; }
-        node.onmouseleave = () => {  virtual.mouse_hover = false; }
-        node.onmousedown = () => { virtual.mouse_down = true; }
-        node.onmouseup = () => { virtual.mouse_up = true; }
+        element.onmouseover = () => { virtual.mouse_hover = true; }
+        element.onmouseleave = () => {  virtual.mouse_hover = false; }
+        element.onmousedown = () => { virtual.mouse_down = true; }
+        element.onmouseup = () => { virtual.mouse_up = true; }
 
-        this._elements[id] = node;
-        view.root.append(node);
+        this._elements[id] = element;
+        view.root.append(element);
     },
+
+
+     // INTERFACE
+     entity(id, type="div") { // rename to virtual
+        if (id in view._elements) { return view._elements[id]; }
+        let virtual = view_module.element(view, id);
+        view.target(id, type, virtual);
+        return virtual;
+    },
+    element() {}, // always creates virtual element and dom element
+    group(id) { 
+        if (id in view._tags) { return view._tags[id]; } 
+        return view_module.tag(context, view, id); 
+    },
+    collect() {},
+    update() {}
+
 
     view.collect() { _collect(view); },
 

@@ -21,7 +21,7 @@ function _max(object, property, value=null) {
 
 // switch "this" for "e"
 // @
-export function element(view, id) {
+export function entity(view, id) {
 
     let e = {
         
@@ -171,22 +171,10 @@ export function element(view, id) {
 }
 
 
-// @TEST @NOT
-function _tag_property(elements, property) {
-    
-    for (let i=0; i < elements.length; i++) {
-
-        let j = elements[i]._tag.id.indexOf(this.id);
-        if (j === -1) { continue; }
-        
-        elements[i][property]();
-        
-    }
-}
 
 
 // @NOT
-export function tag(context, view, id) {
+export function group(context, view, id) {
 
     // check if tag exists, if not create new object, else return existing object
 
