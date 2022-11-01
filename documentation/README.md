@@ -1,4 +1,4 @@
-# litejs API Reference
+# only.js API Reference
 **The *only.js api* is structured as follows:**
 1. *runtime* - 
 2. *app* - sets up runtime, adds systems and runs runtime.
