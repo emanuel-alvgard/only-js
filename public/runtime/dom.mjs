@@ -40,6 +40,8 @@ function _collect(view) {
 // @DONE
 function _update(view) {
 
+    // @ADD adjust all output values according to viewport transformation
+
     let ids = Object.keys(view._elements);
 
     for (let i=0; i < ids.length; i++) {
@@ -95,6 +97,7 @@ export function setup(view) {
     view.ORIENTATION_SWITCH = false;
 
     // DATA
+    view.viewport = null;
     view.root = document.createElement("div"),
     view.width = document.documentElement.clientWidth;
     view.height = window.innerHeight;
@@ -104,29 +107,25 @@ export function setup(view) {
 
     document.body.style.margin = "0px"
 
-    view._target = {
+    view.target = (id, type, virtual) => {
         
-        _elements: {},
+        let node = document.createElement(type);
 
-        element(id, type, virtual) {
-            
-            let node = document.createElement(type);
+        node.style.position = "absolute";
+        node.style.margin = "0px";
 
-            node.style.position = "absolute";
-            node.style.margin = "0px";
+        node.onmouseover = () => { virtual.mouse_hover = true; }
+        node.onmouseleave = () => {  virtual.mouse_hover = false; }
+        node.onmousedown = () => { virtual.mouse_down = true; }
+        node.onmouseup = () => { virtual.mouse_up = true; }
 
-            node.onmouseover = () => { virtual.mouse_hover = true; }
-            node.onmouseleave = () => {  virtual.mouse_hover = false; }
-            node.onmousedown = () => { virtual.mouse_down = true; }
-            node.onmouseup = () => { virtual.mouse_up = true; }
+        this._elements[id] = node;
+        view.root.append(node);
+    },
 
-            this._elements[id] = node;
-            view.root.append(node);
-        },
+    view.collect() { _collect(view); },
 
-        collect() { _collect(view); },
-
-        update() { _update(view); }
+    view.update() { _update(view); }
 
     }
     document.body.append(view.root);

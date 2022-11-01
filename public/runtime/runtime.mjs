@@ -16,31 +16,34 @@ export function setup(context) {
         _systems: {},
 
         // INTERFACE
-        view(id, target="dom") {
+        view(id) {
 
             if (id in context.runtime._views) { return context.runtime._views[id]; }
             
             let view = {
         
                 // DATA
-                _target: null,
+                _entities: {},
                 _elements: {},
                 _tags: {},
         
                 // INTERFACE
-                element(id, type="div") {
+                entity(id, type="div") { // rename to virtual
                     if (id in view._elements) { return view._elements[id]; }
                     let virtual = view_module.element(view, id);
-                    view._target.element(id, type, virtual);
+                    view.target(id, type, virtual);
                     return virtual;
                 },
+                element() {}, // always creates virtual element and dom element
                 tag(id) { 
                     if (id in view._tags) { return view._tags[id]; } 
                     return view_module.tag(context, view, id); 
-                }
+                },
+                collect() {},
+                update() {}
             }
 
-            // RENDER TARGET
+            // RENDER TARGET // @REMOVE make view always be a dom view
             if (target === "dom") { dom_module.setup(view); }
             
             context.runtime._views[id] = view;
@@ -62,7 +65,7 @@ function _collect(context) {
     let ids = Object.keys(context.runtime._views);
     for (let i=0; i < ids.length; i++) {
         let id = ids[i];
-        context.runtime._views[id]._target.collect();
+        context.runtime._views[id].collect();
     }
 }
 
@@ -80,7 +83,7 @@ function _render(context) {
     let ids = Object.keys(context.runtime._views);
     for (let i=0; i < ids.length; i++) {
         let id = ids[i];
-        context.runtime._views[id]._target.update();
+        context.runtime._views[id].update();
     }
 }
 
