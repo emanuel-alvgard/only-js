@@ -1,23 +1,22 @@
-let CONTEXT;
-let start;
-let button;
+export default (context) => {
 
-export function setup(context) {
-
-    CONTEXT = context;
     start = context.runtime.view("start");
-    button = start.element("button", "button");
-}
+    b = start.element("b", "button");
 
-export function update() {
+    b.
+        w(100).
+        h(100).
+        r(start.width - 100).
+        t(100).
+        color(200,200,200). 
+        border("solid").
+        border_color(200,0,0).
+        text("click me").
+        text_color(100,100,100).
+        font(24, "oswald_bold").
+        padding(10,0,0,0);
 
-    if (button.mouse_down) { console.log("click"); }
-
-    button.
-        width(100).
-        height(100).
-        right(start.width - 100).
-        top(100)
-
+    if (b.MOUSE_DOWN) { console.log("click"); }
+    
 }
 

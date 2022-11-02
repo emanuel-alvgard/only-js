@@ -33,14 +33,23 @@ function _collect(view) {
         view.width =  document.documentElement.clientWidth;
         view.scroll_y = window.scrollY;
     }
+
+    // elements
+    let ids = Object.keys(view._virtual);
+
+    for (let i=0; i < ids.length; i++) {
+        let virtual = view._virtual[i];
+        let real = view._real[i];
+        if (virtual._auto_w) { virtual._w = real.clientWidth; }
+        if (virtual._auto_h) { virtual._h = real.clientHeight; }
+    }
+
 }
 
 
 
 // @
 function _update(view) {
-
-    // @ADD adjust all output values according to viewport transformation
 
     let ids = Object.keys(view._elements);
 
@@ -52,13 +61,13 @@ function _update(view) {
 
         if (element.update) {
         
-            if (element._width !== 0) { node.style.width = element._width + "px"; }
+            if (element._width !== 0) { node.style.width = element._width + "px"; } //@HERE
             else { node.style.width = "auto"; }
             
             if (element._height !== 0) { node.style.height = element._height + "px"; }
             else { node.style.height = "auto"; }
             
-            node.style.transform = "translate(" + element._left + "px," + element._top + "px)";
+            node.style.transform = "translate(" + element._left + "px," + element._top + "px)"; // this gets affected by .viewport transform
             
             // text
             node.style.paddingLeft = element._padding_left + "px";
@@ -75,13 +84,13 @@ function _update(view) {
         }
 
         // RESET EVENTS
-        element.mouse_down = false;
-        element.mouse_up = false;
-        element.update = false;
+        element.MOUSE_DOWN = false;
+        element.MOUSE_UP = false;
+        element.UPDATE = false;
     }
 
     // RESET EVENTS
-    view.LOAD = 0;
+    view.SETUP = 0;
     view.FORMAT_SWITCH = 0;
     view.ORIENTATION_SWITCH = 0;
 }
@@ -99,8 +108,8 @@ export function setup(view) {
 
         viewport: null,
         root: document.createElement("div"),
-        width: document.documentElement.clientWidth,
-        height: window.innerHeight,
+        w: document.documentElement.clientWidth,
+        h: window.innerHeight,
         scroll_y: window.scrollY,
         format: "",
         orientation: "",
@@ -109,7 +118,9 @@ export function setup(view) {
         _real: {},
         _groups: {},
 
-        virtual() {},
+        virtual() {
+            virtual.element();
+        },
         
         real (id, type, virtual) {
         
@@ -127,75 +138,28 @@ export function setup(view) {
             view.root.append(element);
         },
 
-        entity() {},
+        element() {
 
-        group() {},
-
-        collect() {},
-
-        update() {}
-
-    }
-
-
-
-    // EVENTS
-    view.SETUP = true;
-    view.FORMAT_SWITCH = false;
-    view.ORIENTATION_SWITCH = false;
-
-    // DATA
-    view.viewport = null; // whatever virtual entity's transform, and other post processing settings if present, if null there's no transformation
-    view.root = document.createElement("div"),
-    view.width = document.documentElement.clientWidth;
-    view.height = window.innerHeight;
-    view.scroll_y = window.scrollY;
-    view.format = "";
-    view.orientation = "";
-
-    document.body.style.margin = "0px" // put stuff like this inside app.html
-
-    view.real = (id, type, virtual) => {
-        
-        let element = document.createElement(type);
-
-        // set everything explicitly here
-        element.style.position = "absolute";
-        element.style.margin = "0px";
-
-        element.onmouseover = () => { virtual.mouse_hover = true; }
-        element.onmouseleave = () => {  virtual.mouse_hover = false; }
-        element.onmousedown = () => { virtual.mouse_down = true; }
-        element.onmouseup = () => { virtual.mouse_up = true; }
-
-        this._elements[id] = element;
-        view.root.append(element);
-    },
-
-
-     // INTERFACE
-     entity(id, type="div") { // rename to virtual
-        if (id in view._elements) { return view._elements[id]; }
+            if (id in view._elements) { return view._elements[id]; }
         let virtual = view_module.element(view, id);
         view.target(id, type, virtual);
         return virtual;
-    },
-    element() {}, // always creates virtual element and dom element
-    group(id) { 
-        if (id in view._tags) { return view._tags[id]; } 
-        return view_module.tag(context, view, id); 
-    },
-    collect() {},
-    update() {}
 
+        },
 
-    view.collect() { _collect(view); },
+        group() {
+            if (id in view._tags) { return view._tags[id]; } 
+            return view_module.tag(context, view, id); 
+        },
 
-    view.update() { _update(view); }
+        collect() { _collect(view); },
+
+        update() { _update(view); }
 
     }
+
     document.body.append(view.root);
+
+    return;
 }
-
-
 

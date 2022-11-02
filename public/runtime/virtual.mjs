@@ -19,150 +19,186 @@ function _max(object, property, value=null) {
 }
 
 
-// switch "this" for "e"
+// switch "e" for "e"
 // @
-export function entity(view, id) {
+export function element(view, id) {
 
     let e = {
         
         // EVENTS
-        update: false,
-        mouse_hover: false,
-        mouse_down: false,
-        mouse_up: false,
+        UPDATE: false,
+        MOUSE_HOVER: false,
+        MOUSE_DOWN: false,
+        MOUSE_UP: false,
 
         // DATA
-        _tag: { id: [] },
+        _groups: {},
         _anims: {},
 
         _visible: true,
-        _left: 0,
-        _top: 0,
-        _width: 0,
-        _height: 0,
+        _l: 0,
+        _t: 0,
+        _w: 0,
+        _h: 0,
+        _auto_w: true,
+        _auto_h: true,
         _font_size: 0,
         _font_type: null,
-        _padding_left: 0,
-        _padding_right: 0,
-        _padding_top: 0,
-        _padding_bottom: 0,
+        _padding_l: 0,
+        _padding_r: 0,
+        _padding_t: 0,
+        _padding_b: 0,
 
         // INTERFACE
-        tag(object) { this._tag.id.push(object.id); return this; }, // @NOT
+        group(object) { e._tag.id.push(object.id); return e; }, // @NOT
         anim(id) { 
-            if (id in this._anims) { return this._anims[id]; }
-            return animation.anim(this); 
+            if (id in e._anims) { return e._anims[id]; }
+            return animation.anim(e); 
         },
 
         // dimension
-        width(w=null, min=null, max=null) {
-            if (w !== null) { 
-                this._width = w; 
-                _min(this, "_width", min);
-                _max(this, "_width", max);
-                this.update = true;
-                return this;
+        w(w=null, min=null, max=null) {
+            if (w === e._w) { return e; }
+            if (w !== null) {
+                e._auto_w = false; 
+                e._w = w; 
+                _min(e, "_w", min);
+                _max(e, "_w", max);
+                e.UPDATE = true;
+                return e;
             } 
-            if (this._width === 0) { return html[index].clientWidth; }
-            else { return this._width; }
-        },
-        height(h=null, min=null, max=null) { 
-            if (h !== null) { 
-                this._height = h; 
-                _min(this, "_height", min);
-                _max(this, "_height", max);
-                this.update = true;
-                return this; 
-            }
-            if (this._height === 0) { return html[index].clientHeight; }
-            else { return this._height; }
+            else { return e._w; }
         },
 
+        h(h=null, min=null, max=null) {
+            if (h === e._h) { return e; } 
+            if (h !== null) {
+                e._auto_h = false; 
+                e._h = h; 
+                _min(e, "_h", min);
+                _max(e, "_h", max);
+                e.UPDATE = true;
+                return e; 
+            }
+            else { return e._h; }
+        },
+
+        auto_w() { e._auto_w = true; },
+        auto_h() { e._auto_h = true; },
+
         // position
-        left(l=null, min=null, max=null) { 
-            if (l !== null) { this._left = l; this.update = true; return this; } 
-            return this._left; 
+        l(l=null, min=null, max=null) {
+            if (l === e._l) { return e; }  
+            if (l !== null) { 
+                e._l = l; 
+                _min(e, "_l", min);
+                _max(e, "_l", max);
+                e.UPDATE = true; 
+                return e; } 
+            return e._l; 
         },
-        top(t=null, min=null, max=null) { 
-            if (t !== null) { this._top = t; this.update = true; return this; }
-            return this._top; 
+
+        t(t=null, min=null, max=null) {
+            if (t === e._t) { return e; }  
+            if (t !== null) { 
+                e._t = t; 
+                _min(e, "_t", min);
+                _max(e, "_t", max);
+                e.UPDATE = true; 
+                return e; }
+            return e._t; 
         },
-        right(r=null, min=null, max=null) {
-            if (r !== null) { this._left = r - this.width(); this.update = true; return this; }
-            return this._left + this.width(); 
+
+        r(r=null, min=null, max=null) {
+            if (r === e._l + e.w()) { return e; } 
+            if (r !== null) { e._l = r - e.w(); e.UPDATE = true; return e; }
+            return e._l + e.w(); 
         },
-        bottom(b=null, min=null, max=null) {
-            if (b !== null) { this._top = b - this.height(); this.update = true; return this; }
-            return this._top + this.height(); 
+        b(b=null, min=null, max=null) {
+            if (b === e._t + e.h()) { return e; } 
+            if (b !== null) { e._t = b - e.h(); e.UPDATE = true; return e; }
+            return e._t + e.h(); 
         },
 
         // extension
-        extend_left(l=null, min=null, max=null) {
+        extend_l(l=null, min=null, max=null) {
             if (l !== null) { 
-                this.width(l - this.right(), min, max);
-                this.left(l);
-                this.update = true;
-                return this; }
-            return this.bottom();
+                e.w(l - e.r(), min, max);
+                e.l(l);
+                e.UPDATE = true;
+                return e; }
+            return e.b();
         },
 
-        extend_top(t=null, min=null, max=null) {
+        extend_t(t=null, min=null, max=null) {
             if (t !== null) { 
-                this.height(t - this.bottom(), min, max); 
-                this.top(t);
-                this.update = true;
-                return this; 
+                e.h(t - e.b(), min, max); 
+                e.t(t);
+                e.UPDATE = true;
+                return e; 
             }
-            return this.bottom();
+            return e.b();
         },
 
-        extend_right(r=null, min=null, max=null) {
-            if (r !== null) { this.width(r - this.left(), min, max); this.update = true; return this; }
-            return this.right();
+        extend_r(r=null, min=null, max=null) {
+            if (r !== null) { e.w(r - e.l(), min, max); e.UPDATE = true; return e; }
+            return e.r();
         },
 
-        extend_bottom(b=null, min=null, max=null) {
-            if (b !== null) { this.height(b - this.top(), min, max); this.update = true; return this; }
-            return this.bottom();
+        extend_b(b=null, min=null, max=null) {
+            if (b !== null) { e.h(b - e.t(), min, max); e.UPDATE = true; return e; }
+            return e.b();
         },
 
         // fixed
-        fixed_top() {},
-        fixed_left() {},
+        fixed_t() {},
+        fixed_l() {},
+        fixed_b() {},
+        fixed_r() {},
 
         // local
-        mid_x() { return this.width() / 2; },
-        mid_y() { return this.height() / 2; },
+        mid_x() { return e.w() / 2; },
+        mid_y() { return e.h() / 2; },
 
         // global
         center_x(x=null, min=null, max=null) {
-            if (x !== null) { this._left = x - this.mid_x(); this.update = true; return this; } 
-            return this._left + this.mid_x(); 
+            if (x !== null) { e._l = x - e.mid_x(); e.UPDATE = true; return e; } 
+            return e._l + e.mid_x(); 
         },
         center_y(y=null, min=null, max=null) { 
-            if (y !== null) { this._top = y - this.mid_y(); this.update = true; return this; }
-            return this._top + this.mid_y(); 
+            if (y !== null) { e._t = y - e.mid_y(); e.UPDATE = true; return e; }
+            return e._t + e.mid_y(); 
         },
 
 
         // text
         padding(left=null, right=null, top=null, bottom=null) {
-            if (left !== null) { this._padding_left = left; this.update = true; }
-            if (right !== null) { this._padding_right = right; this.update = true; }
-            if (top !== null) { this._padding_top = top; this.update = true; }
-            if (bottom !== null) { this._padding_bottom = bottom; this.update = true; }
+            if (left !== null) { e._padding_l = left; e.UPDATE = true; }
+            if (right !== null) { e._padding_r = right; e.UPDATE = true; }
+            if (top !== null) { e._padding_t = top; e.UPDATE = true; }
+            if (bottom !== null) { e._padding_b = bottom; e.UPDATE = true; }
         },
 
         font(size=null, type=null, min=null, max=null) {
-            if (size !== null) { this._font_size = size; this.update = true; }
-            if (type !== null) { this._font_type = type; this.update = true; }
-            _min(this, "_font_size", min);
-            _max(this, "_font_size", max);
+            if (size !== null) { e._font_size = size; e.UPDATE = true; }
+            if (type !== null) { e._font_type = type; e.UPDATE = true; }
+            _min(e, "_font_size", min);
+            _max(e, "_font_size", max);
         },
 
         // visibility
-        show() { this._visible = true; this.update = true; return this; },
-        hide() { this._visible = false; this.update = true; return this; }
+        show() { 
+            if (e._visible) { return e; }
+            e._visible = true; 
+            e.UPDATE = true; 
+            return e; 
+        },
+        hide() {
+            if (!e._visible) { return e; }
+            e._visible = false; 
+            e.UPDATE = true; 
+            return e; 
+        }
 
     }
 
@@ -192,13 +228,13 @@ export function group(context, view, id) {
 
             for (let i=0; i < elements.length; i++) {
 
-                let j = elements[i]._tag.id.indexOf(this.id);
+                let j = elements[i]._tag.id.indexOf(tag.id);
                 if (j === -1) { continue; }
                 
-                if (left !== null) { elements[i]._padding_left = left; }
-                if (right !== null) { elements[i]._padding_right = right; }
-                if (top !== null) { elements[i]._padding_top = top; }
-                if (bottom !== null) { elements[i]._padding_bottom = bottom; }
+                if (left !== null) { elements[i]._padding_l = left; }
+                if (right !== null) { elements[i]._padding_r = right; }
+                if (top !== null) { elements[i]._padding_t = top; }
+                if (bottom !== null) { elements[i]._padding_b = bottom; }
                 
             }
         },
