@@ -10,12 +10,17 @@ it has passed it's most experimental stage.
 ------
 ```javascript
 
-let home = runtime.view("home")
+export default (context) => {
+    
+    let home = context.runtime.view("home")
+    let b1 = home.element("b1", "button")
 
-let b1 = home.element("b1", "button")
-
-b1.width(100).height(25)
-
+    b1.
+        w(100).
+        h(25).
+        r(home.width - 100).
+        t(100)
+}
 
 ```
 **Features**
