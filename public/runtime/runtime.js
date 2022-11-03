@@ -4,14 +4,13 @@ import * as virtual from "./virtual.mjs";
 // @
 export function setup(context) {
 
-    if ("runtime" in context) { return; }
-
-    context.runtime = {
+    return runtime = {
     
         // EVENTS
         SETUP: true,
 
         // DATA
+        context: context,
         _views: {},
         _systems: {},
 
