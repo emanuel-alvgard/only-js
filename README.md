@@ -10,12 +10,12 @@ it has passed it's most experimental stage.
 ------
 ```javascript
 
-let assets_loaded = 0
+let ASSETS = 0
 
 export default (runtime) => {
     
     // CREATING VIEW, ELEMENTS AND GROUPS
-    let home = runtime.view("home")
+    let home = runtime.view("home").hide()
     let hero = home.element("hero", "img")
     let b1 = home.element("b1", "button")
     let b2 = home.element("b2", "button")
@@ -25,24 +25,14 @@ export default (runtime) => {
         add(b1).
         add(b2)
 
-    // ONLY SHOW WHEN LOADED
-    if (runtime.SETUP) {
-        home.hide()
-        hero.hide()
-        b1.hide()
-        b2.hide()
-    }
-
-    if (assets_loaded > 1) {
+    if (ASSETS > 1) {
         home.show()
-        hero.show()
-        b1.show()
-        b2.show()
+        ASSETS = 0
     }
 
     // LOADING ASSETS
-    runtime.image("hero", "/public/assets/hero.svg", (result) => { assets_loaded ++ })
-    runtime.font("standard", "/public/assets/font.woff2", (result) => { assets_loaded ++ })
+    runtime.image("hero", "/public/assets/hero.svg", (result) => { ASSETS ++ })
+    runtime.font("standard", "/public/assets/font.woff2", (result) => { ASSETS ++ })
 
     // STYLING
     hero.
