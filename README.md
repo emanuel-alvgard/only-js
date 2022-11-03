@@ -18,10 +18,11 @@ export default (runtime) => {
     let b2 = home.element("b2", "button")
 
     if (runtime.SETUP) { 
-        runtime.asset(
-            "/public/assets/hero.svg", // path
-            (result) => { hero.real().src = result} // callback
-        )
+        runtime.asset("/public/assets/hero.svg", (result) => { hero.texture(result) })
+        runtime.asset("/public/assets/font.woff2", (result) => { 
+            b1.font(24, result)
+            b2.font(24, result)
+        })
     }
 
     b1.
