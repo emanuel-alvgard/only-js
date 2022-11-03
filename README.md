@@ -10,11 +10,19 @@ it has passed it's most experimental stage.
 ------
 ```javascript
 
-export default (context) => {
+export default (runtime) => {
     
-    let home = context.runtime.view("home")
+    let home = runtime.view("home")
+    let hero = home.element("hero", "img")
     let b1 = home.element("b1", "button")
     let b2 = home.element("b2", "button")
+
+    if (runtime.SETUP) { 
+        runtime.asset(
+            "/public/assets/hero.svg", // path
+            (result) => { hero.real().src = result} // callback
+        )
+    }
 
     b1.
         w(100).
