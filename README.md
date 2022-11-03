@@ -36,34 +36,31 @@ export default (runtime) => {
     }
 
     // LOADING ASSETS
-    runtime.image("hero", "/public/assets/hero.svg", (result) => { 
-        hero.image(result) 
-        assets_loaded ++ 
-    })
-    runtime.font("font", "/public/assets/font.woff2", (result) => { 
-        b1.font(24, result)
-        b2.font(24, result)
-        assets_loaded ++
-    })
+    runtime.image("hero", "/public/assets/hero.svg", (result) => { assets_loaded ++ })
+    runtime.font("standard", "/public/assets/font.woff2", (result) => { assets_loaded ++ })
 
     // STYLING
+    hero.
+        image(runtime.image("hero")).
+        center_x(home.width / 2)
+
     b1.
         w(100).
         h(25).
         r(home.width - 100).
         t(100).
-        text("click me")
+        text("click me").
+        font(24, runtime.font("standard"))
 
     b2.
         w(100).
         h(25).
         r(b1.l() - 10)
         t(100).
-        text("click me")
+        text("click me").
+        font(24, runtime.font("standard"))
 
-    if (b1.MOUSE_DOWN || b2.MOUSE_DOWN) {
-        console.log("A button was clicked!")
-    }
+    if (b1.MOUSE_DOWN || b2.MOUSE_DOWN) { console.log("A button was clicked!") }
 }
 
 ```
