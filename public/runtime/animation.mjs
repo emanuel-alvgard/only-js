@@ -38,9 +38,11 @@ function _cube(p0, p1, p2, p3, i) {
 // button.anim("1").update();
 // button.anim("1").remove();
 
-function anim(element, id, property, start, end, time, delay=null, curve=null, event=null) {
+function anim(runtime, element, id, property, start, end, time, delay, curve, event) {
 
-    let anim = {
+    let a = {
+
+        _id: id,
         
         _start: start,
         _end: end,
@@ -62,64 +64,64 @@ function anim(element, id, property, start, end, time, delay=null, curve=null, e
         _stop: true,
 
         start() {
-            this._pause = false;
-            this._stop = false;
-            return this;
+            a._pause = false;
+            a._stop = false;
+            return a;
         },
         stop() { 
-            this._pause = false;
-            this._stop = true;
-            return this;
+            a._pause = false;
+            a._stop = true;
+            return a;
         },
         pause() {
-            this._pause = true;
-            return this;
+            a._pause = true;
+            return a;
         },
         update() {
 
             // @ADD start, stop, pause, and reset anim data on stop or done
             
-            let delta = context.runtime.delta;
+            let delta = runtime.delta;
             
             // DELAY
-            this._delay_timer += delta * 1000;
-            if (this._delay_timer >= this._delay) { return; }
+            a._delay_timer += delta * 1000;
+            if (a._delay_timer >= a._delay) { return; }
         
             // DONE
-            if (this.run_timer >= this._time) { 
-                element[property](this._end);
-                if (this._event !== null) {
-                    element[this._event] = true;
+            if (a.run_timer >= a._time) { 
+                element[property](a._end);
+                if (a._event !== null) {
+                    element[a._event] = true;
                 }
                 return; 
             }
 
             // PROGRESS
-            this._progress += (this._speed * this._cruve_func(this._curve, (this.run_timer / this._time))) * delta; 
+            a._progress += (a._speed * a._curve_func(a._curve, (a.run_timer / a._time))) * delta; 
         },
-        remove() {}
+        remove() {
+            // use id to remove
+        }
     }
 
     if (end < start) { 
-        anim._direction = -1; 
-        anim._distance = start - end;
+        a._direction = -1; 
+        a._distance = start - end;
     }
     else {
-        anim._direction = 1; 
-        anim._distance = end - start;
+        a._direction = 1; 
+        a._distance = end - start;
     }
 
-    anim._speed = (anim._distance / anim._time) * 1000;
+    a._speed = (a._distance / a._time) * 1000;
 
     switch (curve.length) {
-        case 2: anim._curve_func = function(curve, i) { _line(curve[0], curve[1], _clamp(i, 0, 1)); }; break;
-        case 3: anim._curve_func = function(curve, i) { _quad(curve[0], curve[1], curve[2], _clamp(i, 0, 1)); }; break;
-        case 4: anim._curve_func = function(curve, i) { _cube(curve[0], curve[1], curve[2], curve[3], _clamp(i, 0, 1)); }; break;
+        case 2: a._curve_func = function(curve, i) { _line(curve[0], curve[1], _clamp(i, 0, 1)); }; break;
+        case 3: a._curve_func = function(curve, i) { _quad(curve[0], curve[1], curve[2], _clamp(i, 0, 1)); }; break;
+        case 4: a._curve_func = function(curve, i) { _cube(curve[0], curve[1], curve[2], curve[3], _clamp(i, 0, 1)); }; break;
     }
 
-    element.anim[id] = anim;
-
-    return anim;
+    return a;
 }
 
 

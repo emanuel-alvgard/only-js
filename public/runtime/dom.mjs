@@ -1,3 +1,5 @@
+import * as virtual from "./virtual.mjs";
+
 // @
 function _collect(view) {
 
@@ -107,6 +109,8 @@ export function setup(view) {
         ORIENTATION_SWITCH: false,
 
         viewport: null,
+        time: performance.now(),
+        delta: 0.0,
         root: document.createElement("div"), // hold a reference to the first view.element
         w: document.documentElement.clientWidth, // can be set by root.w(), is auto by default
         h: window.innerHeight,
@@ -118,6 +122,7 @@ export function setup(view) {
         _real: {},
         _groups: {},
 
+        // @HERE
         virtual() {
             virtual.element();
         },
@@ -154,8 +159,10 @@ export function setup(view) {
 
         collect() { _collect(view); },
 
-        update() { _update(view); }
+        update() { _update(view); },
 
+        show() {},
+        hide() {}
     }
 
     document.body.append(view.root);

@@ -1,4 +1,4 @@
-//import * as animation from "animation.mjs";
+import * as animation from "animation.mjs";
 
 // @DONE
 function _min(object, property, value=null) {
@@ -19,9 +19,9 @@ function _max(object, property, value=null) {
 }
 
 
-// switch "e" for "e"
+
 // @
-export function element(view, id) {
+export function element(runtime, id) {
 
     let e = {
         
@@ -32,7 +32,7 @@ export function element(view, id) {
         MOUSE_UP: false,
 
         // DATA
-        _groups: {},
+        _id: id,
         _anims: {},
 
         _visible: true,
@@ -50,10 +50,11 @@ export function element(view, id) {
         _padding_b: 0,
 
         // INTERFACE
-        group(object) { e._tag.id.push(object.id); return e; }, // @NOT
-        anim(id) { 
+        // @DONE
+        anim(id, property, start, end, time, delay=null, curve=null, event=null) { 
             if (id in e._anims) { return e._anims[id]; }
-            return animation.anim(e); 
+            e._anims[id] = animation.anim(runtime, e, id, property, start, end, time, delay, curve, event);
+            return e._anims[id];
         },
 
         // dimension
@@ -202,43 +203,23 @@ export function element(view, id) {
 
     }
 
-    view._elements[id] = e;
     return e;
 }
 
 
 
 
-// @NOT
-export function group(context, view, id) {
+// @
+export function group(runtime, id) {
 
-    // check if tag exists, if not create new object, else return existing object
+    let g = {
+        _elements: {},
 
-    let tag = context.view._tag;
-    let elements = context.view._element.object;
-
-    let index = tag.object.length;
-
-    tag.id.push(id);
-    tag.object.push({
-        
-        id: id,
-
-        padding(left=null, right=null, top=null, bottom=null) {
-
-            for (let i=0; i < elements.length; i++) {
-
-                let j = elements[i]._tag.id.indexOf(tag.id);
-                if (j === -1) { continue; }
-                
-                if (left !== null) { elements[i]._padding_l = left; }
-                if (right !== null) { elements[i]._padding_r = right; }
-                if (top !== null) { elements[i]._padding_t = top; }
-                if (bottom !== null) { elements[i]._padding_b = bottom; }
-                
-            }
+        add(element) {
+            if (element._id in g._elements) { return; }
+            g._elements[id] = element; 
         },
-    });
-    
-    return tag.object[index];
+        remove(element) {}
+    }
+    return g;
 }
