@@ -107,8 +107,8 @@ export function setup(view) {
         ORIENTATION_SWITCH: false,
 
         viewport: null,
-        root: document.createElement("div"),
-        w: document.documentElement.clientWidth,
+        root: document.createElement("div"), // hold a reference to the first view.element
+        w: document.documentElement.clientWidth, // can be set by root.w(), is auto by default
         h: window.innerHeight,
         scroll_y: window.scrollY,
         format: "",

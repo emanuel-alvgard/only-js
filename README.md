@@ -42,12 +42,12 @@ export default (runtime) => {
     // STYLING
     hero.
         image(runtime.image("hero")).
-        center_x(home.width / 2)
+        center_x(home.root.w() / 2)
 
     b1.
         w(100).
         h(25).
-        r(home.width - 100).
+        r(home.root.w() - 100).
         t(100).
         text("click me").
         font(24, runtime.font("standard"))
