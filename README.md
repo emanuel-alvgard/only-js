@@ -14,12 +14,25 @@ export default (context) => {
     
     let home = context.runtime.view("home")
     let b1 = home.element("b1", "button")
+    let b2 = home.element("b2", "button")
 
     b1.
         w(100).
         h(25).
         r(home.width - 100).
-        t(100)
+        t(100).
+        text("click me")
+
+    b2.
+        w(100).
+        h(25).
+        r(b1.l() - 10)
+        t(100).
+        text("click me")
+
+    if (b1.MOUSE_DOWN || b2.MOUSE_DOWN) {
+        console.log("A button was clicked!")
+    }
 }
 
 ```
