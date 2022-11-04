@@ -25,8 +25,12 @@ export default (runtime) => {
         add(b1).
         add(b2)
 
+    home.root.opacity(0)
+    home.root.anim("load", "opacity", 0, 1, 100)
+
     if (ASSETS > 1) {
         home.show()
+        home.root.anim("load").start()
         ASSETS = 0
     }
 
@@ -37,7 +41,7 @@ export default (runtime) => {
     // STYLING
     hero.
         image(runtime.image("hero")).
-        center_x(home.root.w() / 2)
+        x(home.root.x())
 
     b1.
         w(100).
@@ -54,8 +58,9 @@ export default (runtime) => {
     // SIMILAR TO CSS CLASS
     buttons.
         text("click me").
-        font(24, runtime.font("standard"))
-    
+        font(runtime.font("standard")).
+        font_size(24).
+        font_color(50,50,50)
 
     if (b1.MOUSE_DOWN || b2.MOUSE_DOWN) { console.log("A button was clicked!") }
 }
