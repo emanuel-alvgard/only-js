@@ -43,13 +43,13 @@ export default (runtime) => {
         w(100).
         h(25).
         r(home.root.w() - 100).
-        t(100).
+        t(100)
 
     b2.
         w(100).
         h(25).
         r(b1.l() - 10)
-        t(100).
+        t(100)
 
     // SIMILAR TO CSS CLASS
     buttons.
