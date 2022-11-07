@@ -26,21 +26,21 @@ export default (runtime) => {
         add(b2)
 
     home.root.opacity(0)
-    home.root.anim("load", "opacity", 0, 1, 100)
+    let loaded = home.root.anim("load", "opacity", 0, 1, 100, quad_curve(0.0, 0.0, 1.0, 3.0))
 
     if (ASSETS > 1) {
         home.show()
-        home.root.anim("load").start()
+        loaded.start()
         ASSETS = 0
     }
 
     // LOADING ASSETS
-    runtime.image("hero", "/public/assets/hero.svg", (result) => { ASSETS ++ })
-    runtime.font("standard", "/public/assets/font.woff2", (result) => { ASSETS ++ })
+    let hero_img = runtime.image("hero", "/public/assets/hero.svg", (result) => { ASSETS ++ })
+    let font_std = runtime.font("standard", "/public/assets/font.woff2", (result) => { ASSETS ++ })
 
     // STYLING
     hero.
-        image(runtime.image("hero")).
+        image(hero_img).
         x(home.root.x())
 
     b1.
@@ -58,7 +58,7 @@ export default (runtime) => {
     // SIMILAR TO CSS CLASS
     buttons.
         text("click me").
-        font(runtime.font("standard")).
+        font(font_std).
         font_size(24).
         font_color(50,50,50)
 
