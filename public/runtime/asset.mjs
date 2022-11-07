@@ -1,4 +1,4 @@
-// @DONE
+// split into separate functions
 async function asset(url) {
 
     // check url file type to determine which action to take when resource gets fetched.
@@ -26,8 +26,14 @@ async function asset(url) {
     return request.response;
 }
 
+// @
+async function image() {
 
-// move this into asset()
+
+}
+
+
+// @
 async function font(id, asset) {
     
     let f = new FontFace(id, asset);
