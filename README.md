@@ -10,6 +10,7 @@ it has passed it's most experimental stage.
 ------
 ```javascript
 
+// COMPONENT
 let ASSETS = 0
 
 export default (runtime) => {

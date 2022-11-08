@@ -11,10 +11,10 @@ function _collect(runtime) {
 
 // @DONE
 function _update(runtime) {
-    let ids = Object.keys(runtime._systems);
+    let ids = Object.keys(runtime._components);
     for (let i=0; i < ids.length; i++) {
         let id = ids[i];
-        runtime._systems[id]();
+        runtime._components[id]();
     }
 }
 
@@ -42,7 +42,7 @@ export function setup(context) {
         time: performance.now(),
         delta: 0.0,
         _views: {},
-        _systems: {},
+        _components: {},
 
         // INTERFACE
         view(id, api) {
@@ -61,11 +61,11 @@ export function setup(context) {
             return view;
         },
 
-        system(id, func) {
+        component(id, func) {
             
-            if (id in runtime._systems) { return runtime._systems[id]; }
+            if (id in runtime._components) { return runtime._components[id]; }
             
-            runtime._systems[id] = func;
+            runtime._components[id] = func;
             return;
         },
 
