@@ -22,21 +22,18 @@ let command_app = "";
 let command_chrome = "";
 
 if (process.platform === "win32") {
-    command_db = "cd ." + config.db.path + " & start cmd.exe /k npm run directus";
     command_app = "cd ." + config.app.path + " & start cmd.exe /k node app.js " + mode;
     command_chrome = '"C:/Program Files/Google/Chrome/Application/chrome.exe" "http://localhost:' + config.app.port + '"';
 }
 
 // @NOT /k to terminal
 else if (process.platform === "darwin") {
-    command_db = "cd ." + config.db.path + " ; npm run directus";
     command_app = "cd ." + config.app.path + " ; node app.js " + mode;
     command_chrome = 'open -na "Google Chrome" "http://localhost:' + config.app.port  + '"';
 }
 
 // @NOT /k to terminal
 else if (process.platform === "linux") {
-    command_db = "cd ." + config.db.path + " ; npm run directus";
     command_app = "cd ." + config.app.path + " ; node app.js " + mode;
 }
 
