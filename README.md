@@ -21,9 +21,7 @@ export default (runtime) => {
     let b2 = home.element("b2", "button")
     let buttons = home.group("buttons")
     
-    buttons.
-        add(b1).
-        add(b2)
+    let buttons = [b1, b2]
 
     home.root.opacity(0)
     let loaded = home.root.anim("load", "opacity", 0, 1, 100, quad_curve(0.0, 0.0, 1.0, 3.0))
@@ -56,11 +54,13 @@ export default (runtime) => {
         t(100)
 
     // SIMILAR TO CSS CLASS
-    buttons.
-        text("click me").
-        font(font_std).
-        font_size(24).
-        font_color(50,50,50)
+    buttons.forEach((button) => {
+        button.
+            text("click me").
+            font(font_std).
+            font_size(24).
+            font_color(50,50,50)
+    })
 
     if (b1.MOUSE_DOWN || b2.MOUSE_DOWN) { console.log("A button was clicked!") }
 }

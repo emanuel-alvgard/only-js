@@ -226,21 +226,3 @@ export function element(runtime, id) {
 
     return e;
 }
-
-
-
-
-// @
-export function group(runtime, id) {
-
-    let g = {
-        _elements: {},
-
-        add(element) {
-            if (element._id in g._elements) { return; }
-            g._elements[id] = element; 
-        },
-        remove(element) {}
-    }
-    return g;
-}

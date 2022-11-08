@@ -120,7 +120,6 @@ export function setup(view) {
 
         _virtual: {},
         _real: {},
-        _groups: {},
 
         // @HERE
         virtual() {
@@ -150,11 +149,6 @@ export function setup(view) {
         view.target(id, type, virtual);
         return virtual;
 
-        },
-
-        group() {
-            if (id in view._tags) { return view._tags[id]; } 
-            return view_module.tag(context, view, id); 
         },
 
         collect() { _collect(view); },
