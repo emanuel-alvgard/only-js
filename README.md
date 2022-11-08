@@ -1,9 +1,22 @@
-# only.js
+# only.js (ALPHA)
+
+JavaScript only web framework.
 
 **Disclaimers**
 ------
 + This project is currently being developed by a single person and will continue to be so until
-it has passed it's most experimental stage.
+it has passed it's most experimental stage. To contribute one can read the code and submit issues. Help with
+automated testing, documentation etc. will probably be needed in the near future.
+
+**Features**
+------
++ Small runtime! 10KB (minify & gzip)
++ Only (2) dependencies: Node.js & ESBuild
++ Very low amount of garbage collection
++ Builtin animations
++ No HTML or CSS, only JS structure & styling
++ Simple progressive hydration
++ Convenient asset loading
 
 **Examples**
 ------
@@ -70,15 +83,6 @@ export default (runtime) => {
 }
 
 ```
-**Features**
-------
-+ Small runtime! 10KB (minify & gzip)
-+ Only (2) dependencies: Node.js & ESBuild
-+ Very low amount of garbage collection
-+ Builtin animations
-+ No HTML or CSS, only JS structure & styling
-+ Simple progressive hydration
-+ Convenient asset loading
 
 **Vision**
 ------
