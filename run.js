@@ -17,10 +17,16 @@ if (mode !== "install" && mode !== "dev" && mode !== "live" && mode !== "build")
 
 if (mode === "build") {
     esbuild.build({
+        loader: { 
+            ".js": "js",
+            ".mjs": "js" 
+        },
         entryPoints: ["./src/client/app.mjs"],
-        bundle: false,
+        bundle: true,
         minify: true,
         outdir: "./build",
+        write: true,
+        allowOverwrite: true,
     })
 }
 

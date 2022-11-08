@@ -38,7 +38,7 @@ function _cube(p0, p1, p2, p3, i) {
 // button.anim("1").update();
 // button.anim("1").remove();
 
-function anim(runtime, element, id, property, start, end, time, delay, curve, event) {
+export function anim(runtime, element, id, property, start, end, time, delay, curve, event) {
 
     let a = {
 
@@ -142,7 +142,7 @@ function anim(runtime, element, id, property, start, end, time, delay, curve, ev
 
 
 
-// @TEST
+/* @TEST
 let e = document.createElement("div");
 e.style.position = "absolute";
 e.style.backgroundColor = "black";
@@ -183,3 +183,5 @@ function test() {
 }
 
 test();
+
+*/

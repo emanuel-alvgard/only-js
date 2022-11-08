@@ -1,5 +1,4 @@
-# only.js 
-Data Oriented Web Framework.
+# only.js
 
 **Disclaimers**
 ------
@@ -69,12 +68,8 @@ export default (runtime) => {
 ```
 **Features**
 ------
-+ Lightweight runtime (10KB, minify + gzip)
-+ Superb runtime performance
-+ Pure JavaScript (no template syntax)
-+ Zero dependencies
++ Only (2) dependencies: Node.js and ESBuild
 + Very low amount of garbage collection
-+ Virtual DOM with a flat hierarchy
 
 **Vision**
 ------

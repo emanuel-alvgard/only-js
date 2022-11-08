@@ -1,4 +1,4 @@
-import * as animation from "animation.mjs";
+import * as animation from "./animation.mjs";
 
 // @DONE
 function _min(object, property, value=null) {
