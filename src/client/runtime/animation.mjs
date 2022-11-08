@@ -38,6 +38,7 @@ function _cube(p0, p1, p2, p3, i) {
 // button.anim("1").update();
 // button.anim("1").remove();
 
+// @NOT
 export function anim(runtime, element, id, property, start, end, time, delay, curve, event) {
 
     let a = {
@@ -88,7 +89,7 @@ export function anim(runtime, element, id, property, start, end, time, delay, cu
             if (a._delay_timer >= a._delay) { return; }
         
             // DONE
-            if (a.run_timer >= a._time) { 
+            if (a._run_timer >= a._time) { 
                 element[property](a._end);
                 if (a._event !== null) {
                     element[a._event] = true;
@@ -123,65 +124,3 @@ export function anim(runtime, element, id, property, start, end, time, delay, cu
 
     return a;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* @TEST
-let e = document.createElement("div");
-e.style.position = "absolute";
-e.style.backgroundColor = "black";
-e.style.width = "100px";
-e.style.height = "100px";
-document.body.append(e);
-
-let e_left = 0.0;
-
-const tot_time = 1000;
-let distance = 100.0
-let speed = (distance / tot_time) * 1000;
-
-let delta = 0.0;
-let prev_time = performance.now();
-
-let timer = 0.0;
-
-
-function test() {
-
-    //if (counter === 10) { return; }
-
-    let time = performance.now();
-    delta = (time - prev_time) / 1000;
-    timer += (time - prev_time)
-    prev_time = time;
-
-    if (timer >= tot_time) { l(e_left); 
-        e_left = distance;
-        e.style.transform = "translate("+ e_left + "px,0px)";
-        return; 
-    }
-    e_left += (speed * _cube(0.0, 0.0, 3.5, 0.5, _clamp(timer / tot_time, 0, 1))) * delta; 
-    e.style.transform = "translate("+ e_left + "px,0px)";
-
-    window.requestAnimationFrame(test);
-}
-
-test();
-
-*/

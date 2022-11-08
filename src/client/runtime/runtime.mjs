@@ -52,7 +52,7 @@ export function setup(context) {
             let view;
 
             // RENDERING API
-            if (api === "dom") { dom.setup(view); }
+            if (api === "dom") { dom.setup(runtime, view); }
             else if (api === "canvas") {}
             else if (api === "webgl") {}
             else if (api === "webgpu") {}
@@ -64,7 +64,6 @@ export function setup(context) {
         component(id, func) {
             
             if (id in runtime._components) { return runtime._components[id]; }
-            
             runtime._components[id] = func;
             return;
         },
@@ -82,6 +81,5 @@ export function setup(context) {
             window.requestAnimationFrame(() => { run(); });
         }
     }
-
     return runtime;
 }

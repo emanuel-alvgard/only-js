@@ -22,7 +22,7 @@ if (mode === "build") {
             ".mjs": "js" 
         },
         entryPoints: ["./src/client/app.mjs"],
-        bundle: true,
+        bundle: false,
         minify: true,
         outdir: "./build",
         write: true,

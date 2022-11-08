@@ -100,7 +100,6 @@ export function element(runtime, id) {
         t(v=null, min=null, max=null) { return _number(e, "_t", v, min, max) },
 
         r(v=null, min=null, max=null) {
-            _number();
             if (r === e._l + e.w()) { return e; } 
             if (r !== null) { e._l = r - e.w(); e.UPDATE = true; return e; }
             return e._l + e.w(); 
@@ -223,6 +222,5 @@ export function element(runtime, id) {
         }
 
     }
-
     return e;
 }

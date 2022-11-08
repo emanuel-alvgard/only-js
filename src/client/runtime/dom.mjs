@@ -100,7 +100,7 @@ function _update(view) {
 
 
 // @HERE
-export function setup(view) {
+export function setup(runtime, view) {
 
     view = {
 
@@ -111,10 +111,7 @@ export function setup(view) {
         viewport: null,
         time: performance.now(),
         delta: 0.0,
-        root: document.createElement("div"), // hold a reference to the first view.element
-        w: document.documentElement.clientWidth, // can be set by root.w(), is auto by default
-        h: window.innerHeight,
-        scroll_y: window.scrollY,
+        root: null,
         format: "",
         orientation: "",
 
@@ -126,12 +123,14 @@ export function setup(view) {
             virtual.element();
         },
         
-        real (id, type, virtual) {
+        // @NOT @HERE
+        real(id, type, virtual) {
         
             let element = document.createElement(type);
     
             element.style.position = "absolute";
             element.style.margin = "0px";
+            element.style.padding = "0px";
     
             element.onmouseover = () => { virtual.mouse_hover = true; }
             element.onmouseleave = () => {  virtual.mouse_hover = false; }
@@ -142,23 +141,26 @@ export function setup(view) {
             view.root.append(element);
         },
 
-        element() {
+        // @DONE
+        element(id, type="div") {
 
             if (id in view._elements) { return view._elements[id]; }
-        let virtual = view_module.element(view, id);
-        view.target(id, type, virtual);
-        return virtual;
-
+            let virtual = virtual.element(runtime, id);
+            view.real(id, type, virtual);
+            return virtual;
         },
 
+        // @DONE
         collect() { _collect(view); },
 
+        // @DONE
         update() { _update(view); },
 
         show() {},
         hide() {}
     }
 
+    view.root = view.element("root")
     document.body.append(view.root);
 
     return;
