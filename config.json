@@ -6,7 +6,7 @@
         "token": ""
     },
     "app": {
-        "path": "/private",
+        "path": "/src/server",
         "port": 3000,
         "domain": ""
     }
