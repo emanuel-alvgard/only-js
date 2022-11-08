@@ -14,8 +14,9 @@ let ASSETS = 0
 
 export default (runtime) => {
     
-    // CREATING VIEW, ELEMENTS AND GROUPS
-    let home = runtime.view("home").hide()
+    // CREATING VIEW & ELEMENTS
+    let home = runtime.view("home")
+    let root = home.root
     let hero = home.element("hero", "img")
     let b1 = home.element("b1", "button")
     let b2 = home.element("b2", "button")
@@ -26,8 +27,11 @@ export default (runtime) => {
     home.root.opacity(0)
     let loaded = home.root.anim("load", "opacity", 0, 1, 100, quad_curve(0.0, 0.0, 1.0, 3.0))
 
+    // SHOW VIEW WHEN ASSETS LOADED
+    if (home.SETUP) { root.hide() }
+    
     if (ASSETS > 1) {
-        home.show()
+        root.show()
         loaded.start()
         ASSETS = 0
     }
@@ -39,12 +43,12 @@ export default (runtime) => {
     // STYLING
     hero.
         image(hero_img).
-        x(home.root.x())
+        x(root.x())
 
     b1.
         w(100).
         h(25).
-        r(home.root.w() - 100).
+        r(root.w() - 100).
         t(100)
 
     b2.
@@ -68,11 +72,15 @@ export default (runtime) => {
 ```
 **Features**
 ------
-+ Only (2) dependencies: Node.js and ESBuild
++ Small runtime! 10KB (minify & gzip)
++ Only (2) dependencies: Node.js & ESBuild
 + Very low amount of garbage collection
++ Builtin animations
++ No HTML or CSS, only JS structure & styling
++ Simple progressive hydration
++ Convenient asset loading
 
 **Vision**
 ------
-*To create a data oriented web framework 
-with as little performance bottlenecks as possible, where 
-JavaScript, HTML and CSS are unified into a coherent and readable interface.*
+*To create web framework with as little performance bottlenecks as possible, where 
+JavaScript, HTML and CSS are unified into a coherent and developer friendly interface.*

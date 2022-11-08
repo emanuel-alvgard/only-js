@@ -1,11 +1,11 @@
 export default (runtime) => {
 
-    let view = runtime.view("view")
+    let root = runtime.view("view").root
     let bt = view.element("bt", "button")
 
     bt.
-        x(view.root.x()).
-        y(view.root.y()).
+        x(root.x()).
+        y(root.y()).
         text("click me")
 }
 

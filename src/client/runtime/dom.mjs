@@ -118,13 +118,16 @@ export function setup(runtime, view) {
         _virtual: {},
         _real: {},
 
-        // @HERE
-        virtual() {
-            virtual.element();
+        // @DONE
+        virtual(id) {
+            if (id in view._virtual) { return view._virtual[id]; }
+            return virtual.element(runtime, id);
         },
         
-        // @NOT @HERE
+        // @HERE
         real(id, type, virtual) {
+
+            if (id in view._real) { return view._real[id]; }
         
             let element = document.createElement(type);
     
@@ -132,6 +135,7 @@ export function setup(runtime, view) {
             element.style.margin = "0px";
             element.style.padding = "0px";
     
+            // @CHECK if this should be here?? maybe swap out for custom intersection system
             element.onmouseover = () => { virtual.mouse_hover = true; }
             element.onmouseleave = () => {  virtual.mouse_hover = false; }
             element.onmousedown = () => { virtual.mouse_down = true; }
@@ -143,8 +147,6 @@ export function setup(runtime, view) {
 
         // @DONE
         element(id, type="div") {
-
-            if (id in view._elements) { return view._elements[id]; }
             let virtual = virtual.element(runtime, id);
             view.real(id, type, virtual);
             return virtual;
