@@ -10,6 +10,7 @@ automated testing, documentation etc. will probably be needed in the near future
 
 **Features**
 ------
++ NO BUILD STEP!
 + Small runtime! 10KB (minify & gzip)
 + Only (2) dependencies: Node.js & ESBuild
 + Very low amount of garbage collection
