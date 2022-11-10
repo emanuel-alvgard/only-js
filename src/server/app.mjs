@@ -50,7 +50,13 @@ function run() {
     
     let router = http.router(context, routes, triggers);
     http.server(context.config.app.port, router);
-} 
+}
+
+// build step (ESBuild) should be done here. all .mjs files in ../client
+// this app watches all .mjs files and rebuilds on modification
+// gets minified and put in ../build/scripts then they are
+// read into memory, gzipped (zlib.gzip) and cached in the context.
+// the router may need to function a bit differently than it is now 
 
 run();
 

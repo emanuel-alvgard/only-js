@@ -1,85 +1,107 @@
 import * as dom from "./dom.mjs";
 
 // @DONE
-function _collect(runtime) {
-    let ids = Object.keys(runtime._views);
+function _collect(context) {
+    let ids = Object.keys(context._views);
     for (let i=0; i < ids.length; i++) {
         let id = ids[i];
-        runtime._views[id].collect();
+        context._views[id].collect();
     }
 }
 
 // @DONE
-function _update(runtime) {
-    let ids = Object.keys(runtime._components);
+function _update(context) {
+    let ids = Object.keys(context._components);
     for (let i=0; i < ids.length; i++) {
         let id = ids[i];
-        runtime._components[id]();
+        context._components[id]();
     }
 }
 
 // @DONE
-function _render(runtime) {
-    let ids = Object.keys(runtime._views);
+function _render(context) {
+    let ids = Object.keys(context._views);
     for (let i=0; i < ids.length; i++) {
         let id = ids[i];
-        runtime._views[id].update();
+        context._views[id].update();
     }
 }
 
 
 
-// @DONE
-export function setup(context) {
+const _context = {
+    
+    data: {},
+    
+    // INTERFACE
+    view(id, api) {
 
-    const runtime = {
+        if (id in data._views) { return data._views[id]; }
+        
+        let view;
+
+        // RENDERING API
+        if (api === "dom") { dom.setup(data, view); }
+        else if (api === "canvas") {}
+        else if (api === "webgl") {}
+        else if (api === "webgpu") {}
+        
+        data._views[id] = view;
+        return view;
+    },
+    image() {},
+    font() {},
+    json() {}
+}
+
+
+
+// @DONE
+export function setup() {
+
+    const context = {
     
         // EVENTS
         SETUP: true,
 
         // DATA
-        context: context,
         time: performance.now(),
         delta: 0.0,
+
+        _images: {},
+        _fonts: {},
         _views: {},
         _components: {},
 
-        // INTERFACE
-        view(id, api) {
-
-            if (id in runtime._views) { return runtime._views[id]; }
-            
-            let view;
-
-            // RENDERING API
-            if (api === "dom") { dom.setup(runtime, view); }
-            else if (api === "canvas") {}
-            else if (api === "webgl") {}
-            else if (api === "webgpu") {}
-            
-            runtime._views[id] = view;
-            return view;
-        },
-
         component(id, func) {
             
-            if (id in runtime._components) { return runtime._components[id]; }
-            runtime._components[id] = func;
+            if (id in context._components) { return context._components[id]; }
+            context._components[id] = func;
             return;
         },
 
-        run() {
+        run() { //@EDIT to start() & stop()
 
             let time = performance.now();
-            runtime.delta = (time - runtime.time) / 1000;
-            runtime.time = time;
+            context.delta = (time - context.time) / 1000;
+            context.time = time;
 
-            _collect(runtime);
-            _update(runtime);
-            _render(runtime);
+            _collect(context);
+            _update(context);
+            _render(context);
         
             window.requestAnimationFrame(() => { run(); });
         }
     }
-    return runtime;
+    return context;
+}
+
+export function use(context) {
+
+    _context.data._images = context._images
+    _context.data._fonts = context._fonts
+    _context.data._views = context._views
+    _context.data._components = context._components
+
+    return _context
 }

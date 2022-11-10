@@ -1,11 +1,9 @@
 import { setup } from "./runtime/runtime.mjs";
-import test from "./components/test.mjs";
+import example from "./components/example.mjs";
 
-const context = {}
+const context = setup();
 
-const runtime = setup(context);
+context.component("example", example);
 
-runtime.component("test", test);
-
-runtime.run();
+context.run();
 

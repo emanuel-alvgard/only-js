@@ -99,7 +99,7 @@ function _update(view) {
 
 
 
-// @HERE
+// @HERE @EDIT must return a new view instead of mutating incoming
 export function setup(runtime, view) {
 
     view = {
