@@ -1,17 +1,11 @@
-import { use } from "../runtime/runtime.mjs"
+export default (app) => {
 
-export default (context) => {
+    const home = app.view("home")
+    let b = home.element("b", "button")
 
-    const app = use(context)
-
-    app.view()
-
-    let view = app.view("view")
-    let bt = view.element("bt", "button")
-
-    bt.
-        x(view.root.x()).
-        y(view.root.y()).
+    b.
+        x(home.root.x()).
+        y(home.root.y()).
         text("click me")
-}
 
+}

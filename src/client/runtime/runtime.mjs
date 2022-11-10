@@ -28,20 +28,19 @@ function _render(context) {
 }
 
 
-
 const _context = {
     
     data: {},
     
     // INTERFACE
-    view(id, api) {
+    view(id, api="dom") {
 
-        if (id in data._views) { return data._views[id]; }
-        
         let view;
 
+        //if (id in data._views) { view = data._views[id]; }
+
         // RENDERING API
-        if (api === "dom") { dom.setup(data, view); }
+        if (api === "dom") { view = dom.setup(data); }
         else if (api === "canvas") {}
         else if (api === "webgl") {}
         else if (api === "webgpu") {}

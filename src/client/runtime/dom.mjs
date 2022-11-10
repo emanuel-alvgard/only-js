@@ -100,9 +100,9 @@ function _update(view) {
 
 
 // @HERE @EDIT must return a new view instead of mutating incoming
-export function setup(runtime, view) {
+export function setup(context) {
 
-    view = {
+    const view = {
 
         SETUP: true,
         FORMAT_SWITCH: false,
@@ -121,7 +121,7 @@ export function setup(runtime, view) {
         // @DONE
         virtual(id) {
             if (id in view._virtual) { return view._virtual[id]; }
-            return virtual.element(runtime, id);
+            return virtual.element(context, id);
         },
         
         // @HERE
@@ -147,7 +147,7 @@ export function setup(runtime, view) {
 
         // @DONE
         element(id, type="div") {
-            let virtual = virtual.element(runtime, id);
+            let virtual = virtual.element(context, id);
             view.real(id, type, virtual);
             return virtual;
         },
@@ -165,6 +165,6 @@ export function setup(runtime, view) {
     view.root = view.element("root")
     document.body.append(view.root);
 
-    return;
+    return view
 }
 

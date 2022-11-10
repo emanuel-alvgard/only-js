@@ -9,25 +9,9 @@ const esbuild = require("./src/client/node_modules/esbuild");
 
 // TERMINAL ARGS
 let mode = process.argv[2];
-if (mode !== "install" && mode !== "dev" && mode !== "live" && mode !== "build") { 
-    console.log("Please enter execution mode: (install, dev, live, build)."); 
+if (mode !== "install" && mode !== "dev" && mode !== "live") { 
+    console.log("Please enter execution mode: (install, dev, live)."); 
     process.exit(); 
-}
-
-
-if (mode === "build") {
-    esbuild.build({
-        loader: { 
-            ".js": "js",
-            ".mjs": "js" 
-        },
-        entryPoints: ["./src/client/app.mjs"],
-        bundle: false,
-        minify: true,
-        outdir: "./build",
-        write: true,
-        allowOverwrite: true,
-    })
 }
 
 
