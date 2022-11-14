@@ -6,4 +6,3 @@ const context = setup();
 context.component("example", example);
 
 context.run();
-

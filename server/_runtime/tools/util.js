@@ -1,5 +1,5 @@
 // @DONE
-export function digit(c) { // digit("1");
+function digit(c) { // digit("1");
     let i = c.charCodeAt(0);
     if (i < 48) { return false; }
     if (i > 57) { return false; }
@@ -7,7 +7,7 @@ export function digit(c) { // digit("1");
 }
 
 // @DONE
-export function lower(c) { // lower("a");
+function lower(c) { // lower("a");
     let i = c.charCodeAt(0);
     if (i < 97) { return false; }
     if (i > 122) { return false; }
@@ -15,7 +15,7 @@ export function lower(c) { // lower("a");
 }
 
 // @DONE
-export function upper(c) { // upper("A");
+function upper(c) { // upper("A");
     let i = c.charCodeAt(0);
     if (i < 65) { return false; }
     if (i > 90) { return false; }
@@ -23,13 +23,13 @@ export function upper(c) { // upper("A");
 }
 
 // @DONE
-export function symbol(c, s) { // symbol("&", ["&", ":", "/"]);
+function symbol(c, s) { // symbol("&", ["&", ":", "/"]);
     if (s.includes(c)) { return true; }
     return false;
 }
 
 // @DONE
-export function string(s, t, p={position:0,previous:0}) { // string("simple test", "simple", {position:0, previous:0});
+function string(s, t, p={position:0,previous:0}) { // string("simple test", "simple", {position:0, previous:0});
 
     let i = p.position;
     let j = 0;
@@ -47,7 +47,7 @@ export function string(s, t, p={position:0,previous:0}) { // string("simple test
 }
 
 // @DONE
-export function longest(a) { // longest(["short", "longest"]);
+function longest(a) { // longest(["short", "longest"]);
     let l = [];
     for (let i=0; i < a.length; i++) {
         l.push(a[i].length);
@@ -56,7 +56,7 @@ export function longest(a) { // longest(["short", "longest"]);
 }
 
 // @DONE
-export function parts(string, delimiter) {
+function parts(string, delimiter) {
     let result = [];
     let nested = "";
     for (let i=0; i < string.length; i++) {
@@ -70,7 +70,7 @@ export function parts(string, delimiter) {
 }
 
 // @DONE
-export function match(input, strings, delimiter) {
+function match(input, strings, delimiter) {
     
     // EXACT
     for (let i=0; i < strings.length; i++) {
@@ -113,7 +113,7 @@ export function match(input, strings, delimiter) {
 
 
 // @DONE
-export function value_i(s, p={position:0,previous:0}) { 
+function value_i(s, p={position:0,previous:0}) { 
     
     let result = "";
     let i = p.position;
@@ -134,7 +134,7 @@ export function value_i(s, p={position:0,previous:0}) {
 }
 
 // @DONE
-export function value_f(s, p={position:0,previous:0}) {
+function value_f(s, p={position:0,previous:0}) {
     
     let result = "";
     let i = p.position;
@@ -166,7 +166,7 @@ export function value_f(s, p={position:0,previous:0}) {
 }
 
 // @DONE
-export function value_label(s, p={position:0,previous:0}) {
+function value_label(s, p={position:0,previous:0}) {
     
     let result = "";
     let i = p.position;
@@ -188,7 +188,7 @@ export function value_label(s, p={position:0,previous:0}) {
 }
 
 // @DONE
-export function value_str_fmt(s, p={position:0,previous:0}) {
+function value_str_fmt(s, p={position:0,previous:0}) {
     
     let result = "";
     let i = p.position;
@@ -229,7 +229,7 @@ export function value_str_fmt(s, p={position:0,previous:0}) {
 
 
 // @DONE
-export function q_create(l, v) {
+function q_create(l, v) {
 
     let q = {
         data: [],
@@ -253,7 +253,7 @@ export function q_create(l, v) {
 
 
 // @DONE
-export function q_add(v, q) {
+function q_add(v, q) {
 
     if (q.count >= q.data.length) { return -1; }
 
@@ -267,7 +267,7 @@ export function q_add(v, q) {
 }
 
 // @DONE
-export function q_remove(q) {
+function q_remove(q) {
 
     if (q.count === 0) { return -1; }
 
@@ -282,12 +282,12 @@ export function q_remove(q) {
 }
 
 // @DONE
-export function sleep(ms) {
+function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 // @DONE
-export async function wait(task, error, condition=(t)=>{}) {
+async function wait(task, error, condition=(t)=>{}) {
 
     // result = { done: 0, fail: 0}
 
@@ -311,17 +311,17 @@ export async function wait(task, error, condition=(t)=>{}) {
 }
 
 // @DONE
-export function filetype(s) {
+function filetype(s) {
     for (let i = (s.length -1); i > 0; i--) {
         if (s[i] === ".") {
-            return s.substring(i+1, s.length);
+            return s.substring(i, s.length);
         }
     }
     return "unknown";
 }
 
 // @DONE
-export function format_url(input) {
+function format_url(input) {
 
     let result = "/";
 
@@ -344,3 +344,29 @@ export function format_url(input) {
     }
     return result;
 }
+
+
+
+
+exports.digit = digit;
+exports.lower = lower;
+exports.upper = upper;
+exports.symbol = symbol;
+exports.string = string;
+exports.longest = longest;
+exports.parts = parts;
+exports.match = match;
+
+exports.value_label = value_label;
+exports.value_i = value_i;
+exports.value_f = value_f;
+exports.value_str_fmt = value_str_fmt;
+
+exports.filetype = filetype;
+exports.q_create = q_create;
+exports.q_add = q_add;
+exports.q_remove = q_remove;
+
+exports.sleep = sleep;
+exports.wait = wait;
+exports.format_url = format_url;

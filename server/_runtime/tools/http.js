@@ -1,11 +1,11 @@
-import * as http_builtin from "http";
-import * as util from "./util.mjs";
+const http_builtin = require("http");
+const util = require("./util.js");
 
 let error = new Error("");
 let message = "FAIL: http.";
 
 // @DONE
-export function setup() {
+function setup() {
 
     let data = {
 
@@ -21,7 +21,7 @@ export function setup() {
 }
 
 // @DONE
-export async function get(urls, result) {
+async function get(urls, result) {
     
     for (let i = 0; i < urls.length; i++) {
 
@@ -63,7 +63,7 @@ export async function get(urls, result) {
 }
 
 // @DONE
-export async function set(method, type, messages, urls, result) {
+async function set(method, type, messages, urls, result) {
 
     for (let i = 0; i < urls.length; i++) {
 
@@ -106,7 +106,7 @@ export async function set(method, type, messages, urls, result) {
 }
 
 // @DONE
-export function parse(result, func) {
+function parse(result, func) {
 
     for (let i = 0; i < result.raw.length; i++) {
         Object.assign(result.parsed[i], func(result.raw[i].string));
@@ -116,7 +116,7 @@ export function parse(result, func) {
 }
 
 // @DONE
-export function server(port, router) {
+function server(port, router) {
 
     let result = http_builtin.createServer(router);
     result.listen(port);
@@ -125,7 +125,7 @@ export function server(port, router) {
 }
 
 // @DONE
-export function router(context, routes=[], triggers=[]) {
+function router(context, routes=[], triggers=[]) {
     
     async function request(req, res) {
         
@@ -156,3 +156,11 @@ export function router(context, routes=[], triggers=[]) {
     }
     return request;
 }
+
+// @EXPORT
+exports.setup = setup;
+exports.get = get;
+exports.set = set;
+exports.parse = parse;
+exports.server = server;
+exports.router = router;

@@ -1,12 +1,8 @@
-// BUILTIN
-import * as fs_builtin from "fs";
-
-// TOOLS
-import * as http from "../tools/http.mjs";
-import * as structure from "../tools/structure.mjs";
+const fs_builtin = require("fs");
+const util = require("../_runtime/tools/util.js");
 
 // @DONE
-export default async (context, incoming) => { // @ADD config
+exports.component = async (context, incoming) => { // @ADD config
 
     const types = {
         mjs: "text/javascript",

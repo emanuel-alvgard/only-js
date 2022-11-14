@@ -1,12 +1,9 @@
-// BUILTIN
-import * as fs_builtin from "fs";
-
-// TOOLS
-import * as http from "../tools/http.mjs";
-import * as structure from "../tools/structure.mjs";
+const http = require("../_runtime/tools/http.js");
+const util = require("../_runtime/tools/util.js");
+const fs_builtin = require("fs");
 
 // @DONE
-export default async (context, incoming) => {
+exports.component = async (context, incoming) => {
 
     // make explicit else 404 page
     incoming.result = await fs_builtin.promises.readFile("../public/app.html");
