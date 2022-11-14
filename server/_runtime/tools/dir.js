@@ -1,6 +1,7 @@
 let fs = require('fs');
 
 // @DONE
+// @MOVE into util
 function array_assign(source, target) {
     target.splice(0, target.length);
     for (let i = 0; i < source.length; i++) {
