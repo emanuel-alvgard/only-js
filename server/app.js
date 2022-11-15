@@ -56,7 +56,44 @@ function run() {
     http.server(context.config.app.port, router);
 }
 
+
+
+
+
+
+
+
+
+
+
+
 // HOT RELOADING (dev)
+let html_index = fs_builtin.readFileSync("../build/index.html").toString()
+
+function string(s, t, p={position:0,previous:0}) { // string("simple test", "simple", {position:0, previous:0});
+
+    let i = p.position;
+    let j = 0;
+    
+    while (j < t.length) {
+        if (i >= s.length) { return false; }
+        if (s[i] !== t[j]) { return false; }
+        i ++; j ++;
+    }
+
+    p.previous = p.position; 
+    p.position = i;
+
+    return true;
+}
+
+let pointer = { position:0, previous:0 }
+while (pointer.position < html_index.length) {
+    if (string(html_index, "</body>", pointer)) { console.log(pointer.position); break; }
+    pointer.position ++
+}
+
+
 // inject script tag in index.html that send xhr request every 100ms 
 // when build step is completed server responds with a reload on where
 // script calls location.reload()

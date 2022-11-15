@@ -6,6 +6,6 @@ export default (app) => {
     b.
         x(home.root.x()).
         y(home.root.y()).
-        text("click me")
+        text("click me!")
 
 }
