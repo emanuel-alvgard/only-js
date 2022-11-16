@@ -57,14 +57,18 @@ function run() {
 }
 
 
+// RUNTIME SUPPORT FOR API AUTH
 
 
+// DATABASE (key:value store a bit like redis)
+// JSON based and directory structured.
+// always caches index.json from all directories
+// always caches database structure and fills
+// the cache with as many files as possible within the set cache limit
+// on a write to a certain file that file is flushed from the cache
 
 
-
-
-
-
+// SIMPLE SOLUTION FOR SETTING UP WEBSOCKETS
 
 
 // HOT RELOADING (dev)
