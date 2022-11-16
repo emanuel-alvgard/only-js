@@ -102,7 +102,8 @@ while (pointer.position < html_index.length) {
 // inject base64 img tag in index.html
 
 
-
+// JSON COMPRESSION
+// json() api calls are automatically compressed to gzip
 
 
 // BUILD STEP WITH CACHING
