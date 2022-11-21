@@ -1,4 +1,4 @@
-import * as virtual from "./virtual.mjs";
+import * as virtual from "./virtual.js";
 
 // @
 function _collect(view) {

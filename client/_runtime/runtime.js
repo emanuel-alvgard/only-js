@@ -1,4 +1,4 @@
-import * as dom from "./dom.mjs";
+import * as dom from "./dom.js";
 
 // @DONE
 function _collect(context) {
@@ -28,33 +28,6 @@ function _render(context) {
 }
 
 
-const _context = {
-    
-    data: {},
-    
-    // INTERFACE
-    view(id, api="dom") {
-
-        let view;
-
-        //if (id in data._views) { view = data._views[id]; }
-
-        // RENDERING API
-        if (api === "dom") { view = dom.setup(data); }
-        else if (api === "canvas") {}
-        else if (api === "webgl") {}
-        else if (api === "webgpu") {}
-        
-        data._views[id] = view;
-        return view;
-    },
-    image() {},
-    font() {},
-    json() {}
-}
-
-
-
 // @DONE
 export function setup() {
 
@@ -71,6 +44,26 @@ export function setup() {
         _fonts: {},
         _views: {},
         _components: {},
+
+            // INTERFACE
+        view(id, api="dom") {
+
+            let view;
+
+            //if (id in data._views) { view = data._views[id]; }
+
+            // RENDERING API
+            if (api === "dom") { view = dom.setup(data); }
+            else if (api === "canvas") {}
+            else if (api === "webgl") {}
+            else if (api === "webgpu") {}
+            
+            data._views[id] = view;
+            return view;
+        },
+        image() {},
+        font() {},
+        json() {},
 
         component(id, func) {
             
@@ -93,14 +86,4 @@ export function setup() {
         }
     }
     return context;
-}
-
-export function use(context) {
-
-    _context.data._images = context._images
-    _context.data._fonts = context._fonts
-    _context.data._views = context._views
-    _context.data._components = context._components
-
-    return _context
 }

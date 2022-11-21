@@ -126,7 +126,7 @@ function server(port, router) {
 
 // @DONE
 function router(context, routes=[], triggers=[]) {
-    
+
     async function request(req, res) {
         
         let incoming = {

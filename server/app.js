@@ -39,15 +39,15 @@ if (mode === "dev") {
 }
 
 let routes = [
-    file,
-    file,
-    file, 
-    api,
-    page
+    file.component,
+    file.component,
+    file.component, 
+    api.component,
+    page.component
 ]
 
 let triggers = [
-    "/public/",
+    "/build/",
     "/robots.txt",
     "/sitemap.xml",
     "/api",
@@ -123,6 +123,9 @@ routes.unshift(async (context, incoming) => {
     })
 })
 
+let router = http.router(context, routes, triggers);
+http.server(context.config.app.port, router);
+
 
 // inject script tag in index.html that send xhr request every 100ms 
 // when build step is completed server responds with a reload on where
@@ -145,19 +148,16 @@ routes.unshift(async (context, incoming) => {
 // REBUILD / RELOAD
 let cache;
 
-dir.watch("../client", [".mjs"], ["node_modules"], () => {
+dir.watch("../client", [".js"], ["node_modules"], () => {
 
     // REBUILD
     let build = []
-    dir.collect("../client", [".mjs"], ["node_modules"], build);
+    dir.collect("../client", [".js"], ["node_modules"], build);
     
     let start = performance.now()
     
     let minified = esbuild.buildSync({
-        loader: { 
-            ".js": "js",
-            ".mjs": "js" 
-        },
+        loader: { ".js": "js" },
         entryPoints: build,
         bundle: false,
         minify: true,
@@ -167,10 +167,7 @@ dir.watch("../client", [".mjs"], ["node_modules"], () => {
     })
 
     esbuild.buildSync({
-        loader: { 
-            ".js": "js",
-            ".mjs": "js" 
-        },
+        loader: { ".js": "js" },
         entryPoints: build,
         bundle: false,
         minify: true,
@@ -196,9 +193,4 @@ dir.watch("../client", [".mjs"], ["node_modules"], () => {
     context.client_reload = true
 
 });
-
-
-
-let router = http.router(context, routes, triggers);
-http.server(context.config.app.port, router);
 
