@@ -24,37 +24,36 @@ else { console.log("Please enter execution mode: (dev / live)."); process.exit()
 console.log("Server v.1.0.0 (" + platform + ") (" + mode + ")");
 console.log("Type 'help' for avalible commands.");
 
-function run() {
-    
-    let context = {
-        protocol: "https://",
-        config: JSON.parse(fs_builtin.readFileSync("../config.json")),
-    };
 
-    if (mode === "dev") {
-        context.protocol = "http://";
-        context.config.app.domain = "localhost:" + context.config.app.port;
-    }
 
-    let routes = [
-        file,
-        file,
-        file, 
-        api,
-        page
-    ];
-    
-    let triggers = [
-        "/public/",
-        "/robots.txt",
-        "/sitemap.xml",
-        "/api",
-        "/",
-    ]; 
-    
-    let router = http.router(context, routes, triggers);
-    http.server(context.config.app.port, router);
+
+let context = {
+    client_reload: false,
+    protocol: "https://",
+    config: JSON.parse(fs_builtin.readFileSync("../config.json")),
+};
+
+if (mode === "dev") {
+    context.protocol = "http://";
+    context.config.app.domain = "localhost:" + context.config.app.port;
 }
+
+let routes = [
+    file,
+    file,
+    file, 
+    api,
+    page
+]
+
+let triggers = [
+    "/public/",
+    "/robots.txt",
+    "/sitemap.xml",
+    "/api",
+    "/",
+]
+
 
 
 // RUNTIME SUPPORT FOR API AUTH
@@ -71,36 +70,65 @@ function run() {
 // SIMPLE SOLUTION FOR SETTING UP WEBSOCKETS
 
 
-// HOT RELOADING (dev)
+// HOT RELOADING SETUP
 let html_index = fs_builtin.readFileSync("../build/index.html").toString()
-
-function string(s, t, p={position:0,previous:0}) { // string("simple test", "simple", {position:0, previous:0});
-
-    let i = p.position;
-    let j = 0;
-    
-    while (j < t.length) {
-        if (i >= s.length) { return false; }
-        if (s[i] !== t[j]) { return false; }
-        i ++; j ++;
-    }
-
-    p.previous = p.position; 
-    p.position = i;
-
-    return true;
-}
+let reload_script = fs_builtin.readFileSync("./_runtime/client_reload.js").toString()
 
 let pointer = { position:0, previous:0 }
 while (pointer.position < html_index.length) {
-    if (string(html_index, "</body>", pointer)) { console.log(pointer.position); break; }
+    if (util.string(html_index, "</body>", pointer)) { console.log(pointer.position); break; }
     pointer.position ++
 }
+
+let html_start = html_index.substring(0, pointer.previous)
+let html_end = html_index.substring(pointer.previous, html_index.length-1)
+
+let new_html = 
+    html_start +
+    "<script>" + 
+    reload_script + 
+    "</script>" +
+    html_end
+
+let index_route = triggers.indexOf("/")
+if (index_route > -1) { 
+    routes[index_route] = async (context, incoming) => {
+        incoming.result = new_html
+        incoming.response.writeHead(200, {
+            'Content-Length': Buffer.from(incoming.result).length,
+            'Content-Type': "text/html"
+        });
+    }
+}
+
+triggers.unshift("/client_reload")
+routes.unshift(async (context, incoming) => {
+
+    let result = { done: false, fail: false }
+    
+    let i = setInterval(() => {
+        if (context.client_reload) { 
+            context.client_reload = false
+            result.done = true
+            clearInterval(i)
+        }
+        // @ADD check if sockets destroyed and clear interval
+    }, 10);
+
+    await util.wait(result)
+    
+    incoming.response.writeHead(200, {
+        'Content-Length': Buffer.from(incoming.result).length,
+        'Content-Type': "text/html"
+    })
+})
 
 
 // inject script tag in index.html that send xhr request every 100ms 
 // when build step is completed server responds with a reload on where
 // script calls location.reload()
+// reroute index.html to index_dev
+// create route function for reload
 
 // BASE64 LOADING IMAGE
 // inject base64 img tag in index.html
@@ -112,10 +140,14 @@ while (pointer.position < html_index.length) {
 
 // BUILD STEP WITH CACHING
 // @MOVE into _runtime
+
+
+// REBUILD / RELOAD
 let cache;
 
 dir.watch("../client", [".mjs"], ["node_modules"], () => {
 
+    // REBUILD
     let build = []
     dir.collect("../client", [".mjs"], ["node_modules"], build);
     
@@ -160,7 +192,13 @@ dir.watch("../client", [".mjs"], ["node_modules"], () => {
 
     console.log(((performance.now() - start) / 1000) + " ms")
 
+    // RELOAD
+    context.client_reload = true
+
 });
 
-run();
+
+
+let router = http.router(context, routes, triggers);
+http.server(context.config.app.port, router);
 

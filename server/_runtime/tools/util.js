@@ -287,21 +287,19 @@ function sleep(ms) {
 }
 
 // @DONE
-async function wait(task, error, condition=(t)=>{}) {
-
-    // result = { done: 0, fail: 0}
+async function wait(task, error=new Error(), condition=(t)=>{}) {
 
     let p = await new Promise(function (resolve, reject){
         let i = setInterval(function () {
 
             condition(task);
 
-            if (task.done === 1) {
+            if (task.done) {
                 resolve();
                 clearInterval(i);
                 return;
             }
-            if (task.fail === 1) {
+            if (task.fail) {
                 reject(error);
                 clearInterval(i);
                 return;

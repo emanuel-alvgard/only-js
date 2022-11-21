@@ -9,8 +9,8 @@ function setup() {
 
     let data = {
 
-        done: 0,
-        fail: 0,
+        done: false,
+        fail: false,
         responses: { value: 0 },
         raw: [],
         parsed: [],
@@ -50,14 +50,14 @@ async function get(urls, result) {
         });
 
         req.on('error', function (e) {
-            result.fail = 1;
+            result.fail = true;
         });
         
         req.end();
     }
     
     error.message = message + "get(" + urls + ")";
-    let condition = (task) => { if (task.responses.value === urls.length) { task.done = 1; }} 
+    let condition = (task) => { if (task.responses.value === urls.length) { task.done = true; }} 
     await util.wait(result, error, condition);
 
 }
@@ -93,7 +93,7 @@ async function set(method, type, messages, urls, result) {
         });
 
         req.on('error', function () {
-            result.fail = 1;
+            result.fail = true;
         });
         
         req.write(messages[i]);
@@ -101,7 +101,7 @@ async function set(method, type, messages, urls, result) {
     }
     
     error.message = message + "set(" + urls + ")";
-    let condition = (task) => { if (task.responses.value === urls.length) { task.done = 1; }} 
+    let condition = (task) => { if (task.responses.value === urls.length) { task.done = true; }} 
     await util.wait(result, error, condition);
 }
 
