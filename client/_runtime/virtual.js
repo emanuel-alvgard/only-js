@@ -36,7 +36,7 @@ function _number(e, p, v=null, min=null, max=null, v_offset=0) {
 
 
 // @
-export function element(runtime, id) {
+export function element(context, id) {
 
     let e = {
         
@@ -77,7 +77,7 @@ export function element(runtime, id) {
         // @DONE
         anim(id, property, start, end, time, delay=null, curve=null, event=null) { 
             if (id in e._anims) { return e._anims[id]; }
-            e._anims[id] = animation.anim(runtime, e, id, property, start, end, time, delay, curve, event);
+            e._anims[id] = animation.anim(context, e, id, property, start, end, time, delay, curve, event);
             return e._anims[id];
         },
 
@@ -148,10 +148,12 @@ export function element(runtime, id) {
 
         // global
         x(x=null, min=null, max=null) {
+            if (x === e._l) { return e }
             if (x !== null) { e._l = x - (e.w() / 2); e.UPDATE = true; return e; } 
             return e._l + (e.w() / 2); 
         },
         y(y=null, min=null, max=null) { 
+            if (y === e._t) { return e }
             if (y !== null) { e._t = y - (e.h() / 2); e.UPDATE = true; return e; }
             return e._t + (e.h() / 2); 
         },

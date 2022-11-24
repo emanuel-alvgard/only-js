@@ -69,7 +69,7 @@ let triggers = [
 
 // SIMPLE SOLUTION FOR SETTING UP WEBSOCKETS
 
-
+// IF DEV MODE
 // HOT RELOADING SETUP
 let html_index = fs_builtin.readFileSync("../build/index.html").toString()
 let reload_script = fs_builtin.readFileSync("./_runtime/client_reload.js").toString()
@@ -85,6 +85,7 @@ let html_end = html_index.substring(pointer.previous, html_index.length-1)
 
 let new_html = 
     html_start +
+    '<script type="module" src="../client/app.js"></script>' + // /build/scripts/app.js if live mode
     "<script>" + 
     reload_script + 
     "</script>" +
@@ -101,6 +102,7 @@ if (index_route > -1) {
     }
 }
 
+triggers[0] = "/client/" // if dev mode
 triggers.unshift("/client_reload")
 routes.unshift(async (context, incoming) => {
 
@@ -151,15 +153,15 @@ let cache;
 dir.watch("../client", [".js"], ["node_modules"], () => {
 
     // REBUILD
-    let build = []
-    dir.collect("../client", [".js"], ["node_modules"], build);
+    let build = ["../client/app.js"]
+    //dir.collect("../client", [".js"], ["node_modules"], build);
     
     let start = performance.now()
     
     let minified = esbuild.buildSync({
         loader: { ".js": "js" },
         entryPoints: build,
-        bundle: false,
+        bundle: true,
         minify: true,
         outdir: "../build/scripts",
         write: false,
@@ -169,7 +171,7 @@ dir.watch("../client", [".js"], ["node_modules"], () => {
     esbuild.buildSync({
         loader: { ".js": "js" },
         entryPoints: build,
-        bundle: false,
+        bundle: true,
         minify: true,
         outdir: "../build/scripts",
         write: true,
@@ -193,4 +195,3 @@ dir.watch("../client", [".js"], ["node_modules"], () => {
     context.client_reload = true
 
 });
-

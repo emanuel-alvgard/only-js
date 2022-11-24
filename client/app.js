@@ -1,8 +1,8 @@
-import { setup } from "./_runtime/runtime.js";
-import example from "./components/example.js";
+import { setup } from "./_runtime/runtime.js"
+import example from "./components/example.js"
 
-const context = setup();
+const context = setup()
 
-context.component("example", example);
+context.component("example", example)
 
-context.run();
+context.start()

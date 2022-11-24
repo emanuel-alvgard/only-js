@@ -1,49 +1,50 @@
-import * as virtual from "./virtual.js";
+import * as virtual from "./virtual.js"
 
 // @
 function _collect(view) {
 
     // format
     if (view.width < 1000) {
-        if (view.format === "desktop") { view.FORMAT_SWITCH = 1; } 
-        view.format = "mobile";
+        if (view.format === "desktop") { view.FORMAT_SWITCH = 1 } 
+        view.format = "mobile"
     }
     if (view.width > 1000) {
-        if (view.format === "mobile") { view.FORMAT_SWITCH = 1; } 
-        view.format = "desktop";
+        if (view.format === "mobile") { view.FORMAT_SWITCH = 1 } 
+        view.format = "desktop"
     }
 
     // orientation
     if (view.width < window.innerHeight) { 
-        if (view.orientation === "horizontal") { view.ORIENTATION_SWITCH = 1; }
-        view.orientation = "vertical";  
+        if (view.orientation === "horizontal") { view.ORIENTATION_SWITCH = 1 }
+        view.orientation = "vertical"  
     }
     if (view.width > window.innerHeight) { 
-        if (view.orientation === "vertical") { view.ORIENTATION_SWITCH  = 1; }
-        view.orientation = "horizontal";  
+        if (view.orientation === "vertical") { view.ORIENTATION_SWITCH  = 1 }
+        view.orientation = "horizontal" 
     }
 
     // dimension
     if (view.format === "desktop") {
-        view.width =  document.documentElement.clientWidth;
-        view.height = window.innerHeight;
-        view.scroll_y = window.scrollY;
+        view.width =  document.documentElement.clientWidth
+        view.height = window.innerHeight
+        view.scroll_y = window.scrollY
     }
 
     if (view.format === "mobile") {
-        if (view.FORMAT_SWITCH || view.ORIENTATION_SWITCH) { view.height = window.innerHeight; }
-        view.width =  document.documentElement.clientWidth;
-        view.scroll_y = window.scrollY;
+        if (view.FORMAT_SWITCH || view.ORIENTATION_SWITCH) { view.height = window.innerHeight }
+        view.width =  document.documentElement.clientWidth
+        view.scroll_y = window.scrollY
     }
 
     // elements
-    let ids = Object.keys(view._virtual);
+    let ids = Object.keys(view._virtual)
 
     for (let i=0; i < ids.length; i++) {
-        let virtual = view._virtual[i];
-        let real = view._real[i];
-        if (virtual._auto_w) { virtual._w = real.clientWidth; }
-        if (virtual._auto_h) { virtual._h = real.clientHeight; }
+        let id = ids[i]
+        let virtual = view._virtual[id]
+        let real = view._real[id]
+        if (virtual._auto_w) { virtual._w = real.clientWidth }
+        if (virtual._auto_h) { virtual._h = real.clientHeight }
     }
 
 }
@@ -53,48 +54,48 @@ function _collect(view) {
 // @
 function _update(view) {
 
-    let ids = Object.keys(view._elements);
+    let ids = Object.keys(view._virtual)
 
     for (let i=0; i < ids.length; i++) {
 
         let id = ids[i];
-        let element = view._elements[id];
-        let node = view._target._elements[id];
+        let virtual = view._virtual[id]
+        let real = view._real[id]
 
-        if (element.update) {
+        if (virtual.UPDATE) {
         
-            if (element._width !== 0) { node.style.width = element._width + "px"; } //@HERE
-            else { node.style.width = "auto"; }
+            if (virtual._w !== 0) { real.style.width = virtual._w + "px" } //@HERE
+            else { real.style.width = "auto" }
             
-            if (element._height !== 0) { node.style.height = element._height + "px"; }
-            else { node.style.height = "auto"; }
+            if (virtual._h !== 0) { real.style.height = virtual._h + "px" }
+            else { real.style.height = "auto" }
             
-            node.style.transform = "translate(" + element._left + "px," + element._top + "px)"; // this gets affected by .viewport transform
+            real.style.transform = "translate(" + virtual._l + "px," + virtual._t + "px)" // this gets affected by .viewport transform
             
             // text
-            node.style.paddingLeft = element._padding_left + "px";
-            node.style.paddingRight = element._padding_right + "px";
-            node.style.paddingTop = element._padding_top + "px";
-            node.style.paddingBottom = element._padding_bottom + "px";
+            //real.style.paddingLeft = virtual._padding_left + "px"
+            //real.style.paddingRight = virtual._padding_right + "px"
+            //real.style.paddingTop = virtual._padding_top + "px"
+            //real.style.paddingBottom = virtual._padding_bottom + "px"
 
-            if (element._font_size !== 0) { node.style.fontSize = element._font_size + "px"; }
-            if (element._font_type !== null) { node.style.fontFamily = element._font_type; }
+            if (virtual._font_size !== 0) { real.style.fontSize = virtual._font_size + "px" }
+            if (virtual._font !== null) { real.style.fontFamily = virtual._font }
 
             // visibility
-            if (element._visible) { node.style.display = "initial"; }
-            else { node.style.display = "none"; }
+            if (virtual._visible) { real.style.display = "initial" }
+            else { real.style.display = "none" }
         }
 
         // RESET EVENTS
-        element.MOUSE_DOWN = false;
-        element.MOUSE_UP = false;
-        element.UPDATE = false;
+        virtual.MOUSE_DOWN = false
+        virtual.MOUSE_UP = false
+        virtual.UPDATE = false
     }
 
     // RESET EVENTS
-    view.SETUP = 0;
-    view.FORMAT_SWITCH = 0;
-    view.ORIENTATION_SWITCH = 0;
+    view.SETUP = false
+    view.FORMAT_SWITCH = false
+    view.ORIENTATION_SWITCH = false
 }
 
 
@@ -120,50 +121,54 @@ export function setup(context) {
 
         // @DONE
         virtual(id) {
-            if (id in view._virtual) { return view._virtual[id]; }
-            return virtual.element(context, id);
+            if (id in view._virtual) { return view._virtual[id] }
+            view._virtual[id] = virtual.element(context, id)
+            return view._virtual[id]
         },
         
-        // @HERE
-        real(id, type, virtual) {
+        // @DONE
+        real(id, type) {
 
-            if (id in view._real) { return view._real[id]; }
-        
-            let element = document.createElement(type);
+            if (id in view._real) { return view._real[id] }
+
+            let element
+            let ssr = document.getElementById(id)
+            if (ssr !== undefined && ssr !== null) { element = ssr }
+            else { element = document.createElement(type) }
     
-            element.style.position = "absolute";
-            element.style.margin = "0px";
-            element.style.padding = "0px";
+            element.id = id
+            element.style.position = "absolute"
+            element.style.margin = "0px"
+            element.style.padding = "0px"
     
             // @CHECK if this should be here?? maybe swap out for custom intersection system
-            element.onmouseover = () => { virtual.mouse_hover = true; }
-            element.onmouseleave = () => {  virtual.mouse_hover = false; }
-            element.onmousedown = () => { virtual.mouse_down = true; }
-            element.onmouseup = () => { virtual.mouse_up = true; }
+            //element.onmouseover = () => { virtual.mouse_hover = true }
+            //element.onmouseleave = () => {  virtual.mouse_hover = false }
+            //element.onmousedown = () => { virtual.mouse_down = true }
+            //element.onmouseup = () => { virtual.mouse_up = true }
     
-            this._elements[id] = element;
-            view.root.append(element);
+            view._real[id] = element
+            if (id !== "root") { view.real("root").append(element) }
         },
 
         // @DONE
         element(id, type="div") {
-            let virtual = virtual.element(context, id);
-            view.real(id, type, virtual);
-            return virtual;
+            view.real(id, type)
+            return view.virtual(id)
         },
 
         // @DONE
-        collect() { _collect(view); },
+        collect() { _collect(view) },
 
         // @DONE
-        update() { _update(view); },
+        update() { _update(view) },
 
         show() {},
         hide() {}
     }
 
     view.root = view.element("root")
-    document.body.append(view.root);
+    document.body.append(view.real("root"))
 
     return view
 }

@@ -39,7 +39,7 @@ function _cube(p0, p1, p2, p3, i) {
 // button.anim("1").remove();
 
 // @NOT
-export function anim(runtime, element, id, property, start, end, time, delay, curve, event) {
+export function anim(context, element, id, property, start, end, time, delay, curve, event) {
 
     let a = {
 
@@ -82,7 +82,7 @@ export function anim(runtime, element, id, property, start, end, time, delay, cu
 
             // @ADD start, stop, pause, and reset anim data on stop or done
             
-            let delta = runtime.delta;
+            let delta = context.delta;
             
             // DELAY
             a._delay_timer += delta * 1000;
