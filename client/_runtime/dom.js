@@ -3,7 +3,21 @@ import * as virtual from "./virtual.js"
 // @
 function _collect(view) {
 
-    // format
+    // AUTO WIDTH / HEIGHT
+    if (view.root._auto_w) { view.root._w = document.documentElement.clientWidth }
+    if (view.root._auto_h) { view.root._h = document.documentElement.clientHeight }
+
+    let ids = Object.keys(view._virtual)
+
+    for (let i=1; i < ids.length; i++) {
+        let id = ids[i]
+        let virtual = view._virtual[id]
+        let real = view._real[id]
+        if (virtual._auto_w) { virtual._w = real.clientWidth }
+        if (virtual._auto_h) { virtual._h = real.clientHeight }
+    }
+
+    /* format
     if (view.width < 1000) {
         if (view.format === "desktop") { view.FORMAT_SWITCH = 1 } 
         view.format = "mobile"
@@ -35,24 +49,15 @@ function _collect(view) {
         view.width =  document.documentElement.clientWidth
         view.scroll_y = window.scrollY
     }
-
-    // elements
-    let ids = Object.keys(view._virtual)
-
-    for (let i=0; i < ids.length; i++) {
-        let id = ids[i]
-        let virtual = view._virtual[id]
-        let real = view._real[id]
-        if (virtual._auto_w) { virtual._w = real.clientWidth }
-        if (virtual._auto_h) { virtual._h = real.clientHeight }
-    }
-
+    */
 }
 
 
 
 // @
 function _update(view) {
+
+
 
     let ids = Object.keys(view._virtual)
 
@@ -71,8 +76,15 @@ function _update(view) {
             else { real.style.height = "auto" }
             
             real.style.transform = "translate(" + virtual._l + "px," + virtual._t + "px)" // this gets affected by .viewport transform
+
+            // BACKGROUND
+            real.style.backgroundColor = "rgb(" + 
+                virtual._color_r + "," +
+                virtual._color_g + "," + 
+                virtual._color_b + ")" 
             
             // text
+            if (virtual._text !== "") { real.textContent = virtual._text }
             //real.style.paddingLeft = virtual._padding_left + "px"
             //real.style.paddingRight = virtual._padding_right + "px"
             //real.style.paddingTop = virtual._padding_top + "px"
@@ -137,9 +149,11 @@ export function setup(context) {
             else { element = document.createElement(type) }
     
             element.id = id
+            element.style.display = "block"
             element.style.position = "absolute"
             element.style.margin = "0px"
             element.style.padding = "0px"
+            element.style.border = "none"
     
             // @CHECK if this should be here?? maybe swap out for custom intersection system
             //element.onmouseover = () => { virtual.mouse_hover = true }

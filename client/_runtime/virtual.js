@@ -58,6 +58,12 @@ export function element(context, id) {
         _auto_w: true,
         _auto_h: true,
 
+        _color_r: 230,
+        _color_g: 230,
+        _color_b: 230,
+
+        _text: "",
+
         _font: null,
         _font_size: 0,
         _font_red: 0,
@@ -100,8 +106,8 @@ export function element(context, id) {
         t(v=null, min=null, max=null) { return _number(e, "_t", v, min, max) },
 
         r(v=null, min=null, max=null) {
-            if (r === e._l + e.w()) { return e; } 
-            if (r !== null) { e._l = r - e.w(); e.UPDATE = true; return e; }
+            if (v === e._l + e.w()) { return e; } 
+            if (v !== null) { e._l = v - e.w(); e.UPDATE = true; return e; }
             return e._l + e.w(); 
         },
         b(b=null, min=null, max=null) {
@@ -160,13 +166,24 @@ export function element(context, id) {
 
         // BACKGROUND
         image(asset, type) {},
-        color() {},
+
+        color(r, g, b) { 
+            if (r !== e._color_r) { e._color_r = r; e.UPDATE = true }
+            if (g !== e._color_g) { e._color_g = g; e.UPDATE = true }
+            if (b !== e._color_b) { e._color_b = b; e.UPDATE = true }
+            return e
+        },
+
         color_red() {},
         color_green() {},
         color_blue() {},
 
         // TEXT
-        text() {},
+        text(v=null) {
+            if (v === e._text) { return e }
+            if (v !== null) { e._text = v; e.UPDATE = true; return e; }
+            return e._text
+        },
 
         // padding
         padding_t(t) {},
