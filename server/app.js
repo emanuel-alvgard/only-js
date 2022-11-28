@@ -81,7 +81,7 @@ while (pointer.position < html_index.length) {
 }
 
 let html_start = html_index.substring(0, pointer.previous)
-let html_end = html_index.substring(pointer.previous, html_index.length-1)
+let html_end = html_index.substring(pointer.previous, html_index.length)
 
 let new_html = 
     html_start +

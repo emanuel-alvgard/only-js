@@ -57,8 +57,6 @@ function _collect(view) {
 // @
 function _update(view) {
 
-
-
     let ids = Object.keys(view._virtual)
 
     for (let i=0; i < ids.length; i++) {
@@ -69,11 +67,11 @@ function _update(view) {
 
         if (virtual.UPDATE) {
         
-            if (virtual._w !== 0) { real.style.width = virtual._w + "px" } //@HERE
-            else { real.style.width = "auto" }
+            if (virtual._auto_w) { real.style.width = "auto" }
+            else { real.style.width = virtual._w + "px" }
             
-            if (virtual._h !== 0) { real.style.height = virtual._h + "px" }
-            else { real.style.height = "auto" }
+            if (virtual._auto_h) { real.style.height = "auto" }
+            else { real.style.height = virtual._h + "px" }
             
             real.style.transform = "translate(" + virtual._l + "px," + virtual._t + "px)" // this gets affected by .viewport transform
 
@@ -83,12 +81,25 @@ function _update(view) {
                 virtual._color_g + "," + 
                 virtual._color_b + ")" 
             
-            // text
+            // TEXT
             if (virtual._text !== "") { real.textContent = virtual._text }
             //real.style.paddingLeft = virtual._padding_left + "px"
             //real.style.paddingRight = virtual._padding_right + "px"
             //real.style.paddingTop = virtual._padding_top + "px"
             //real.style.paddingBottom = virtual._padding_bottom + "px"
+
+            // BORDER
+            real.style.border = virtual._border
+            real.style.borderColor = "rgb(" + 
+                virtual._border_color_r + "," +
+                virtual._border_color_g + "," + 
+                virtual._border_color_b + ")"
+
+            real.style.borderRadius = 
+                virtual._border_radius_lt + "px "
+                virtual._border_radius_rt + "px "
+                virtual._border_radius_rb + "px "
+                virtual._border_radius_lb + "px"
 
             if (virtual._font_size !== 0) { real.style.fontSize = virtual._font_size + "px" }
             if (virtual._font !== null) { real.style.fontFamily = virtual._font }

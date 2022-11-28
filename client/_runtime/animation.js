@@ -1,30 +1,30 @@
 const l = function(string) { console.log(string) }
 
 // @DONE
-const _clamp = (num, min, max) => Math.min(Math.max(num, min), max);
+const _clamp = (num, min, max) => Math.min(Math.max(num, min), max)
 
 // @DONE
 function _round(n) {
-    return n + (n>0?0.5:-0.5) << 0;
+    return n + (n>0?0.5:-0.5) << 0
 }
 
 // @DONE
 function _line(p0, p1, i) {
-    return ((p1 - p0) * i) + p0; 
+    return ((p1 - p0) * i) + p0
 }
 
 // @DONE
 function _quad(p0, p1, p2, i) {
-    let l0 = _line(p0, p1, i);
-    let l1 = _line(p1, p2, i);
-    return _line(l0, l1, i);
+    let l0 = _line(p0, p1, i)
+    let l1 = _line(p1, p2, i)
+    return _line(l0, l1, i)
 }
 
 // @DONE
 function _cube(p0, p1, p2, p3, i) {
-    let q0 = _quad(p0, p1, p2, i);
-    let q1 = _quad(p1, p2, p3, i);
-    return _line(q0, q1, i);
+    let q0 = _quad(p0, p1, p2, i)
+    let q1 = _quad(p1, p2, p3, i)
+    return _line(q0, q1, i)
 }
 
 // @
@@ -98,7 +98,7 @@ export function anim(context, element, id, property, start, end, time, delay, cu
             }
 
             // PROGRESS
-            a._progress += (a._speed * a._curve_func(a._curve, (a.run_timer / a._time))) * delta; 
+            a._progress += (a._speed * a._curve_func(a._curve, (a._run_timer / a._time))) * delta; 
         },
         remove() {
             // use id to remove

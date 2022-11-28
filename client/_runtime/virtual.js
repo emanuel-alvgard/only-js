@@ -36,12 +36,12 @@ function _number(e, p, v=null, min=null, max=null, v_offset=0) {
 
 
 // @
-export function element(context, id) {
+export function element(context, view, id) {
 
     let e = {
         
         // EVENTS
-        UPDATE: false,
+        UPDATE: true,
         MOUSE_HOVER: false,
         MOUSE_DOWN: false,
         MOUSE_UP: false,
@@ -58,9 +58,9 @@ export function element(context, id) {
         _auto_w: true,
         _auto_h: true,
 
-        _color_r: 230,
-        _color_g: 230,
-        _color_b: 230,
+        _color_r: 200,
+        _color_g: 200,
+        _color_b: 200,
 
         _text: "",
 
@@ -75,11 +75,24 @@ export function element(context, id) {
         _padding_t: 0,
         _padding_b: 0,
 
+        _border: "none",
+
+        _border_color_r: 0,
+        _border_color_g: 0,
+        _border_color_b: 0,
+
+        _border_radius_lt: 0,
+        _border_radius_rt: 0,
+        _border_radius_rb: 0,
+        _border_radius_lb: 0,
+
         _shadow_red: 0,
         _shadow_green: 0,
         _shadow_blue: 0,
 
         // INTERFACE
+        real() {},
+
         // @DONE
         anim(id, property, start, end, time, delay=null, curve=null, event=null) { 
             if (id in e._anims) { return e._anims[id]; }
@@ -186,45 +199,44 @@ export function element(context, id) {
         },
 
         // padding
-        padding_t(t) {},
-        padding_l(l) {},
-        padding_b(b) {},
-        padding_r(r) {},
-
         padding(left=null, right=null, top=null, bottom=null) {
             if (left !== null) { e._padding_l = left; e.UPDATE = true; }
             if (right !== null) { e._padding_r = right; e.UPDATE = true; }
             if (top !== null) { e._padding_t = top; e.UPDATE = true; }
             if (bottom !== null) { e._padding_b = bottom; e.UPDATE = true; }
+            return e
         },
 
         // font
-        font(size=null, type=null, min=null, max=null) { // only sets the font type
+        font(type=null, size=null, min=null, max=null) { // only sets the font type
             if (size !== null) { e._font_size = size; e.UPDATE = true; }
             if (type !== null) { e._font = type; e.UPDATE = true; }
             _min(e, "_font_size", min);
             _max(e, "_font_size", max);
         },
-
-        font_size() {},
         font_color() {},
 
         // border ?????
-        border() {}, // only sets the border type
-        border_size_t() {},
-        border_size_l() {},
-        border_size_b() {},
-        border_size_r() {},
-        border_radius_tl() {},
-        border_radius_tr() {},
-        border_radius_bl() {},
-        border_radius_br() {},
+        border(type=null, size=null) {
+            if (type === e._border) { return e }
+            if (type !== null) { e._border = type; e.UPDATE = true; return e; }
+            return e._border
+        },
+
+        border_color() {},
+
+        border_radius(lt=null, rt=null, rb=null, lb=null) {
+            if (lt !== null) { e._border_radius_lt = lt; e.UPDATE = true; }
+            if (rt !== null) { e._border_radius_rt = rt; e.UPDATE = true; }
+            if (rb !== null) { e._border_radius_rb = rb; e.UPDATE = true; }
+            if (lb !== null) { e._border_radius_lb = lb; e.UPDATE = true; }
+            return e
+        },
+
 
         // shadow
+        shadow() {},
         shadow_color() {},
-        shadow_red() {},
-        shadow_green() {},
-        shadow_blue() {},
 
         // visibility
         show() { 
