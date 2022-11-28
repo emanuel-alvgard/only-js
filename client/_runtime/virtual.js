@@ -34,6 +34,8 @@ function _number(e, p, v=null, min=null, max=null, v_offset=0) {
 
 }
 
+function _rgba(e, property) {}
+
 
 // @
 export function element(context, view, id) {
@@ -62,6 +64,7 @@ export function element(context, view, id) {
         _color_r: 200,
         _color_g: 200,
         _color_b: 200,
+        _color_a: 1,
 
         _text: "",
 
@@ -78,14 +81,15 @@ export function element(context, view, id) {
 
         _border: "none",
 
-        _border_color_r: 0,
-        _border_color_g: 0,
-        _border_color_b: 0,
+        _border_r: 0,
+        _border_g: 0,
+        _border_b: 0,
+        _border_a: 1,
 
-        _border_radius_lt: 0,
-        _border_radius_rt: 0,
-        _border_radius_rb: 0,
-        _border_radius_lb: 0,
+        _border_lt: 0,
+        _border_rt: 0,
+        _border_rb: 0,
+        _border_lb: 0,
 
         _shadow_x: 0,
         _shadow_y: 0,
@@ -94,6 +98,7 @@ export function element(context, view, id) {
         _shadow_r: 0,
         _shadow_g: 0,
         _shadow_b: 0,
+        _shadow_a: 1,
 
         // INTERFACE
         real() {},
@@ -190,10 +195,11 @@ export function element(context, view, id) {
         // BACKGROUND
         image(asset, type) {},
 
-        color(r, g, b) { 
-            if (r !== e._color_r) { e._color_r = r; e.UPDATE = true }
-            if (g !== e._color_g) { e._color_g = g; e.UPDATE = true }
-            if (b !== e._color_b) { e._color_b = b; e.UPDATE = true }
+        color(rgba) { 
+            if (rgba[0] !== e._color_r) { e._color_r = rgba[0]; e.UPDATE = true }
+            if (rgba[1] !== e._color_g) { e._color_g = rgba[1]; e.UPDATE = true }
+            if (rgba[2] !== e._color_b) { e._color_b = rgba[2]; e.UPDATE = true }
+            if (rgba[3] !== e._color_a) { e._color_b = rgba[3]; e.UPDATE = true }
             return e
         },
 
@@ -236,10 +242,10 @@ export function element(context, view, id) {
         border_color() {},
 
         border_radius(lt=null, rt=null, rb=null, lb=null) {
-            if (lt !== null) { e._border_radius_lt = lt; e.UPDATE = true; }
-            if (rt !== null) { e._border_radius_rt = rt; e.UPDATE = true; }
-            if (rb !== null) { e._border_radius_rb = rb; e.UPDATE = true; }
-            if (lb !== null) { e._border_radius_lb = lb; e.UPDATE = true; }
+            if (lt !== null) { e._border_lt = lt; e.UPDATE = true; }
+            if (rt !== null) { e._border_rt = rt; e.UPDATE = true; }
+            if (rb !== null) { e._border_rb = rb; e.UPDATE = true; }
+            if (lb !== null) { e._border_lb = lb; e.UPDATE = true; }
             return e
         },
 
@@ -251,10 +257,11 @@ export function element(context, view, id) {
             if (blur !== null) { e._shadow_blur = blur; e.UPDATE = true; }
             return e
         },
-        shadow_color(r=null, g=null, b=null) {
-            if (r !== null) { e._shadow_r = r; e.UPDATE = true; }
-            if (g !== null) { e._shadow_g = g; e.UPDATE = true; }
-            if (b !== null) { e._shadow_b = b; e.UPDATE = true; }
+        shadow_color(rgba) {
+            if (rgba[0] !== e._shadow_r) { e._shadow_r = rgba[0]; e.UPDATE = true }
+            if (rgba[1] !== e._shadow_g) { e._shadow_g = rgba[1]; e.UPDATE = true }
+            if (rgba[2] !== e._shadow_b) { e._shadow_b = rgba[2]; e.UPDATE = true }
+            if (rgba[3] !== e._shadow_a) { e._shadow_a = rgba[3]; e.UPDATE = true }
             return e
         },
 

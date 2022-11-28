@@ -4,8 +4,9 @@ import * as virtual from "./virtual.js"
 function _collect(view) {
 
     // AUTO WIDTH / HEIGHT
-    if (view.root._auto_w) { view.root._w = document.documentElement.clientWidth }
-    if (view.root._auto_h) { view.root._h = document.documentElement.clientHeight }
+    view.root.w(document.documentElement.clientWidth)
+    view.root.h(document.documentElement.clientHeight)
+
 
     let ids = Object.keys(view._virtual)
 
@@ -77,10 +78,11 @@ function _update(view) {
             real.style.zIndex = virtual._z_index + ""
 
             // BACKGROUND
-            real.style.backgroundColor = "rgb(" + 
+            real.style.backgroundColor = "rgba(" + 
                 virtual._color_r + "," +
-                virtual._color_g + "," + 
-                virtual._color_b + ")" 
+                virtual._color_g + "," +
+                virtual._color_b + "," +  
+                virtual._color_a + ")" 
             
             // TEXT
             if (virtual._text !== "") { real.textContent = virtual._text }
@@ -91,25 +93,27 @@ function _update(view) {
 
             // BORDER
             real.style.border = virtual._border
-            real.style.borderColor = "rgb(" + 
-                virtual._border_color_r + "," +
-                virtual._border_color_g + "," + 
-                virtual._border_color_b + ")" //@HERE rename
+            real.style.borderColor = "rgba(" + 
+                virtual._border_r + "," +
+                virtual._border_g + "," +
+                virtual._border_b + "," +  
+                virtual._border_a + ")" //@HERE rename
 
             real.style.borderRadius = 
-                virtual._border_radius_lt + "px " +
-                virtual._border_radius_rt + "px " +
-                virtual._border_radius_rb + "px " +
-                virtual._border_radius_lb + "px"
+                virtual._border_lt + "px " +
+                virtual._border_rt + "px " +
+                virtual._border_rb + "px " +
+                virtual._border_lb + "px"
 
             // SHADOW
             real.style.boxShadow =
                 virtual._shadow_x + "px " +
                 virtual._shadow_y + "px " +
-                virtual._shadow_blur + "px rgb(" +
+                virtual._shadow_blur + "px rgba(" +
                 virtual._shadow_r + "," +
-                virtual._shadow_g + "," + 
-                virtual._shadow_b + ")"
+                virtual._shadow_g + "," +
+                virtual._shadow_b + "," +  
+                virtual._shadow_a + ")"
 
 
             if (virtual._font_size !== 0) { real.style.fontSize = virtual._font_size + "px" }
