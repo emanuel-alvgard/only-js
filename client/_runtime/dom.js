@@ -74,6 +74,7 @@ function _update(view) {
             else { real.style.height = virtual._h + "px" }
             
             real.style.transform = "translate(" + virtual._l + "px," + virtual._t + "px)" // this gets affected by .viewport transform
+            real.style.zIndex = virtual._z_index + ""
 
             // BACKGROUND
             real.style.backgroundColor = "rgb(" + 

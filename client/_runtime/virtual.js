@@ -55,6 +55,7 @@ export function element(context, view, id) {
         _t: 0,
         _w: 0,
         _h: 0,
+        _z_index: 0,
         _auto_w: true,
         _auto_h: true,
 
@@ -155,7 +156,7 @@ export function element(context, view, id) {
         },
 
         extend_b(b=null, min=null, max=null) {
-            if (b !== null) { e.h(b - e.t(), min, max); e.UPDATE = true; return e; }
+            if (b !== null) { e.h(b - e.t(), min, max); e._auto_h = false; e.UPDATE = true; return e; }
             return e.b();
         },
 
@@ -175,6 +176,11 @@ export function element(context, view, id) {
             if (y === e._t) { return e }
             if (y !== null) { e._t = y - (e.h() / 2); e.UPDATE = true; return e; }
             return e._t + (e.h() / 2); 
+        },
+        z(v=null) {
+            if (v === e._z_index) { return e }
+            if (v !== null) { e._z_index = v; e.UPDATE = true; return e; }
+            return e._z_index
         },
 
         // BACKGROUND

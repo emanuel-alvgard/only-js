@@ -1,18 +1,29 @@
 export default (app) => {
 
-    const home = app.view("home")
-    const b = home.element("b", "button")
-    const box = home.element("box", "div")
-    const input = home.element("in", "input")
+    const dashboard = app.view("dashboard")
+    const side_nav = dashboard.element("side_nav")
+    const card = dashboard.element("card")
+    //const box = home.element("box", "div")
+    //const input = home.element("in", "input")
 
-    b
-        .x(home.root.x())
-        .y(home.root.y())
-        .text("click meeeeeeeeeeee!")
-        .color(225,225,225)
-        .border("solid")
-        .border_radius(10,10,10,10)
+    side_nav
+        .t(dashboard.root.t())
+        .l(dashboard.root.l()) // extend :)
+        .extend_b(dashboard.root.b())
+        .w(300)
+        .z(1)
+        .color(100,99,110)
+
+    card
+        .x(dashboard.root.x())
+        .y(dashboard.root.y())
+        .w(500)
+        .h(1000)
+        .text("This is a card")
+        .color(240,240,240)
+        .border_radius(25,25,25,25)
     
+    /*
     box
         .w(100)
         .h(100)
@@ -27,6 +38,7 @@ export default (app) => {
         .r(box.l())
         .border("solid")
         .border_radius(5,5,5,5)
+    */
 
     //input.real().style.boderStyle = ""
 
