@@ -22,6 +22,8 @@ export default (app) => {
         .text("This is a card")
         .color(240,240,240)
         .border_radius(25,25,25,25)
+        .shadow(0,3,15)
+        .shadow_color(150,150,150)
     
     /*
     box

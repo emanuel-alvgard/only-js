@@ -87,9 +87,13 @@ export function element(context, view, id) {
         _border_radius_rb: 0,
         _border_radius_lb: 0,
 
-        _shadow_red: 0,
-        _shadow_green: 0,
-        _shadow_blue: 0,
+        _shadow_x: 0,
+        _shadow_y: 0,
+        _shadow_blur: 0,
+
+        _shadow_r: 0,
+        _shadow_g: 0,
+        _shadow_b: 0,
 
         // INTERFACE
         real() {},
@@ -240,9 +244,19 @@ export function element(context, view, id) {
         },
 
 
-        // shadow
-        shadow() {},
-        shadow_color() {},
+        // SHADOW
+        shadow(x=null, y=null, blur=null) {
+            if (x !== null) { e._shadow_x = x; e.UPDATE = true; }
+            if (y !== null) { e._shadow_y = y; e.UPDATE = true; }
+            if (blur !== null) { e._shadow_blur = blur; e.UPDATE = true; }
+            return e
+        },
+        shadow_color(r=null, g=null, b=null) {
+            if (r !== null) { e._shadow_r = r; e.UPDATE = true; }
+            if (g !== null) { e._shadow_g = g; e.UPDATE = true; }
+            if (b !== null) { e._shadow_b = b; e.UPDATE = true; }
+            return e
+        },
 
         // visibility
         show() { 

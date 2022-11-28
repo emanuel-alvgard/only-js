@@ -94,13 +94,23 @@ function _update(view) {
             real.style.borderColor = "rgb(" + 
                 virtual._border_color_r + "," +
                 virtual._border_color_g + "," + 
-                virtual._border_color_b + ")"
+                virtual._border_color_b + ")" //@HERE rename
 
             real.style.borderRadius = 
-                virtual._border_radius_lt + "px "
-                virtual._border_radius_rt + "px "
-                virtual._border_radius_rb + "px "
+                virtual._border_radius_lt + "px " +
+                virtual._border_radius_rt + "px " +
+                virtual._border_radius_rb + "px " +
                 virtual._border_radius_lb + "px"
+
+            // SHADOW
+            real.style.boxShadow =
+                virtual._shadow_x + "px " +
+                virtual._shadow_y + "px " +
+                virtual._shadow_blur + "px rgb(" +
+                virtual._shadow_r + "," +
+                virtual._shadow_g + "," + 
+                virtual._shadow_b + ")"
+
 
             if (virtual._font_size !== 0) { real.style.fontSize = virtual._font_size + "px" }
             if (virtual._font !== null) { real.style.fontFamily = virtual._font }
