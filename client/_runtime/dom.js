@@ -93,6 +93,7 @@ function _update(view) {
 
             // BORDER
             real.style.border = virtual._border
+            real.style.borderWidth = virtual._border_size + "px"
             real.style.borderColor = "rgba(" + 
                 virtual._border_r + "," +
                 virtual._border_g + "," +
@@ -138,7 +139,7 @@ function _update(view) {
 
 
 
-// @HERE @EDIT must return a new view instead of mutating incoming
+// @
 export function setup(context) {
 
     const view = {
@@ -160,7 +161,7 @@ export function setup(context) {
         // @DONE
         virtual(id) {
             if (id in view._virtual) { return view._virtual[id] }
-            view._virtual[id] = virtual.element(context, id)
+            view._virtual[id] = virtual.element(context, view, id)
             return view._virtual[id]
         },
         

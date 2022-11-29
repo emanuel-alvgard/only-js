@@ -80,6 +80,7 @@ export function element(context, view, id) {
         _padding_b: 0,
 
         _border: "none",
+        _border_size: 0,
 
         _border_r: 0,
         _border_g: 0,
@@ -101,7 +102,16 @@ export function element(context, view, id) {
         _shadow_a: 1,
 
         // INTERFACE
-        real() {},
+        real() {
+            if (id in view._real) { return view._real[id] }
+        },
+        remove() {
+            try {
+                e.real().remove()
+                delete view._virtual[id]
+            }
+            catch (error) {}
+        },
 
         // @DONE
         anim(id, property, start, end, time, delay=null, curve=null, event=null) { 
@@ -199,7 +209,7 @@ export function element(context, view, id) {
             if (rgba[0] !== e._color_r) { e._color_r = rgba[0]; e.UPDATE = true }
             if (rgba[1] !== e._color_g) { e._color_g = rgba[1]; e.UPDATE = true }
             if (rgba[2] !== e._color_b) { e._color_b = rgba[2]; e.UPDATE = true }
-            if (rgba[3] !== e._color_a) { e._color_b = rgba[3]; e.UPDATE = true }
+            if (rgba[3] !== e._color_a) { e._color_a = rgba[3]; e.UPDATE = true }
             return e
         },
 
@@ -214,7 +224,7 @@ export function element(context, view, id) {
             return e._text
         },
 
-        // padding
+        // PADDING
         padding(left=null, right=null, top=null, bottom=null) {
             if (left !== null) { e._padding_l = left; e.UPDATE = true; }
             if (right !== null) { e._padding_r = right; e.UPDATE = true; }
@@ -223,21 +233,23 @@ export function element(context, view, id) {
             return e
         },
 
-        // font
-        font(type=null, size=null, min=null, max=null) { // only sets the font type
-            if (size !== null) { e._font_size = size; e.UPDATE = true; }
-            if (type !== null) { e._font = type; e.UPDATE = true; }
-            _min(e, "_font_size", min);
-            _max(e, "_font_size", max);
+        // FONT
+        font(v=null) {
+            if (v === e._font) { return e }
+            if (v !== null) { e._font = v; e.UPDATE = true; return e; }
+            return e._font
         },
+        font_size() {},
         font_color() {},
 
         // border ?????
-        border(type=null, size=null) {
-            if (type === e._border) { return e }
-            if (type !== null) { e._border = type; e.UPDATE = true; return e; }
+        border(v=null) {
+            if (v === e._border) { return e }
+            if (v !== null) { e._border = v; e.UPDATE = true; return e; }
             return e._border
         },
+
+        border_size(v=null, min=null, max=null) { return _number(e, "_border_size", v, min, max) },
 
         border_color() {},
 
