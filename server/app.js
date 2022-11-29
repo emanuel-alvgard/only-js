@@ -102,7 +102,8 @@ if (index_route > -1) {
     }
 }
 
-triggers[0] = "/client/" // if dev mode
+triggers.unshift("/client/") // if dev mode
+routes.unshift(file.component)
 triggers.unshift("/client_reload")
 routes.unshift(async (context, incoming) => {
 

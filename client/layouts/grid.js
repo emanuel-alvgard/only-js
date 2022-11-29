@@ -1,5 +1,5 @@
 // @DONE
-export default (container, elements, row_h, column_w, row_gap, column_gap) => {
+export default (container, elements, row_gap, column_gap, row_h=null, column_w=null) => {
     
     let border = 0
     if (container.border() === "solid") { border = container.border_size() }

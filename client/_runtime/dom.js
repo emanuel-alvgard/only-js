@@ -98,7 +98,7 @@ function _update(view) {
                 virtual._border_r + "," +
                 virtual._border_g + "," +
                 virtual._border_b + "," +  
-                virtual._border_a + ")" //@HERE rename
+                virtual._border_a + ")"
 
             real.style.borderRadius = 
                 virtual._border_lt + "px " +

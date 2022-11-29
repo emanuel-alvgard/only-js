@@ -1,4 +1,5 @@
-import * as dom from "./dom.js";
+import * as dom from "./dom.js"
+import * as asset from "./asset.js"
 
 // @DONE
 function _collect(context) {
@@ -78,9 +79,14 @@ export function setup() {
             return context._views[id]
         },
 
-        image() {},
-        font() {},
-        json() {},
+        // @DONE
+        font(id, path, callback=()=>{}) {
+            if (id in context._fonts) { return context._fonts[id] }
+            context._fonts[id] = null
+            asset.font(id, path, (f) => { context._fonts[id] = f; callback() })
+        },
+        image(id, path, callback=()=>{}) {},
+        json(id, path, callback=()=>{}) {},
 
         // @DONE
         component(id, func) {

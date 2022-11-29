@@ -5,7 +5,8 @@ const types = {
     js: "text/javascript",
     mjs: "text/javascript",
     html: "text/html",
-    svg: "image/svg+xml"
+    svg: "image/svg+xml",
+    woff2: "application/font-woff2"
 }
 
 // @DONE
@@ -21,6 +22,7 @@ exports.component = async (context, incoming) => { // @ADD config
         case "/sitemap.xml": path += "/build/search/sitemap.xml"; break;
         default: path += incoming.url;
     }
+
 
     // @ADD check context.cache first
 

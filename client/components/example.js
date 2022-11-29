@@ -1,19 +1,26 @@
 import grid from "../layouts/grid.js"
 
-let main = [100,99,110,1]
+let main = [200,200,200,1]
 let accent = [255,255,255,1]
+let shadow = [220,220,220,1]
 
 //let debounce_frames = 10
 //let counter = 0
 
-export default (context) => {
+let loaded = false
+
+export default (app) => {
     
     /* DEBOUNCING EXAMPLE
     if (counter !== debounce_frames) { counter ++; return }
     counter = 0
     */
 
-    const dashboard = context.view("dashboard")
+    let oswald_bold = app.font("oswald_bold", "/build/assets/fonts/oswald_bold.woff2", () => { loaded = true })
+
+    if (loaded) { console.log(oswald_bold); loaded = false }
+
+    const dashboard = app.view("dashboard")
     const root = dashboard.root
     root.color([250, 250, 250, 1])
 
@@ -21,22 +28,38 @@ export default (context) => {
         .t(root.t())
         .l(root.l())
         .extend_b(root.b())
-        .w(200)
+        .w(root.w() / 3, 100, 300)
         .z(1)
-        .color(main)
+        .color(accent)
         .shadow(0,5,25)
-        .shadow_color([150,150,150,1])
+        .shadow_color(shadow)
 
     const card = dashboard.element("card")
-        .x(root.x())
-        .y(root.y())
-        .w(300)
-        .h(400)
+        .l(side_nav.r() + 50)
+        .extend_r(root.r() - 50)
+        .t(root.t() + 25)
+        .extend_b(root.b() - 50)
         .color(accent)
         .border_radius(15,15,15,15)
         .shadow(0,5,25)
-        .shadow_color([220,220,220,1])
+        .shadow_color(shadow)
+        .z(1)
+        .text("hello")
+        .font(oswald_bold)
 
+    const search = dashboard.element("search", "input")
+        .x(card.x())
+        .t(card.t() + 50)
+        .w(card.w() / 3)
+        .h(card.w() / 25)
+        .color(accent)
+        .border("solid")
+        .border_size(2)
+        .border_color(main)
+        .border_radius(25, 25, 25, 25)
+        .z(2)
+
+    /*
     let boxes = [ 
         dashboard.element("box_1"),
         dashboard.element("box_2"),
@@ -69,6 +92,7 @@ export default (context) => {
         1,
         1
     )
+    */
 
     //input.real().style.boderStyle = ""
 

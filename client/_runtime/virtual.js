@@ -251,7 +251,13 @@ export function element(context, view, id) {
 
         border_size(v=null, min=null, max=null) { return _number(e, "_border_size", v, min, max) },
 
-        border_color() {},
+        border_color(rgba) {
+            if (rgba[0] !== e._border_r) { e._border_r = rgba[0]; e.UPDATE = true }
+            if (rgba[1] !== e._border_g) { e._border_g = rgba[1]; e.UPDATE = true }
+            if (rgba[2] !== e._border_b) { e._border_b = rgba[2]; e.UPDATE = true }
+            if (rgba[3] !== e._border_a) { e._border_a = rgba[3]; e.UPDATE = true }
+            return e
+        },
 
         border_radius(lt=null, rt=null, rb=null, lb=null) {
             if (lt !== null) { e._border_lt = lt; e.UPDATE = true; }
