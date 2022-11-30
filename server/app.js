@@ -47,7 +47,7 @@ let routes = [
 ]
 
 let triggers = [
-    "/build/",
+    "/client/",
     "/robots.txt",
     "/sitemap.xml",
     "/api",
@@ -71,7 +71,7 @@ let triggers = [
 
 // IF DEV MODE
 // HOT RELOADING SETUP
-let html_index = fs_builtin.readFileSync("../build/index.html").toString()
+let html_index = fs_builtin.readFileSync("../index.html").toString()
 let reload_script = fs_builtin.readFileSync("./_runtime/client_reload.js").toString()
 
 let pointer = { position:0, previous:0 }
@@ -85,7 +85,6 @@ let html_end = html_index.substring(pointer.previous, html_index.length)
 
 let new_html = 
     html_start +
-    '<script type="module" src="../client/app.js"></script>' + // /build/scripts/app.js if live mode
     "<script>" + 
     reload_script + 
     "</script>" +
@@ -102,8 +101,6 @@ if (index_route > -1) {
     }
 }
 
-triggers.unshift("/client/") // if dev mode
-routes.unshift(file.component)
 triggers.unshift("/client_reload")
 routes.unshift(async (context, incoming) => {
 
@@ -153,12 +150,12 @@ let cache;
 
 dir.watch("../client", [".js"], ["node_modules"], () => {
 
-    // REBUILD
+    /* REBUILD
     let build = ["../client/app.js"]
     //dir.collect("../client", [".js"], ["node_modules"], build);
     
     let start = performance.now()
-    
+
     let minified = esbuild.buildSync({
         loader: { ".js": "js" },
         entryPoints: build,
@@ -191,6 +188,8 @@ dir.watch("../client", [".js"], ["node_modules"], () => {
     // switch cache
 
     console.log(((performance.now() - start) / 1000) + " ms")
+
+    */
 
     // RELOAD
     context.client_reload = true

@@ -16,7 +16,8 @@ export default (app) => {
     counter = 0
     */
 
-    let oswald_bold = app.font("oswald_bold", "/build/assets/fonts/oswald_bold.woff2", () => { loaded = true })
+    let oswald_bold = app.font("oswald_bold", "oswald_bold.woff2", () => { loaded = true })
+    let roboto_300 = app.font("roboto_300", "roboto_300.woff2", () => { loaded = true })
 
     if (loaded) { console.log(oswald_bold); loaded = false }
 
@@ -45,7 +46,11 @@ export default (app) => {
         .shadow_color(shadow)
         .z(1)
         .text("hello")
-        .font(oswald_bold)
+        .font(roboto_300) //text_font()
+        //text_color()
+        //text_spacing_x()
+        //text_spacing_y()
+        //text_size()
 
     const search = dashboard.element("search", "input")
         .x(card.x())

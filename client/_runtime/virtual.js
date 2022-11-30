@@ -179,13 +179,8 @@ export function element(context, view, id) {
             return e.b();
         },
 
-        // fixed??
-        fixed_t() {},
-        fixed_l() {},
-        fixed_b() {},
-        fixed_r() {},
 
-        // global
+        // 
         x(x=null, min=null, max=null) {
             if (x === e._l) { return e }
             if (x !== null) { e._l = x - (e.w() / 2); e.UPDATE = true; return e; } 

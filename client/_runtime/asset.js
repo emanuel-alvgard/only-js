@@ -1,10 +1,10 @@
 // @DONE
-async function _asset(url, result) {
+async function _asset(path, result) {
 
     let done = false
 
     let request = new XMLHttpRequest()
-    request.open("GET", url, true)
+    request.open("GET", "client/assets/" + path, true)
     request.setRequestHeader("Content-Type", "application/octet-stream")
     request.responseType = "arraybuffer"
 
@@ -30,7 +30,7 @@ export async function font(id, path, callback) {
 
     let result = { data: null }
 
-    await _asset(path, result)
+    await _asset("fonts/" + path, result)
     
     let f = new FontFace(id, result.data)
     await f.load()
