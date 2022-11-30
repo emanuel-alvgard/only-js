@@ -49,6 +49,8 @@ export function element(context, view, id) {
         MOUSE_UP: false,
 
         // DATA
+        _context: context,
+        _view: view,
         _id: id,
         _anims: {},
 
@@ -62,6 +64,8 @@ export function element(context, view, id) {
         _auto_h: true,
 
         _image: null,
+        _image_position: "center",
+        _image_fit: "cover",
 
         _color_r: 200,
         _color_g: 200,
@@ -103,6 +107,7 @@ export function element(context, view, id) {
         _shadow_a: 1,
 
         // INTERFACE
+        view() { return e._view },
         real() {
             if (id in view._real) { return view._real[id] }
         },
@@ -207,6 +212,12 @@ export function element(context, view, id) {
             if (v === e._image) { return e }
             if (v !== null) { e._image = v; e.UPDATE = true; return e; }
             return e._image
+        },
+        image_position() {},
+        image_fit(v=null) {
+            if (v === e._image_fit) { return e }
+            if (v !== null) { e._image_fit = v; e.UPDATE = true; return e; }
+            return e._image_fit
         },
 
         color(rgba) { 

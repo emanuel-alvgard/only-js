@@ -79,9 +79,20 @@ function _update(view) {
 
             // BACKGROUND
             if (virtual._image !== null) { 
-                if (real.tagName === "IMG") { real.src = "data:image/jpg;base64," + virtual._image }
-                else { real.style.backgroundImage = 'url("data:image/jpg;base64,' + virtual._image + '")' } 
+                if (real.tagName === "IMG") { 
+                    real.src = "data:image/jpg;base64," + virtual._image
+                    real.style.objectPosition = virtual._image_position
+                    real.style.objectFit = virtual._image_fit
+                }
+                else { 
+                    real.style.backgroundImage = 'url("data:image/jpg;base64,' + virtual._image + '")'
+                    real.style.backgroundPosition = virtual._image_position
+                    real.style.backgroundSize = virtual._image_fit 
+                } 
             }
+
+            real.style.objectPosition = virtual._image_position
+            real.style.objectFit = virtual._image_fit
 
             real.style.backgroundColor = "rgba(" + 
                 virtual._color_r + "," +
@@ -126,7 +137,7 @@ function _update(view) {
             if (virtual._text_font !== null) { real.style.fontFamily = virtual._text_font }
 
             // visibility
-            if (virtual._visible) { real.style.display = "initial" }
+            if (virtual._visible) { real.style.display = "block" }
             else { real.style.display = "none" }
         }
 
@@ -186,12 +197,8 @@ export function setup(context) {
             element.style.margin = "0px"
             element.style.padding = "0px"
             element.style.border = "none"
-    
-            // @CHECK if this should be here?? maybe swap out for custom intersection system
-            //element.onmouseover = () => { virtual.mouse_hover = true }
-            //element.onmouseleave = () => {  virtual.mouse_hover = false }
-            //element.onmousedown = () => { virtual.mouse_down = true }
-            //element.onmouseup = () => { virtual.mouse_up = true }
+            element.style.backgroundRepeat = "no-repeat"
+            element.style.boxSizing = "border-box"
     
             view._real[id] = element
             if (id !== "root") { view.real("root").append(element) }

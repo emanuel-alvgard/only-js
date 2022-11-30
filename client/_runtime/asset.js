@@ -39,17 +39,18 @@ export async function font(id, path, callback) {
     return
 }
 
-// @
-export async function image(id, path, callback) {
+// @DONE
+export async function image(path, callback) {
 
     let result = { data: null }
 
     await _asset("images/" + path, result)
-    let str = new Uint8Array(result.data)
-    callback(
-        // @HERE
-        str.toString("base64")
-    )
+    let u8 = new Uint8Array(result.data)
+    let str = ""
+    u8.forEach(byte => {
+        str += String.fromCharCode(byte)
+    })
+    callback(btoa(str))
     return
 }
 

@@ -90,7 +90,7 @@ export function setup() {
             if (id in context._images) { return context._images[id] }
             if (path === null) { return ""}
             context._images[id] = null
-            asset.image(id, path, (i) => { context._images[id] = i; callback() })
+            asset.image(path, (i) => { context._images[id] = i; callback() })
         },
         json(id, path, callback=()=>{}) {
             if (path === null) { return ""}
