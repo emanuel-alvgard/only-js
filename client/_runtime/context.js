@@ -80,13 +80,21 @@ export function setup() {
         },
 
         // @DONE
-        font(id, path, callback=()=>{}) {
+        font(id, path="", callback=()=>{}) {
             if (id in context._fonts) { return context._fonts[id] }
+            if (path === null) { return ""}
             context._fonts[id] = null
             asset.font(id, path, (f) => { context._fonts[id] = f; callback() })
         },
-        image(id, path, callback=()=>{}) {},
-        json(id, path, callback=()=>{}) {},
+        image(id, path="", callback=()=>{}) {
+            if (id in context._images) { return context._images[id] }
+            if (path === null) { return ""}
+            context._images[id] = null
+            asset.image(id, path, (i) => { context._images[id] = i; callback() })
+        },
+        json(id, path, callback=()=>{}) {
+            if (path === null) { return ""}
+        },
 
         // @DONE
         component(id, func) {

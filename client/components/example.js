@@ -8,6 +8,7 @@ let shadow = [220,220,220,1]
 //let counter = 0
 
 let loaded = false
+let img_loaded = false
 
 export default (app) => {
     
@@ -18,8 +19,10 @@ export default (app) => {
 
     let oswald_bold = app.font("oswald_bold", "oswald_bold.woff2", () => { loaded = true })
     let roboto_300 = app.font("roboto_300", "roboto_300.woff2", () => { loaded = true })
+    let img = app.image("img", "img.jpg", () => { img_loaded = true })
 
-    if (loaded) { console.log(oswald_bold); loaded = false }
+    if (loaded) { console.log("font loaded"); loaded = false }
+    if (img_loaded) { console.log(img); img_loaded = false }
 
     const dashboard = app.view("dashboard")
     const root = dashboard.root
@@ -41,12 +44,14 @@ export default (app) => {
         .t(root.t() + 25)
         .extend_b(root.b() - 50)
         .color(accent)
-        .border_radius(15,15,15,15)
-        .shadow(0,5,25)
+        .border_radius([15,15,15,15])
+        .shadow([0,5,25])
         .shadow_color(shadow)
         .z(1)
         .text("hello")
-        .font(roboto_300) //text_font()
+        .text_font(roboto_300)
+        .image(img)
+
         //text_color()
         //text_spacing_x()
         //text_spacing_y()

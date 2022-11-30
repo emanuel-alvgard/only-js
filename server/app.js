@@ -76,7 +76,7 @@ let reload_script = fs_builtin.readFileSync("./_runtime/client_reload.js").toStr
 
 let pointer = { position:0, previous:0 }
 while (pointer.position < html_index.length) {
-    if (util.string(html_index, "</body>", pointer)) { console.log(pointer.position); break; }
+    if (util.string(html_index, "</body>", pointer)) { break; }
     pointer.position ++
 }
 

@@ -42,6 +42,15 @@ export async function font(id, path, callback) {
 // @
 export async function image(id, path, callback) {
 
+    let result = { data: null }
+
+    await _asset("images/" + path, result)
+    let str = new Uint8Array(result.data)
+    callback(
+        // @HERE
+        str.toString("base64")
+    )
+    return
 }
 
 // @

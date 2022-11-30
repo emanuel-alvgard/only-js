@@ -6,7 +6,9 @@ const types = {
     mjs: "text/javascript",
     html: "text/html",
     svg: "image/svg+xml",
-    woff2: "application/font-woff2"
+    woff2: "application/font-woff2",
+    jpg: "image/jpeg",
+    jpeg: "image/jpeg"
 }
 
 // @DONE

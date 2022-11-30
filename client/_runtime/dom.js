@@ -78,6 +78,11 @@ function _update(view) {
             real.style.zIndex = virtual._z_index + ""
 
             // BACKGROUND
+            if (virtual._image !== null) { 
+                if (real.tagName === "IMG") { real.src = "data:image/jpg;base64," + virtual._image }
+                else { real.style.backgroundImage = 'url("data:image/jpg;base64,' + virtual._image + '")' } 
+            }
+
             real.style.backgroundColor = "rgba(" + 
                 virtual._color_r + "," +
                 virtual._color_g + "," +
@@ -85,7 +90,7 @@ function _update(view) {
                 virtual._color_a + ")" 
             
             // TEXT
-            if (virtual._text !== "") { real.textContent = virtual._text }
+            if (virtual._text !== null) { real.textContent = virtual._text }
             //real.style.paddingLeft = virtual._padding_left + "px"
             //real.style.paddingRight = virtual._padding_right + "px"
             //real.style.paddingTop = virtual._padding_top + "px"
@@ -117,8 +122,8 @@ function _update(view) {
                 virtual._shadow_a + ")"
 
 
-            if (virtual._font_size !== 0) { real.style.fontSize = virtual._font_size + "px" }
-            if (virtual._font !== null) { real.style.fontFamily = virtual._font }
+            if (virtual._text_size !== null) { real.style.fontSize = virtual._text_size + "px" }
+            if (virtual._text_font !== null) { real.style.fontFamily = virtual._text_font }
 
             // visibility
             if (virtual._visible) { real.style.display = "initial" }

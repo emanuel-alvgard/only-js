@@ -61,18 +61,19 @@ export function element(context, view, id) {
         _auto_w: true,
         _auto_h: true,
 
+        _image: null,
+
         _color_r: 200,
         _color_g: 200,
         _color_b: 200,
         _color_a: 1,
 
-        _text: "",
-
-        _font: null,
-        _font_size: 0,
-        _font_red: 0,
-        _font_green: 0,
-        _font_blue: 0,
+        _text: null,
+        _text_font: null,
+        _text_size: null,
+        _text_red: 0,
+        _text_green: 0,
+        _text_blue: 0,
 
         _padding_l: 0,
         _padding_r: 0,
@@ -151,6 +152,7 @@ export function element(context, view, id) {
 
         // extension
         extend_l(l=null, min=null, max=null) {
+            if (l === e.w() + e.r()) { return e }
             if (l !== null) { 
                 e.w(l - e.r(), min, max);
                 e.l(l);
@@ -160,6 +162,7 @@ export function element(context, view, id) {
         },
 
         extend_t(t=null, min=null, max=null) {
+            if (t === e.h() + e.b()) { return e }
             if (t !== null) { 
                 e.h(t - e.b(), min, max); 
                 e.t(t);
@@ -170,11 +173,13 @@ export function element(context, view, id) {
         },
 
         extend_r(r=null, min=null, max=null) {
+            if (r === e.w() + e.l()) { return e }
             if (r !== null) { e.w(r - e.l(), min, max); e.UPDATE = true; return e; }
             return e.r();
         },
 
         extend_b(b=null, min=null, max=null) {
+            if (b === e.h() + e.t()) { return e }
             if (b !== null) { e.h(b - e.t(), min, max); e._auto_h = false; e.UPDATE = true; return e; }
             return e.b();
         },
@@ -198,7 +203,11 @@ export function element(context, view, id) {
         },
 
         // BACKGROUND
-        image(asset, type) {},
+        image(v=null) {
+            if (v === e._image) { return e }
+            if (v !== null) { e._image = v; e.UPDATE = true; return e; }
+            return e._image
+        },
 
         color(rgba) { 
             if (rgba[0] !== e._color_r) { e._color_r = rgba[0]; e.UPDATE = true }
@@ -219,6 +228,14 @@ export function element(context, view, id) {
             return e._text
         },
 
+        text_font(v=null) {
+            if (v === e._text_font) { return e }
+            if (v !== null) { e._text_font = v; e.UPDATE = true; return e; }
+            return e._text_font
+        },
+        text_size() {},
+        text_color() {},
+
         // PADDING
         padding(left=null, right=null, top=null, bottom=null) {
             if (left !== null) { e._padding_l = left; e.UPDATE = true; }
@@ -228,16 +245,7 @@ export function element(context, view, id) {
             return e
         },
 
-        // FONT
-        font(v=null) {
-            if (v === e._font) { return e }
-            if (v !== null) { e._font = v; e.UPDATE = true; return e; }
-            return e._font
-        },
-        font_size() {},
-        font_color() {},
-
-        // border ?????
+        // BORDER
         border(v=null) {
             if (v === e._border) { return e }
             if (v !== null) { e._border = v; e.UPDATE = true; return e; }
@@ -254,20 +262,20 @@ export function element(context, view, id) {
             return e
         },
 
-        border_radius(lt=null, rt=null, rb=null, lb=null) {
-            if (lt !== null) { e._border_lt = lt; e.UPDATE = true; }
-            if (rt !== null) { e._border_rt = rt; e.UPDATE = true; }
-            if (rb !== null) { e._border_rb = rb; e.UPDATE = true; }
-            if (lb !== null) { e._border_lb = lb; e.UPDATE = true; }
+        border_radius(v) {
+            if (v[0] !== e._border_lt) { e._border_lt = v[0]; e.UPDATE = true; }
+            if (v[1] !== e._border_rt) { e._border_rt = v[1]; e.UPDATE = true; }
+            if (v[2] !== e._border_rb) { e._border_rb = v[2]; e.UPDATE = true; }
+            if (v[3] !== e._border_lb) { e._border_lb = v[3]; e.UPDATE = true; }
             return e
         },
 
 
         // SHADOW
-        shadow(x=null, y=null, blur=null) {
-            if (x !== null) { e._shadow_x = x; e.UPDATE = true; }
-            if (y !== null) { e._shadow_y = y; e.UPDATE = true; }
-            if (blur !== null) { e._shadow_blur = blur; e.UPDATE = true; }
+        shadow(v) {
+            if (v[0] !== e._shadow_x) { e._shadow_x = v[0]; e.UPDATE = true; }
+            if (v[1] !== e._shadow_y) { e._shadow_y = v[1]; e.UPDATE = true; }
+            if (v[2] !== e._shadow_blur) { e._shadow_blur = v[2]; e.UPDATE = true; }
             return e
         },
         shadow_color(rgba) {
