@@ -80,8 +80,8 @@ export function element(context, view, id) {
         _text_blue: 0,
 
         _padding_l: 0,
-        _padding_r: 0,
         _padding_t: 0,
+        _padding_r: 0,
         _padding_b: 0,
 
         _border: "none",
@@ -248,11 +248,11 @@ export function element(context, view, id) {
         text_color() {},
 
         // PADDING
-        padding(left=null, right=null, top=null, bottom=null) {
-            if (left !== null) { e._padding_l = left; e.UPDATE = true; }
-            if (right !== null) { e._padding_r = right; e.UPDATE = true; }
-            if (top !== null) { e._padding_t = top; e.UPDATE = true; }
-            if (bottom !== null) { e._padding_b = bottom; e.UPDATE = true; }
+        padding(v) {
+            if (v[0] !== e._padding_l) { e._padding_l = v[0]; e.UPDATE = true; }
+            if (v[1] !== e._padding_t) { e._padding_t = v[1]; e.UPDATE = true; }
+            if (v[2] !== e._padding_r) { e._padding_r = v[2]; e.UPDATE = true; }
+            if (v[3] !== e._padding_b) { e._padding_b = v[3]; e.UPDATE = true; }
             return e
         },
 

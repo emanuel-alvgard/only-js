@@ -102,10 +102,10 @@ function _update(view) {
             
             // TEXT
             if (virtual._text !== null) { real.textContent = virtual._text }
-            //real.style.paddingLeft = virtual._padding_left + "px"
-            //real.style.paddingRight = virtual._padding_right + "px"
-            //real.style.paddingTop = virtual._padding_top + "px"
-            //real.style.paddingBottom = virtual._padding_bottom + "px"
+            real.style.paddingLeft = virtual._padding_l + "px "
+            real.style.paddingTop = virtual._padding_t + "px "
+            real.style.paddingRight = virtual._padding_r + "px "
+            real.style.paddingBottom = virtual._padding_b + "px "
 
             // BORDER
             real.style.border = virtual._border

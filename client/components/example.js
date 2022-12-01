@@ -1,9 +1,28 @@
 import grid from "../layouts/grid.js"
 import slider from "../layouts/slider.js"
 
-let main = [220,220,220,1]
-let accent = [255,255,255,1]
+let mode = "light"
+let background = [220,220,220,1]
+let main = [255,255,255,1]
+let second = [245, 245, 245, 1]
 let shadow = [220,220,220,1]
+
+function color_mode() {
+    if (mode === "light") {
+        background = [120,120,120,1]
+        main = [50,50,50,1]
+        second = [150, 150, 150, 1]
+        shadow = [120,120,120,1]
+        mode = "dark"
+    }
+    else if (mode === "dark") {
+        background = [220,220,220,1]
+        main = [255,255,255,1]
+        second = [245, 245, 245, 1]
+        shadow = [220,220,220,1]
+        mode = "light"
+    }
+}
 
 //let debounce_frames = 10
 //let counter = 0
@@ -26,7 +45,7 @@ export default (app) => {
     if (img_loaded) { img_loaded = false }
 
     const dashboard = app.view("dashboard")
-    dashboard.root.color([250, 250, 250, 1])
+    dashboard.root.color(second)
 
     const side_nav = dashboard.element("side_nav")
     const card = dashboard.element("card")
@@ -41,10 +60,10 @@ export default (app) => {
         .extend_b(dashboard.root.b())
         .w(dashboard.root.w() / 3, 100, 300)
         .z(1)
-        .color(accent)
+        .color(main)
         .border("solid")
         .border_size(1)
-        .border_color(main)
+        .border_color(background)
         .shadow([0,1,5])
         .shadow_color(shadow)
 
@@ -53,15 +72,15 @@ export default (app) => {
         .extend_r(dashboard.root.r() - 50)
         .t(dashboard.root.t() + 25)
         .extend_b(dashboard.root.b() - 50)
-        .color(accent)
+        .color(main)
         .border("solid")
         .border_size(1)
-        .border_color(main)
+        .border_color(background)
         .border_radius([3,3,3,3])
         .shadow([0,1,5])
         .shadow_color(shadow)
         .z(1)
-        .image(img)
+        //.image(img)
         //.image_fit("cover")
 
 
@@ -72,7 +91,7 @@ export default (app) => {
         .h(25)
         .z(2)
 
-        slider(mode_slider)
+        slider(mode_slider, color_mode)
 
     search
         .x(card.x())
@@ -82,10 +101,10 @@ export default (app) => {
         .color([247,247,247,1])
         .border("solid")
         .border_size(1)
-        .border_color(main)
+        .border_color(background)
         .border_radius([3,3,3,3])
         .z(2)
-        //.padding([10,0,0,0])
+        .padding([5,0,0,0])
 
     /*
     let boxes = [ 
@@ -121,7 +140,5 @@ export default (app) => {
         1
     )
     */
-
-    //input.real().style.boderStyle = ""
 
 }

@@ -1,6 +1,6 @@
 let ON = false
 
-export default (root) => {
+export default (root, callback) => {
     
     const button = root.view().element("test")
 
@@ -19,7 +19,8 @@ export default (root) => {
 
     const click = () => {
         if (ON) { ON = false}
-            else { ON = true }
+        else { ON = true }
+        callback()
     }
 
     if (root.view().SETUP) {
