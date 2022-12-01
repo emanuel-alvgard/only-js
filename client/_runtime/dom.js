@@ -85,7 +85,7 @@ function _update(view) {
                     real.style.objectFit = virtual._image_fit
                 }
                 else { 
-                    real.style.backgroundImage = 'url("data:image/jpg;base64,' + virtual._image + '")'
+                    real.style.backgroundImage = 'url("data:application/octet-stream;base64,' + virtual._image + '")'
                     real.style.backgroundPosition = virtual._image_position
                     real.style.backgroundSize = virtual._image_fit 
                 } 

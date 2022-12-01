@@ -19,7 +19,10 @@ export default (root, elements, row_gap, column_gap, row_h=null, column_w=null) 
             elements[i][j].w(column_w[i])
             elements[i][j].z(root.z() + 1)
             
-            if (i === 0) { root_width += column_w[j] }
+            if (i === 0) { 
+                root_width += column_w[j] 
+                if (j === 0) { elements[i][j].border_radius([root._border_radius_lt,,0,0]) } // @HERE
+            }
             column_pos += column_w[i] + column_gap
         }
 
@@ -27,8 +30,16 @@ export default (root, elements, row_gap, column_gap, row_h=null, column_w=null) 
         row_pos += row_h[i] + row_gap
     }
 
-    root.w(root_width + (column_gap * (column_w.length - 1)))
-    root.h(root_height + (row_gap * (row_h.length - 1)))
+    root.w(
+        root_width + 
+        (column_gap * (column_w.length - 1)) +
+        (border * 2)
+    )
+    root.h(
+        root_height + 
+        (row_gap * (row_h.length - 1)) +
+        (border * 2)
+    )
 
     return root
 }

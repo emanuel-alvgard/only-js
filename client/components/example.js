@@ -6,6 +6,7 @@ let background = [220,220,220,1]
 let main = [255,255,255,1]
 let second = [245, 245, 245, 1]
 let shadow = [220,220,220,1]
+let transparent = [255,255,255,0]
 
 function color_mode() {
     if (mode === "light") {
@@ -37,20 +38,28 @@ export default (app) => {
     counter = 0
     */
 
-    let oswald_bold = app.font("oswald_bold", "oswald_bold.woff2", () => { loaded = true })
-    let roboto_300 = app.font("roboto_300", "roboto_300.woff2", () => { loaded = true })
-    let img = app.image("img", "img.jpg", () => { img_loaded = true })
+    let _oswald_bold = app.font("oswald_bold", "oswald_bold.woff2", () => { loaded = true })
+    let _roboto_300 = app.font("roboto_300", "roboto_300.woff2", () => { loaded = true })
+    let _img_logo = app.image("img_logo", "logo.png", () => { img_loaded = true })
+    let _img_logout = app.image("img_logout", "logout.png", () => { img_loaded = true })
+    let _img_search = app.image("img_search", "search.png", () => { img_loaded = true })
 
     if (loaded) { loaded = false }
     if (img_loaded) { img_loaded = false }
 
     const dashboard = app.view("dashboard")
     dashboard.root.color(second)
+    const e = dashboard.element
 
-    const side_nav = dashboard.element("side_nav")
-    const card = dashboard.element("card")
-    const mode_slider = dashboard.element("mode_slider")
-    const search = dashboard.element("search", "input")
+    const side_nav = e("side_nav")
+    const img_logo = e("img_logo")
+    const img_logout = e("img_logout")
+
+    const card = e("card")
+    const img_search = e("img_search")
+    const mode_slider = e("mode_slider")
+    const search = e("search", "input")
+    const customer_grid = e("customer_grid")
 
     const all = [side_nav, card, search]
 
@@ -67,6 +76,23 @@ export default (app) => {
         .shadow([0,1,5])
         .shadow_color(shadow)
 
+    img_logo
+        .t(side_nav.t() - 50)
+        .l(side_nav.l() + 35)
+        .extend_r(side_nav.r() - 45)
+        .h(img_logo.w())
+        .image(_img_logo)
+        .z(side_nav.z() + 1)
+
+    img_logout
+        .w(25)
+        .h(25)
+        .b(side_nav.b() - 25)
+        .l(side_nav.l() + 25)
+        .z(side_nav.z() + 1)
+        .image(_img_logout)
+        .color(transparent)
+
     card
         .l(side_nav.r() + 50)
         .extend_r(dashboard.root.r() - 50)
@@ -80,8 +106,6 @@ export default (app) => {
         .shadow([0,1,5])
         .shadow_color(shadow)
         .z(1)
-        //.image(img)
-        //.image_fit("cover")
 
 
     mode_slider
@@ -96,49 +120,62 @@ export default (app) => {
     search
         .x(card.x())
         .t(card.t() + 50)
-        .w(card.w() / 3)
-        .h(card.w() / 25)
+        .w(card.w() / 3, 300, 1000)
+        .h(card.w() / 25, 50, 100)
         .color([247,247,247,1])
         .border("solid")
         .border_size(1)
         .border_color(background)
         .border_radius([3,3,3,3])
         .z(2)
-        .padding([5,0,0,0])
+        .padding([10,0,45,0])
 
-    /*
+    img_search
+        .w(25)
+        .h(25)
+        .z(search.z() + 1)
+        .image(_img_search)
+        .color(transparent)
+        .r(search.r() - 10)
+        .y(search.y())
+
+    
     let boxes = [ 
-        dashboard.element("box_1"),
-        dashboard.element("box_2"),
-        dashboard.element("box_3"),
-        dashboard.element("box_4"),
-        dashboard.element("box_5"),
-        dashboard.element("box_6")
+        e("box_1"),
+        e("box_2"),
+        e("box_3"),
+        e("box_4"),
+        e("box_5"),
+        e("box_6")
     ]
 
     boxes.forEach(box => {
         box.color([245, 245, 245, 1])
     })
 
-    const customer_grid = dashboard.element("grid")
+    customer_grid
         .x(card.x())
         .y(card.y())
-        .z(1)
-        .color([0,0,0,1])
+        .z(card.z() + 1)
+        .color(background)
         .border("solid")
         .border_size(1)
+        .border_color(background)
+        .border_radius([3, 3, 3, 3])
+        .w(200)
+        .h(200)
 
+      
     grid(
         customer_grid,
         [
             [boxes[0], boxes[1], boxes[2]], 
             [boxes[3], boxes[4], boxes[5]]
         ],
+        1,
+        1,
         [50,50],
         [75,75,75],
-        1,
-        1
     )
-    */
-
+    
 }
