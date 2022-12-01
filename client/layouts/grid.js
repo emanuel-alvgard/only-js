@@ -16,14 +16,19 @@ export default (root, elements, row_gap, column_gap, row_h=null, column_w=null) 
             elements[i][j].t(row_pos)
             elements[i][j].l(column_pos)
             elements[i][j].h(row_h[i])
-            elements[i][j].w(column_w[i])
+            elements[i][j].w(column_w[j])
             elements[i][j].z(root.z() + 1)
             
             if (i === 0) { 
                 root_width += column_w[j] 
-                if (j === 0) { elements[i][j].border_radius([root._border_radius_lt,,0,0]) } // @HERE
+                if (j === 0) { elements[i][j].border_radius([root._border_lt,0,0,0]) } // @HERE
+                if (j === elements[i].length-1) { elements[i][j].border_radius([0,root._border_rt,0,0]) }
             }
-            column_pos += column_w[i] + column_gap
+            if (i === elements.length-1) {
+                if (j === elements[i].length-1) { elements[i][j].border_radius([0,0,root._border_rb,0]) }
+                if (j === 0) { elements[i][j].border_radius([0,0,0,root._border_lb]) }
+            }
+            column_pos += column_w[j] + column_gap
         }
 
         root_height += row_h[i]

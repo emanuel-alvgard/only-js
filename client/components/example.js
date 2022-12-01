@@ -140,42 +140,39 @@ export default (app) => {
         .y(search.y())
 
     
-    let boxes = [ 
-        e("box_1"),
-        e("box_2"),
-        e("box_3"),
-        e("box_4"),
-        e("box_5"),
-        e("box_6")
-    ]
+    let items = []
+    let columns = [300]
+    let rows = []
 
-    boxes.forEach(box => {
-        box.color([245, 245, 245, 1])
-    })
+    for (let i=0; i < 10; i++) {
+        let item = e("item_" + i)
+            .color(second)
+
+        items.push([item])
+        rows.push(40)
+    }
+
 
     customer_grid
         .x(card.x())
-        .y(card.y())
+        .t(search.b() + 25)
         .z(card.z() + 1)
-        .color(background)
+        .color(main)
         .border("solid")
         .border_size(1)
         .border_color(background)
-        .border_radius([3, 3, 3, 3])
+        .border_radius([5, 5, 5, 5])
         .w(200)
         .h(200)
 
       
     grid(
         customer_grid,
-        [
-            [boxes[0], boxes[1], boxes[2]], 
-            [boxes[3], boxes[4], boxes[5]]
-        ],
+        items,
+        2,
         1,
-        1,
-        [50,50],
-        [75,75,75],
+        rows,
+        columns,
     )
     
 }
