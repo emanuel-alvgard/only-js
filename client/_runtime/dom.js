@@ -54,7 +54,7 @@ function _collect(view) {
 }
 
 
-
+// @ADD take children into account
 // @
 function _update(view) {
 

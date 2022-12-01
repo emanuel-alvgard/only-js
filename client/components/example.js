@@ -8,6 +8,10 @@ let second = [245, 245, 245, 1]
 let shadow = [220,220,220,1]
 let transparent = [255,255,255,0]
 
+// shadow = { y:1, blur:5 }
+// item_border = {b:"solid"}
+// item_border_color = { b:second }
+
 function color_mode() {
     if (mode === "light") {
         background = [120,120,120,1]
@@ -73,7 +77,9 @@ export default (app) => {
         .border("solid")
         .border_size(1)
         .border_color(background)
-        .shadow([0,1,5])
+        .shadow([0,1,5]) 
+        /* .shadow({y: 1, blur: 5})
+        */
         .shadow_color(shadow)
 
     img_logo
@@ -94,17 +100,17 @@ export default (app) => {
         .color(transparent)
 
     card
-        .l(side_nav.r() + 50)
-        .extend_r(dashboard.root.r() - 50)
-        .t(dashboard.root.t() + 25)
-        .extend_b(dashboard.root.b() - 50)
+        .l(side_nav.r() + 10)
+        .extend_r(dashboard.root.r() - 10)
+        .t(dashboard.root.t() + 10)
+        .extend_b(dashboard.root.b() - 10)
         .color(main)
         .border("solid") //
-        .border_size([1,1,1,1]) //
+        .border_size(1) //
         .border_color(background)
         .border_radius([3,3,3,3])
         .shadow([0,1,5])
-        .shadow_color(shadow)
+        .shadow_color(shadow) // shadow_color()
         .z(1)
 
 
@@ -124,7 +130,7 @@ export default (app) => {
         .h(card.w() / 25, 50, 100)
         .color([247,247,247,1])
         .border("solid")
-        .border_size(1)
+        .border_size(1) // border_size({top:1}) check if object
         .border_color(background)
         .border_radius([3,3,3,3])
         .z(2)
@@ -141,7 +147,7 @@ export default (app) => {
 
     
     let items = []
-    let columns = [300]
+    let columns = [500]
     let rows = []
 
     for (let i=0; i < 10; i++) {
@@ -158,15 +164,15 @@ export default (app) => {
         .t(search.b() + 25)
         .z(card.z() + 1)
         .color(main)
-        .border("solid")
-        .border_size(1)
-        .border_color(background)
-        .border_radius([5, 5, 5, 5])
-        .w(200)
-        .h(200)
+        //.border("solid") //
+        //.border_size(1)
+        //.border_color(background)
+        //.border_radius([5, 5, 5, 5])
 
       
-    grid(
+    grid( // @EDIT so that columns are equally devided
+    // grid() does not set width and height of input element
+    // only overflow y is allowed
         customer_grid,
         items,
         2,
