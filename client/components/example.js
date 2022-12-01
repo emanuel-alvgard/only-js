@@ -99,8 +99,8 @@ export default (app) => {
         .t(dashboard.root.t() + 25)
         .extend_b(dashboard.root.b() - 50)
         .color(main)
-        .border("solid")
-        .border_size(1)
+        .border("solid") //
+        .border_size([1,1,1,1]) //
         .border_color(background)
         .border_radius([3,3,3,3])
         .shadow([0,1,5])
