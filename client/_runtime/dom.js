@@ -7,7 +7,7 @@ function _collect(view) {
     view.bounds.w(document.documentElement.clientWidth)
     view.bounds.h(document.documentElement.clientHeight)
 
-    for (id in view._virtual) {
+    for (const id in view._virtual) {
         if (id === "bounds") { continue }
         let virtual = view._virtual[id]
         let real = view._real[id]
@@ -55,7 +55,7 @@ function _collect(view) {
 // @
 function _update(view) {
 
-    for (id in view._virtual) {
+    for (const id in view._virtual) {
 
         let virtual = view._virtual[id]
         let real = view._real[id]
@@ -67,8 +67,16 @@ function _update(view) {
             
             if (virtual._auto_h) { real.style.height = "auto" }
             else { real.style.height = virtual._h + "px" }
+
+            let left = virtual._l
+            let top = virtual._t
+
+            if (virtual._bounds !== null) {
+                left -= virtual._bounds._l
+                top -= virtual._bounds._t
+            }
             
-            real.style.transform = "translate(" + virtual._l + "px," + virtual._t + "px)" // this gets affected by .view.port transform
+            real.style.transform = "translate(" + left + "px," + top + "px)" // this gets affected by .view.port transform
             real.style.zIndex = virtual._z_index + ""
 
             // BACKGROUND
@@ -162,9 +170,9 @@ export function setup(context) {
         _real: {},
 
         // @DONE
-        virtual(id) {
+        virtual(id, bounds) {
             if (id in view._virtual) { return view._virtual[id] }
-            view._virtual[id] = virtual.element(context, view, id)
+            view._virtual[id] = virtual.element(context, view, bounds, id)
             return view._virtual[id]
         },
         
@@ -186,6 +194,7 @@ export function setup(context) {
             element.style.border = "none"
             element.style.backgroundRepeat = "no-repeat"
             element.style.boxSizing = "border-box"
+            element.style.overflow = "hidden"
     
             view._real[id] = element
             if (id !== "bounds") { bounds.real().append(element) }
@@ -193,8 +202,8 @@ export function setup(context) {
 
         // @DONE
         element(id, type="div", bounds=view.bounds) {
-            view.real(id, type)
-            return view.virtual(id)
+            view.real(id, type, bounds)
+            return view.virtual(id, bounds)
         },
 
         // @DONE
@@ -207,7 +216,7 @@ export function setup(context) {
         hide() {}
     }
 
-    view.bounds = view.element("bounds")
+    view.bounds = view.element("bounds", "div", null)
     document.body.append(view.real("bounds"))
 
     return view

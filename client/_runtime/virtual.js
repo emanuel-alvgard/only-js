@@ -38,7 +38,7 @@ function _rgba(e, property) {}
 
 
 // @
-export function element(context, view, id) {
+export function element(context, view, bounds, id) {
 
     let e = {
         
@@ -51,6 +51,7 @@ export function element(context, view, id) {
         // DATA
         _context: context,
         _view: view,
+        _bounds: bounds,
         _id: id,
         _anims: {},
 

@@ -42,6 +42,8 @@ export default (context) => {
     counter = 0
     */
 
+    //console.log("hej")
+
     let _oswald_bold = context.font("oswald_bold", "oswald_bold.woff2", () => { loaded = true })
     let _roboto_300 = context.font("roboto_300", "roboto_300.woff2", () => { loaded = true })
     let _img_logo = context.image("img_logo", "logo.png", () => { img_loaded = true })
@@ -70,7 +72,7 @@ export default (context) => {
     side_nav
         .t(dashboard.bounds.t())
         .l(dashboard.bounds.l())
-        .extend_b(dashboard.root.b())
+        .extend_b(dashboard.bounds.b())
         .w(dashboard.bounds.w() / 3, 100, 300)
         .z(1)
         .color(main)
@@ -145,21 +147,8 @@ export default (context) => {
         .r(search.r() - 10)
         .y(search.y())
 
-    
-    let items = []
-    let columns = [500]
-    let rows = []
 
-    for (let i=0; i < 10; i++) {
-        let item = e("item_" + i)
-            .color(second)
-
-        items.push([item])
-        rows.push(40)
-    }
-
-
-    customer_grid
+    customer_grid // @CHECK if this needs to get created in grid.js
         .x(card.x())
         .t(search.b() + 25)
         .z(card.z() + 1)
@@ -168,6 +157,18 @@ export default (context) => {
         //.border_size(1)
         //.border_color(background)
         //.border_radius([5, 5, 5, 5])
+
+    let items = []
+    let columns = [500]
+    let rows = []
+
+    for (let i=0; i < 10; i++) {
+        let item = e("item_" + i, "div", customer_grid)
+            .color(second)
+
+        items.push([item])
+        rows.push(40)
+    }
 
       
     grid( // @EDIT so that columns are equally devided
@@ -181,4 +182,7 @@ export default (context) => {
         columns,
     )
     
+
+    if (dashboard.SETUP) { console.log(dashboard.bounds._bounds) }
+
 }

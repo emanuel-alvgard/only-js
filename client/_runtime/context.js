@@ -32,11 +32,9 @@ function _run(context) {
     context.delta = (time - context.time) / 1000
     context.time = time
 
-    for (id in context._views) {
-        context._views[id].collect()
-        context._components[id](context)
-        context._views[id].update()
-    }
+    for (const id in context._views) { context._views[id].collect() }
+    for (const id in context._components) { context._components[id](context) }
+    for (const id in context._views) { context._views[id].update() }
 
     context.SETUP = false
 
