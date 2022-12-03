@@ -4,14 +4,11 @@ import * as virtual from "./virtual.js"
 function _collect(view) {
 
     // AUTO WIDTH / HEIGHT
-    view.root.w(document.documentElement.clientWidth)
-    view.root.h(document.documentElement.clientHeight)
+    view.bounds.w(document.documentElement.clientWidth)
+    view.bounds.h(document.documentElement.clientHeight)
 
-
-    let ids = Object.keys(view._virtual)
-
-    for (let i=1; i < ids.length; i++) {
-        let id = ids[i]
+    for (id in view._virtual) {
+        if (id === "bounds") { continue }
         let virtual = view._virtual[id]
         let real = view._real[id]
         if (virtual._auto_w) { virtual._w = real.clientWidth }
@@ -58,11 +55,8 @@ function _collect(view) {
 // @
 function _update(view) {
 
-    let ids = Object.keys(view._virtual)
+    for (id in view._virtual) {
 
-    for (let i=0; i < ids.length; i++) {
-
-        let id = ids[i];
         let virtual = view._virtual[id]
         let real = view._real[id]
 
@@ -74,7 +68,7 @@ function _update(view) {
             if (virtual._auto_h) { real.style.height = "auto" }
             else { real.style.height = virtual._h + "px" }
             
-            real.style.transform = "translate(" + virtual._l + "px," + virtual._t + "px)" // this gets affected by .viewport transform
+            real.style.transform = "translate(" + virtual._l + "px," + virtual._t + "px)" // this gets affected by .view.port transform
             real.style.zIndex = virtual._z_index + ""
 
             // BACKGROUND
@@ -161,16 +155,9 @@ export function setup(context) {
     const view = {
 
         SETUP: true,
-        FORMAT_SWITCH: false,
-        ORIENTATION_SWITCH: false,
 
-        viewport: null,
-        time: performance.now(),
-        delta: 0.0,
-        root: null,
-        format: "",
-        orientation: "",
-
+        bounds: null,
+        port: null,
         _virtual: {},
         _real: {},
 
@@ -182,7 +169,7 @@ export function setup(context) {
         },
         
         // @DONE
-        real(id, type) {
+        real(id, type, bounds) {
 
             if (id in view._real) { return view._real[id] }
 
@@ -201,11 +188,11 @@ export function setup(context) {
             element.style.boxSizing = "border-box"
     
             view._real[id] = element
-            if (id !== "root") { view.real("root").append(element) }
+            if (id !== "bounds") { bounds.real().append(element) }
         },
 
         // @DONE
-        element(id, type="div") {
+        element(id, type="div", bounds=view.bounds) {
             view.real(id, type)
             return view.virtual(id)
         },
@@ -220,8 +207,8 @@ export function setup(context) {
         hide() {}
     }
 
-    view.root = view.element("root")
-    document.body.append(view.real("root"))
+    view.bounds = view.element("bounds")
+    document.body.append(view.real("bounds"))
 
     return view
 }

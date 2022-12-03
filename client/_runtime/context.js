@@ -1,32 +1,27 @@
 import * as dom from "./dom.js"
 import * as asset from "./asset.js"
 
-// @DONE
+/* @DONE
 function _collect(context) {
-    let ids = Object.keys(context._views)
-    for (let i=0; i < ids.length; i++) {
-        let id = ids[i]
+    for (id in context._views) {
         context._views[id].collect()
     }
 }
 
 // @DONE
 function _update(context) {
-    let ids = Object.keys(context._components)
-    for (let i=0; i < ids.length; i++) {
-        let id = ids[i]
+    for (id in context._views) {
         context._components[id](context)
     }
 }
 
 // @DONE
 function _render(context) {
-    let ids = Object.keys(context._views)
-    for (let i=0; i < ids.length; i++) {
-        let id = ids[i]
+    for (id in context._views) {
         context._views[id].update()
     }
 }
+*/
 
 // @DONE
 function _run(context) {
@@ -37,9 +32,11 @@ function _run(context) {
     context.delta = (time - context.time) / 1000
     context.time = time
 
-    _collect(context)
-    _update(context)
-    _render(context)
+    for (id in context._views) {
+        context._views[id].collect()
+        context._components[id](context)
+        context._views[id].update()
+    }
 
     context.SETUP = false
 

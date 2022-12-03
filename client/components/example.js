@@ -35,24 +35,24 @@ function color_mode() {
 let loaded = false
 let img_loaded = false
 
-export default (app) => {
+export default (context) => {
     
     /* DEBOUNCING EXAMPLE
     if (counter !== debounce_frames) { counter ++; return }
     counter = 0
     */
 
-    let _oswald_bold = app.font("oswald_bold", "oswald_bold.woff2", () => { loaded = true })
-    let _roboto_300 = app.font("roboto_300", "roboto_300.woff2", () => { loaded = true })
-    let _img_logo = app.image("img_logo", "logo.png", () => { img_loaded = true })
-    let _img_logout = app.image("img_logout", "logout.png", () => { img_loaded = true })
-    let _img_search = app.image("img_search", "search.png", () => { img_loaded = true })
+    let _oswald_bold = context.font("oswald_bold", "oswald_bold.woff2", () => { loaded = true })
+    let _roboto_300 = context.font("roboto_300", "roboto_300.woff2", () => { loaded = true })
+    let _img_logo = context.image("img_logo", "logo.png", () => { img_loaded = true })
+    let _img_logout = context.image("img_logout", "logout.png", () => { img_loaded = true })
+    let _img_search = context.image("img_search", "search.png", () => { img_loaded = true })
 
     if (loaded) { loaded = false }
     if (img_loaded) { img_loaded = false }
 
-    const dashboard = app.view("dashboard")
-    dashboard.root.color(second)
+    const dashboard = context.view("dashboard")
+    dashboard.bounds.color(second)
     const e = dashboard.element
 
     const side_nav = e("side_nav")
@@ -68,10 +68,10 @@ export default (app) => {
     const all = [side_nav, card, search]
 
     side_nav
-        .t(dashboard.root.t())
-        .l(dashboard.root.l())
+        .t(dashboard.bounds.t())
+        .l(dashboard.bounds.l())
         .extend_b(dashboard.root.b())
-        .w(dashboard.root.w() / 3, 100, 300)
+        .w(dashboard.bounds.w() / 3, 100, 300)
         .z(1)
         .color(main)
         .border("solid")
@@ -101,9 +101,9 @@ export default (app) => {
 
     card
         .l(side_nav.r() + 10)
-        .extend_r(dashboard.root.r() - 10)
-        .t(dashboard.root.t() + 10)
-        .extend_b(dashboard.root.b() - 10)
+        .extend_r(dashboard.bounds.r() - 10)
+        .t(dashboard.bounds.t() + 10)
+        .extend_b(dashboard.bounds.b() - 10)
         .color(main)
         .border("solid") //
         .border_size(1) //
