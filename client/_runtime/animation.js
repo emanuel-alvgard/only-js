@@ -27,19 +27,9 @@ function _cube(p0, p1, p2, p3, i) {
     return _line(q0, q1, i)
 }
 
-// @
-// create a pool of anim objects. This function allocates an anim object and pushes it into the elements anim array.
-// example: 
-// const CURVE = cube_curve(1.0, 1.0, 1.0);
-// button.anim("1", "left", 0, 100, 100, 0, CURVE, "test");
-// button.anim("1").start();
-// button.anim("1").stop();
-// button.anim("1").pause();
-// button.anim("1").update();
-// button.anim("1").remove();
 
-// @NOT
-export function anim(context, element, id, property, start, end, time, delay, curve, event) {
+// @DONE
+export function anim(context, id, setter, start, end, time, curve, delay) {
 
     let a = {
 
@@ -50,9 +40,8 @@ export function anim(context, element, id, property, start, end, time, delay, cu
         _time: time,
         _delay: delay,
         _curve: curve,
-        _event: event,
         
-        _direction: 0,
+        _direction: 1,
         _distance: 0.0,
         _speed: 0.0,
         _curve_func: null,
@@ -60,45 +49,55 @@ export function anim(context, element, id, property, start, end, time, delay, cu
         _delay_timer: 0.0,
         _run_timer: 0.0,
         _progress: 0.0,
+        _status: "stop",
 
-        _pause: false,
-        _stop: true,
-
-        start() {
-            a._pause = false;
-            a._stop = false;
-            return a;
+        run() {
+            if (a._status === "run") { return }
+            if (a._status === "done") {
+                a._delay_timer = 0.0
+                a._run_timer = 0.0
+                a._progress = 0.0
+            }
+            a._status = "run"
+            return a
         },
-        stop() { 
-            a._pause = false;
-            a._stop = true;
-            return a;
+        stop() {
+            if (a._status === "stop") { return a }
+            a._delay_timer = 0.0
+            a._run_timer = 0.0
+            a._progress = 0.0
+            a._status = "stop"
+            return a
         },
         pause() {
-            a._pause = true;
-            return a;
+            if (a._status === "pause") { return a }
+            a._status = "pause"
+            return a
         },
         update() {
 
-            // @ADD start, stop, pause, and reset anim data on stop or done
-            
-            let delta = context.delta;
-            
+            if (a._status !== "run") { return }            
+            let delta = context.delta
+
             // DELAY
-            a._delay_timer += delta * 1000;
-            if (a._delay_timer >= a._delay) { return; }
+            a._delay_timer += delta * 1000
+            if (a._delay_timer < a._delay) { console.log("here"); return }
         
             // DONE
-            if (a._run_timer >= a._time) { 
-                element[property](a._end);
-                if (a._event !== null) {
-                    element[a._event] = true;
-                }
-                return; 
+            if (a._run_timer >= a._time || a._progress >= a._distance) {
+                console.log(a._progress)
+                setter(a._end)
+                a._status = "done"
+                return 
             }
 
             // PROGRESS
-            a._progress += (a._speed * a._curve_func(a._curve, (a._run_timer / a._time))) * delta; 
+            a._progress += (a._speed * a._curve_func(a._curve, (a._run_timer / a._time))) * delta
+            setter(a._start + (a._progress * a._direction))
+            a._run_timer += delta * 1000
+
+            return
+
         },
         remove() {
             // use id to remove
@@ -106,21 +105,21 @@ export function anim(context, element, id, property, start, end, time, delay, cu
     }
 
     if (end < start) { 
-        a._direction = -1; 
-        a._distance = start - end;
+        a._direction = -1
+        a._distance = start - end
     }
     else {
-        a._direction = 1; 
-        a._distance = end - start;
+        a._direction = 1 
+        a._distance = end - start
     }
 
-    a._speed = (a._distance / a._time) * 1000;
+    a._speed = (a._distance / a._time) * 1000
 
     switch (curve.length) {
-        case 2: a._curve_func = function(curve, i) { _line(curve[0], curve[1], _clamp(i, 0, 1)); }; break;
-        case 3: a._curve_func = function(curve, i) { _quad(curve[0], curve[1], curve[2], _clamp(i, 0, 1)); }; break;
-        case 4: a._curve_func = function(curve, i) { _cube(curve[0], curve[1], curve[2], curve[3], _clamp(i, 0, 1)); }; break;
+        case 2: a._curve_func = function(curve, i) { return _line(curve[0], curve[1], _clamp(i, 0, 1)) }; break
+        case 3: a._curve_func = function(curve, i) { return _quad(curve[0], curve[1], curve[2], _clamp(i, 0, 1)) }; break
+        case 4: a._curve_func = function(curve, i) { return _cube(curve[0], curve[1], curve[2], curve[3], _clamp(i, 0, 1)) }; break
     }
 
-    return a;
+    return a
 }

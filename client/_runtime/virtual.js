@@ -121,9 +121,12 @@ export function element(context, view, bounds, id) {
         },
 
         // @DONE
-        anim(id, property, start, end, time, delay=null, curve=null, event=null) { 
-            if (id in e._anims) { return e._anims[id]; }
-            e._anims[id] = animation.anim(context, e, id, property, start, end, time, delay, curve, event);
+        anim(id, setter, start, end, time, curve=[1.0,1.0], delay=0.0) {
+            if (id in e._anims) { 
+                // check if any of the arguments diff and update object accordingly
+                return e._anims[id]
+            }
+            e._anims[id] = animation.anim(context, id, setter, start, end, time, curve, delay);
             return e._anims[id];
         },
 

@@ -1,5 +1,5 @@
 import grid from "../layouts/grid.js"
-import slider from "../layouts/slider.js"
+import toggle from "../layouts/toggle.js"
 
 let mode = "light"
 let background = [220,220,220,1]
@@ -63,7 +63,7 @@ export default (context) => {
 
     const card = e("card")
     const img_search = e("img_search")
-    const mode_slider = e("mode_slider")
+    const mode_toggle = e("mode_toggle")
     const search = e("search", "input")
     const customer_grid = e("customer_grid")
 
@@ -116,14 +116,14 @@ export default (context) => {
         .z(1)
 
 
-    mode_slider
+    mode_toggle
         .l(card.l() + 10)
         .t(card.t() + 10)
         .w(50)
         .h(25)
         .z(2)
 
-        slider(mode_slider, color_mode)
+        toggle(mode_toggle, color_mode)
 
     search
         .x(card.x())
@@ -150,9 +150,15 @@ export default (context) => {
 
     customer_grid // @CHECK if this needs to get created in grid.js
         .x(card.x())
-        .t(search.b() + 25)
         .z(card.z() + 1)
         .color(main)
+        
+    
+    let down = customer_grid.anim("down", customer_grid.t, search.b() + 25, 1000, 1000, [0, 0, 0, 4])
+    let up = customer_grid.anim("up", customer_grid.t, 1000, search.b() + 25, 1000, [4, 0, 0, 0])
+    if (down._status === "done") { down.stop(); up.run() }
+    if (up._status === "done") { up.stop(); down.run() }
+        
         //.border("solid") //
         //.border_size(1)
         //.border_color(background)
@@ -183,6 +189,12 @@ export default (context) => {
     )
     
 
-    if (dashboard.SETUP) { console.log(dashboard.bounds._bounds) }
+    if (dashboard.SETUP) { 
+        console.log(dashboard.bounds._bounds) 
+        console.log(customer_grid._anims)
+        customer_grid.t(search.b() + 25)
+        side_nav.real().onclick = () => { down.pause() }
+        img_logo.real().onclick = () => { down.run() }
+    }
 
 }

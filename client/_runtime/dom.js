@@ -60,6 +60,12 @@ function _update(view) {
         let virtual = view._virtual[id]
         let real = view._real[id]
 
+        for (const id in virtual._anims) {
+            //console.log(anim)
+            virtual._anims[id].update()
+        }
+
+
         if (virtual.UPDATE) {
         
             if (virtual._auto_w) { real.style.width = "auto" }
