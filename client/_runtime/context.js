@@ -11,7 +11,7 @@ function _collect(context) {
 // @DONE
 function _update(context) {
     for (id in context._views) {
-        context._components[id](context)
+        context.[id](context)
     }
 }
 
@@ -33,7 +33,7 @@ function _run(context) {
     context.time = time
 
     for (const id in context._views) { context._views[id].collect() }
-    for (const id in context._components) { context._components[id](context) }
+    for (const id in context._systems) { context._systems[id](context) }
     for (const id in context._views) { context._views[id].update() }
 
     context.SETUP = false
@@ -57,7 +57,7 @@ export function setup() {
         _images: {},
         _fonts: {},
         _views: {},
-        _components: {},
+        _systems: {},
 
         // INTERFACE
         // @DONE
@@ -92,10 +92,10 @@ export function setup() {
         },
 
         // @DONE
-        component(id, func) {
+        system(id, func) {
             
-            if (id in context._components) { return context._components[id] }
-            context._components[id] = func
+            if (id in context._systems) { return context._systems[id] }
+            context._systems[id] = func
             return
         },
 

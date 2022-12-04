@@ -12,7 +12,7 @@ const types = {
 }
 
 // @DONE
-exports.component = async (context, incoming) => { // @ADD config
+exports.system = async (context, incoming) => { // @ADD config
 
     let path = "..";  
     let file_type = util.filetype(incoming.url);
