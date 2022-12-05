@@ -56,6 +56,7 @@ export function element(context, view, bounds, id) {
         _anims: {},
 
         _visible: true,
+        _opacity: 1.0,
         _l: 0,
         _t: 0,
         _w: 0,
@@ -68,17 +69,17 @@ export function element(context, view, bounds, id) {
         _image_position: "center",
         _image_fit: "cover",
 
-        _color_r: 200,
-        _color_g: 200,
-        _color_b: 200,
-        _color_a: 1,
+        _color_r: 0,
+        _color_g: 0,
+        _color_b: 0,
+        _color_a: 0,
 
         _text: null,
         _text_font: null,
         _text_size: null,
-        _text_red: 0,
-        _text_green: 0,
-        _text_blue: 0,
+        _text_r: 0,
+        _text_g: 0,
+        _text_b: 0,
 
         _padding_l: 0,
         _padding_t: 0,
@@ -121,12 +122,12 @@ export function element(context, view, bounds, id) {
         },
 
         // @DONE
-        anim(id, setter, start, end, time, curve=[1.0,1.0], delay=0.0) {
+        anim(id, property, start, end, time, curve=[1.0,1.0], delay=0.0) {
             if (id in e._anims) { 
                 // check if any of the arguments diff and update object accordingly
                 return e._anims[id]
             }
-            e._anims[id] = animation.anim(context, id, setter, start, end, time, curve, delay);
+            e._anims[id] = animation.anim(context, id, property, start, end, time, curve, delay);
             return e._anims[id];
         },
 
@@ -195,12 +196,12 @@ export function element(context, view, bounds, id) {
 
 
         // 
-        x(x=null, min=null, max=null) {
+        x(x=null, min=null, max=null) { // @HERE does not work with auto width
             if (x === e._l) { return e }
             if (x !== null) { e._l = x - (e.w() / 2); e.UPDATE = true; return e; } 
             return e._l + (e.w() / 2); 
         },
-        y(y=null, min=null, max=null) { 
+        y(y=null, min=null, max=null) { // @HERE does not work with auto height
             if (y === e._t) { return e }
             if (y !== null) { e._t = y - (e.h() / 2); e.UPDATE = true; return e; }
             return e._t + (e.h() / 2); 
@@ -249,7 +250,13 @@ export function element(context, view, bounds, id) {
             return e._text_font
         },
         text_size() {},
-        text_color() {},
+        text_color(rgba) {
+            if (rgba[0] !== e._text_r) { e._text_r = rgba[0]; e.UPDATE = true }
+            if (rgba[1] !== e._text_g) { e._text_g = rgba[1]; e.UPDATE = true }
+            if (rgba[2] !== e._text_b) { e._text_b = rgba[2]; e.UPDATE = true }
+            if (rgba[3] !== e._text_a) { e._text_a = rgba[3]; e.UPDATE = true }
+            return e
+        },
 
         // PADDING
         padding(v) {
@@ -302,6 +309,8 @@ export function element(context, view, bounds, id) {
         },
 
         // visibility
+        opacity(v=null, min=null, max=null) { return _number(e, "_opacity", v, min, max); },
+
         show() { 
             if (e._visible) { return e; }
             e._visible = true; 

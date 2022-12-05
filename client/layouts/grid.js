@@ -2,7 +2,25 @@
 export default (bounds, elements, row_gap, column_gap, row_h=null, column_w=null) => {
 
     // @ADD set bounds.overflow_y("scroll")
+
+    let top = bounds.t()
+
+    elements.forEach(array => {
+        array.forEach(item => {
+            item
+            .w(bounds.w())
+            .h(100)
+            .l(bounds.l())
+            .t(top)
+            .z(bounds.z() + 1)
+
+            top += 100 + row_gap
+
+        })
+    })
     
+
+    /*
     let border = 0
     if (bounds.border() === "solid") { border = bounds.border_size() }
 
@@ -47,6 +65,7 @@ export default (bounds, elements, row_gap, column_gap, row_h=null, column_w=null
         (row_gap * (row_h.length - 1)) +
         (border * 2)
     )
+    */
 
     return bounds
 }

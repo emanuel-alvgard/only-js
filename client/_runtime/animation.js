@@ -29,7 +29,7 @@ function _cube(p0, p1, p2, p3, i) {
 
 
 // @DONE
-export function anim(context, id, setter, start, end, time, curve, delay) {
+export function anim(context, id, property, start, end, time, curve, delay) {
 
     let a = {
 
@@ -81,19 +81,18 @@ export function anim(context, id, setter, start, end, time, curve, delay) {
 
             // DELAY
             a._delay_timer += delta * 1000
-            if (a._delay_timer < a._delay) { console.log("here"); return }
+            if (a._delay_timer < a._delay) { return }
         
             // DONE
             if (a._run_timer >= a._time || a._progress >= a._distance) {
-                console.log(a._progress)
-                setter(a._end)
+                property(a._end)
                 a._status = "done"
                 return 
             }
 
             // PROGRESS
             a._progress += (a._speed * a._curve_func(a._curve, (a._run_timer / a._time))) * delta
-            setter(a._start + (a._progress * a._direction))
+            property(a._start + (a._progress * a._direction))
             a._run_timer += delta * 1000
 
             return

@@ -150,7 +150,7 @@ let cache;
 
 dir.watch("../client", [".js"], ["node_modules"], () => {
 
-    /* REBUILD
+    // REBUILD
     let build = ["../client/app.js"]
     //dir.collect("../client", [".js"], ["node_modules"], build);
     
@@ -161,11 +161,13 @@ dir.watch("../client", [".js"], ["node_modules"], () => {
         entryPoints: build,
         bundle: true,
         minify: true,
-        outdir: "../build/scripts",
         write: false,
         allowOverwrite: true,
     })
 
+    //console.log(minified)
+
+    /*
     esbuild.buildSync({
         loader: { ".js": "js" },
         entryPoints: build,
@@ -175,21 +177,23 @@ dir.watch("../client", [".js"], ["node_modules"], () => {
         write: true,
         allowOverwrite: true,
     })
+    */
 
     let gzipped = []
     let size = 0
-
+    
     minified.outputFiles.forEach(file => {
         let result = zlib_builtin.gzipSync(file.text)
         size += result.byteLength
         gzipped.push(result)
     })
 
+    console.log(size)
+    
+
     // switch cache
 
-    console.log(((performance.now() - start) / 1000) + " ms")
-
-    */
+    //console.log(((performance.now() - start) / 1000) + " ms")
 
     // RELOAD
     context.client_reload = true
