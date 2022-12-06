@@ -11,18 +11,26 @@ function _collect(view) {
         if (id === "bounds") { continue }
         let virtual = view._virtual[id]
         let real = view._real[id]
-        if (virtual._auto_w) { virtual._w = real.clientWidth }
-        if (virtual._auto_h) { virtual._h = real.clientHeight }
+        if (virtual._auto_w) {
+            if (real.clientWidth !== virtual._w) { virtual._w = real.clientWidth; virtual.UPDATE = true } 
+        }
+        if (virtual._auto_h) { 
+            if (real.clientHeight !== virtual._h) { virtual._h = real.clientHeight; virtual.UPDATE = true }
+        }
     }
 }
 
 
-// @ADD take children into account
-// @
+
+// @ EDIT rewrite whole function to create 1 string and set body.innerHTML?
+// maybe solves the problem with rendering out of sync 
+
 //let debounce = 3
 //let count = 0
 
 function _update(view) {
+
+
 
     for (const id in view._virtual) {
 

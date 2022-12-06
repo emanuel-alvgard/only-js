@@ -34,7 +34,8 @@ export function anim(context, id, property, start, end, time, curve, delay) {
     let a = {
 
         _id: id,
-        
+
+        // STATIC
         _start: start,
         _end: end,
         _time: time,
@@ -46,6 +47,7 @@ export function anim(context, id, property, start, end, time, curve, delay) {
         _speed: 0.0,
         _curve_func: null,
 
+        // DTYNAMIC
         _delay_timer: 0.0,
         _run_timer: 0.0,
         _progress: 0.0,
@@ -98,6 +100,7 @@ export function anim(context, id, property, start, end, time, curve, delay) {
             return
 
         },
+        status() { return a._status },
         remove() {
             // use id to remove
         }

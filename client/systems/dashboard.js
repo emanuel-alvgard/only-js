@@ -133,12 +133,11 @@ export default (context) => {
 
     version
         .x(side_nav.x())
-        .b(side_nav.b())
+        .b(side_nav.b() - 10)
         .text("v.0.1")
         .text_color([240,240,240,1])
         .z(side_nav.z() + 1)
 
-    //console.log(version.l())
 
     img_logout
         .w(25)
@@ -170,7 +169,7 @@ export default (context) => {
         .z(1)
 
 
-    /*Ämode_toggle
+    /*mode_toggle
         .l(card.l() + 10)
         .t(card.t() + 10)
         .w(50)
@@ -221,8 +220,10 @@ export default (context) => {
         .real().style.overflowY = "scroll"
         
     
-    let down = customer_grid.anim("down", customer_grid.t, search.b() + 25, 500, 1000, [4, 0, 0, 0])
-    let up = customer_grid.anim("up", customer_grid.t, 500, search.b() + 25, 3000, [4, 0, 0, 0])
+    let down = customer_grid.anim("down", customer_grid.t, search.b() + 25, 500, 1000, [0, 0, 0, 4])
+    let up = customer_grid.anim("up", customer_grid.t, 500, search.b() + 25, 1000, [4, 0, 0, 0])
+    if (down._status === "done") { down.stop(); up.run() }
+    if (up._status === "done") { up.stop(); down.run() }
         
 
     let items = []
@@ -255,8 +256,20 @@ export default (context) => {
     if (dashboard.SETUP) {
 
         customer_grid.t(search.b() + 25)
-        side_nav.real().onclick = () => { down.pause() }
-        img_logo.real().onclick = () => { down.run() }
+        side_nav.real().onclick = () => {
+            if (down._status === "run") { down.pause() }
+            else if (up._status === "run") { up.pause() }
+        }
+        img_logo.real().onclick = () => { 
+            if (down._status === "pause") { down.run() }
+            else if (up._status === "pause") { up.run() }
+            else { down.run() }
+        }
+        search.real().onclick = () => {
+            down.stop()
+            up.stop()
+            customer_grid.t(search.b() + 25)
+        }
     }
 
 }

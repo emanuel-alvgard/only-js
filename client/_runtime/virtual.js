@@ -196,13 +196,13 @@ export function element(context, view, bounds, id) {
 
 
         // 
-        x(x=null, min=null, max=null) { // @HERE does not work with auto width
-            if (x === e._l) { return e }
-            if (x !== null) { e._l = x - (e.w() / 2); e.UPDATE = true; return e; } 
+        x(x=null, min=null, max=null) {
+            if (x === e._l + (e.w() / 2)) { return e }
+            if (x !== null) { e._l = x - (e.w() / 2); e.UPDATE = true; return e; }
             return e._l + (e.w() / 2); 
         },
-        y(y=null, min=null, max=null) { // @HERE does not work with auto height
-            if (y === e._t) { return e }
+        y(y=null, min=null, max=null) {
+            if (y === e._t + (e.h() / 2)) { return e }
             if (y !== null) { e._t = y - (e.h() / 2); e.UPDATE = true; return e; }
             return e._t + (e.h() / 2); 
         },

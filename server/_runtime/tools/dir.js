@@ -30,7 +30,7 @@ exports.collect = (target_dir, extension, excluded, files=[], ino=[], mod=[], tr
     }
 }
 
-// @DONE
+// @NOT @HERE
 exports.watch = (start_path, extension, excluded, func) => {
 
     execute = 0;
