@@ -62,13 +62,13 @@ export default (runtime) => {
     b1.
         w(100).
         h(25).
-        r(root.w() - 100).
+        r(root.width() - 100).
         t(100)
 
     b2.
         w(100).
         h(25).
-        r(b1.l() - 10)
+        r(b1.left() - 10)
         t(100)
 
     // SIMILAR TO CSS CLASS

@@ -1,4 +1,4 @@
-import grid from "../layouts/grid.js"
+import table from "../layouts/table.js"
 import toggle from "../layouts/toggle.js"
 
 let CONTEXT
@@ -11,9 +11,22 @@ let second = [250, 250, 250, 1]
 let shadow = [220,220,220,1]
 let transparent = [255,255,255,0]
 
-// shadow = { y:1, blur:5 }
-// item_border = {b:"solid"}
-// item_border_color = { b:second }
+
+
+
+// @TEST
+let mock_data = {
+    customers: []
+}
+
+for (let i=0; i < 100; i++) {
+    mock_data.customers.push({
+        name: "Customer " + (i + 1),
+        number: "000"+ (i + 1)
+    })
+}
+
+
 
 
 // @DONE
@@ -61,20 +74,10 @@ function hover(element) {
 }
 
 
-
-//let debounce_frames = 10
-//let counter = 0
-
 let loaded = false
 let img_loaded = false
 
 export default (context) => {
-    
-    /* DEBOUNCING EXAMPLE
-    if (counter !== debounce_frames) { counter ++; return }
-    counter = 0
-    */
-
 
     let _oswald_bold = context.font("oswald_bold", "oswald_bold.woff2", () => { loaded = true })
     let _roboto_300 = context.font("roboto_300", "roboto_300.woff2", () => { loaded = true })
@@ -98,7 +101,7 @@ export default (context) => {
     const img_search = e("img_search")
     const mode_toggle = e("mode_toggle")
     const search = e("search", "input")
-    const customer_grid = e("customer_grid")
+    const customer_table = e("customer_table")
 
     const all = [side_nav, card, search]
 
@@ -113,19 +116,19 @@ export default (context) => {
 
 
     side_nav
-        .t(dashboard.bounds.t())
-        .l(dashboard.bounds.l())
-        .extend_b(dashboard.bounds.b())
-        .w(75)
+        .top(dashboard.bounds.top())
+        .left(dashboard.bounds.left())
+        .extend_bottom(dashboard.bounds.bottom())
+        .width(75)
         .z(1)
         .color([55,60,65,1])
         .shadow([0,3,7]) 
         .shadow_color([50,50,50,1])
 
     img_logo
-        .t(25)
-        .h(25)
-        .w(img_logo.h() * 0.708)
+        .top(25)
+        .height(25)
+        .width(img_logo.height() * 0.708)
         .x(side_nav.x())
         .image(_img_logo)
         .z(side_nav.z() + 1)
@@ -133,16 +136,16 @@ export default (context) => {
 
     version
         .x(side_nav.x())
-        .b(side_nav.b() - 10)
+        .bottom(side_nav.bottom() - 10)
         .text("v.0.1")
         .text_color([240,240,240,1])
         .z(side_nav.z() + 1)
 
 
     img_logout
-        .w(25)
-        .h(25)
-        .b(version.t() - 15)
+        .width(25)
+        .height(25)
+        .bottom(version.top() - 15)
         .x(side_nav.x())
         .z(side_nav.z() + 1)
         .image(_img_logout)
@@ -155,10 +158,10 @@ export default (context) => {
 
 
     card
-        .l(side_nav.r() + 10)
-        .extend_r(dashboard.bounds.r() - 10)
-        .t(dashboard.bounds.t() + 10)
-        .extend_b(dashboard.bounds.b() - 10)
+        .left(side_nav.right() + 10)
+        .extend_right(dashboard.bounds.right() - 10)
+        .top(dashboard.bounds.top() + 10)
+        .extend_bottom(dashboard.bounds.bottom() - 10)
         .color(main)
         //.border("solid") //
         .border_size(1) //
@@ -170,22 +173,22 @@ export default (context) => {
 
 
     /*mode_toggle
-        .l(card.l() + 10)
-        .t(card.t() + 10)
-        .w(50)
-        .h(25)
+        .left(card.left() + 10)
+        .top(card.top() + 10)
+        .width(50)
+        .height(25)
         .z(2)
 
         toggle(mode_toggle, color_mode)*/
 
     search
         .x(card.x())
-        .t(card.t() + 50)
-        .w(card.w() / 3, 300, 1000)
-        .h(50)
+        .top(card.top() + 50)
+        .width(card.width() / 3, 300, 1000)
+        .height(50)
         .color(second)
         .border("solid")
-        .border_size(1) // border_size({top:1}) check if object
+        .border_size(1)
         .border_color(background)
         .border_radius([3,3,3,3])
         .z(2)
@@ -198,18 +201,19 @@ export default (context) => {
     //hover(search)
 
     img_search
-        .w(25)
-        .h(25)
+        .width(25)
+        .height(25)
         .z(search.z() + 1)
         .image(_img_search)
         .color(transparent)
-        .r(search.r() - 10)
+        .right(search.right() - 10)
         .y(search.y())
 
 
-    customer_grid // @CHECK if this needs to get created in grid.js
-        .w(card.w() - 100)
-        .extend_b(card.b() - 50)
+    customer_table
+        .width(card.width() - 100)
+        .top(search.bottom() + 25)
+        .extend_bottom(card.bottom() - 50)
         .x(card.x())
         .z(card.z() + 1)
         .color(background)
@@ -217,59 +221,22 @@ export default (context) => {
         .border_size(1)
         .border_color(background)
         .border_radius([3,3,3,3])
-        .real().style.overflowY = "scroll"
-        
     
-    let down = customer_grid.anim("down", customer_grid.t, search.b() + 25, 500, 1000, [0, 0, 0, 4])
-    let up = customer_grid.anim("up", customer_grid.t, 500, search.b() + 25, 1000, [4, 0, 0, 0])
-    if (down._status === "done") { down.stop(); up.run() }
-    if (up._status === "done") { up.stop(); down.run() }
-        
 
     let items = []
-    let columns = [500]
-    let rows = []
 
-    for (let i=0; i < 100; i++) {
-        let item = e("item_" + i, "div", customer_grid)
-            .color(second)
+    mock_data.customers.forEach(i => {
+        let row = []
+        for (const key in i) {
+            let customer = e(i[key], "div", customer_table)
+            customer.text(i[key])
+            hover(customer)
 
-        hover(item)
-
-        items.push([item])
-        rows.push(40)
-    }
-
+            row.push(customer)
+        }
+        items.push(row)
+    })
       
-    grid( // @EDIT so that columns are equally devided
-    // grid() does not set width and height of input element
-    // only overflow y is allowed
-        customer_grid,
-        items,
-        1,
-        1,
-        rows,
-        columns,
-    )
-    
-
-    if (dashboard.SETUP) {
-
-        customer_grid.t(search.b() + 25)
-        side_nav.real().onclick = () => {
-            if (down._status === "run") { down.pause() }
-            else if (up._status === "run") { up.pause() }
-        }
-        img_logo.real().onclick = () => { 
-            if (down._status === "pause") { down.run() }
-            else if (up._status === "pause") { up.run() }
-            else { down.run() }
-        }
-        search.real().onclick = () => {
-            down.stop()
-            up.stop()
-            customer_grid.t(search.b() + 25)
-        }
-    }
+    table(customer_table, items)
 
 }

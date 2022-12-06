@@ -34,7 +34,14 @@ function _number(e, p, v=null, min=null, max=null, v_offset=0) {
 
 }
 
-function _rgba(e, property) {}
+// @
+function _string() {
+
+}
+
+function _rgba(e, property) {
+
+}
 
 
 // @
@@ -57,13 +64,13 @@ export function element(context, view, bounds, id) {
 
         _visible: true,
         _opacity: 1.0,
-        _l: 0,
-        _t: 0,
-        _w: 0,
-        _h: 0,
+        _left: 0,
+        _top: 0,
+        _width: 0,
+        _height: 0,
         _z_index: 0,
-        _auto_w: true,
-        _auto_h: true,
+        _auto_width: true,
+        _auto_height: true,
 
         _image: null,
         _image_position: "center",
@@ -81,13 +88,17 @@ export function element(context, view, bounds, id) {
         _text_g: 0,
         _text_b: 0,
 
-        _padding_l: 0,
-        _padding_t: 0,
-        _padding_r: 0,
-        _padding_b: 0,
+        _padding_left: 0,
+        _padding_top: 0,
+        _padding_right: 0,
+        _padding_bottom: 0,
 
-        _border: "none",
-        _border_size: 0,
+        _border_left: "none",
+        _border_top: "none",
+        _border_right: "none",
+        _border_bottom: "none",
+
+        _border_size: 1,
 
         _border_r: 0,
         _border_g: 0,
@@ -107,6 +118,9 @@ export function element(context, view, bounds, id) {
         _shadow_g: 0,
         _shadow_b: 0,
         _shadow_a: 1,
+
+        _overflow_x: "hidden",
+        _overflow_y: "hidden",
 
         // INTERFACE
         view() { return e._view },
@@ -131,97 +145,98 @@ export function element(context, view, bounds, id) {
             return e._anims[id];
         },
 
-        // dimension
-        w(v=null, min=null, max=null) {
-            if (v !== null) { e._auto_w = false; } 
-            return _number(e, "_w", v, min, max);
+        // DIMENSION
+        width(v=null, min=null, max=null) {
+            if (v !== null) { e._auto_width = false; } 
+            return _number(e, "_width", v, min, max);
         },
 
-        h(v=null, min=null, max=null) {
-            if (v !== null) { e._auto_h = false; } 
-            return _number(e, "_h", v, min, max);
+        height(v=null, min=null, max=null) {
+            if (v !== null) { e._auto_height = false; } 
+            return _number(e, "_height", v, min, max);
         },
 
-        auto_w() { e._auto_w = true; },
-        auto_h() { e._auto_h = true; },
+        auto_width() { e._auto_width = true; },
+        auto_height() { e._auto_height = true; },
 
-        // position
-        l(v=null, min=null, max=null) { return _number(e, "_l", v, min, max) },
-        t(v=null, min=null, max=null) { return _number(e, "_t", v, min, max) },
+        // POSITION
+        left(v=null, min=null, max=null) { return _number(e, "_left", v, min, max) },
+        top(v=null, min=null, max=null) { return _number(e, "_top", v, min, max) },
 
-        r(v=null, min=null, max=null) {
-            if (v === e._l + e.w()) { return e; } 
-            if (v !== null) { e._l = v - e.w(); e.UPDATE = true; return e; }
-            return e._l + e.w(); 
+        right(v=null, min=null, max=null) {
+            if (v === e._left + e.width()) { return e } 
+            if (v !== null) { e._left = v - e.width(); e.UPDATE = true; return e }
+            return e._left + e.width() 
         },
-        b(b=null, min=null, max=null) {
-            if (b === e._t + e.h()) { return e; } 
-            if (b !== null) { e._t = b - e.h(); e.UPDATE = true; return e; }
-            return e._t + e.h(); 
+        bottom(b=null, min=null, max=null) {
+            if (b === e._top + e.height()) { return e } 
+            if (b !== null) { e._top = b - e.height(); e.UPDATE = true; return e }
+            return e._top + e.height() 
         },
 
-        // extension
-        extend_l(l=null, min=null, max=null) {
-            if (l === e.w() + e.r()) { return e }
+        // EXTENSTION
+        extend_left(l=null, min=null, max=null) {
+            if (l === e.width() + e.right()) { return e }
             if (l !== null) { 
-                e.w(l - e.r(), min, max);
-                e.l(l);
-                e.UPDATE = true;
-                return e; }
-            return e.b();
+                e.width(l - e.right(), min, max)
+                e.left(l)
+                e.UPDATE = true
+                return e
+            }
+            return e.bottom()
         },
 
-        extend_t(t=null, min=null, max=null) {
-            if (t === e.h() + e.b()) { return e }
+        extend_top(t=null, min=null, max=null) {
+            if (t === e.height() + e.bottom()) { return e }
             if (t !== null) { 
-                e.h(t - e.b(), min, max); 
-                e.t(t);
+                e.height(t - e.bottom(), min, max); 
+                e.top(t);
                 e.UPDATE = true;
                 return e; 
             }
-            return e.b();
+            return e.bottom();
         },
 
-        extend_r(r=null, min=null, max=null) {
-            if (r === e.w() + e.l()) { return e }
-            if (r !== null) { e.w(r - e.l(), min, max); e.UPDATE = true; return e; }
-            return e.r();
+        extend_right(r=null, min=null, max=null) {
+            if (r === e.width() + e.left()) { return e }
+            if (r !== null) { e.width(r - e.left(), min, max); e.UPDATE = true; return e; }
+            return e.right();
         },
 
-        extend_b(b=null, min=null, max=null) {
-            if (b === e.h() + e.t()) { return e }
-            if (b !== null) { e.h(b - e.t(), min, max); e._auto_h = false; e.UPDATE = true; return e; }
-            return e.b();
+        extend_bottom(b=null, min=null, max=null) {
+            if (b === e.height() + e.top()) { return e }
+            if (b !== null) { e.height(b - e.top(), min, max); e._auto_height = false; e.UPDATE = true; return e; }
+            return e.bottom();
         },
 
 
         // 
         x(x=null, min=null, max=null) {
-            if (x === e._l + (e.w() / 2)) { return e }
-            if (x !== null) { e._l = x - (e.w() / 2); e.UPDATE = true; return e; }
-            return e._l + (e.w() / 2); 
+            if (x === e._left + (e.width() / 2)) { return e }
+            if (x !== null) { e._left =x - (e.width() / 2); e.UPDATE = true; return e }
+            return e._left + (e.width() / 2)
         },
         y(y=null, min=null, max=null) {
-            if (y === e._t + (e.h() / 2)) { return e }
-            if (y !== null) { e._t = y - (e.h() / 2); e.UPDATE = true; return e; }
-            return e._t + (e.h() / 2); 
+            if (y === e._top + (e.height() / 2)) { return e }
+            if (y !== null) { e._top = y - (e.height() / 2); e.UPDATE = true; return e }
+            return e._top + (e.height() / 2)
         },
         z(v=null) {
             if (v === e._z_index) { return e }
-            if (v !== null) { e._z_index = v; e.UPDATE = true; return e; }
+            if (v !== null) { e._z_index = v; e.UPDATE = true; return e }
             return e._z_index
         },
 
         // BACKGROUND
         image(v=null) {
             if (v === e._image) { return e }
-            if (v !== null) { e._image = v; e.UPDATE = true; return e; }
+            if (v !== null) { e._image = v; e.UPDATE = true; return e }
             return e._image
         },
         image_position() {},
         image_fit(v=null) {
             if (v === e._image_fit) { return e }
-            if (v !== null) { e._image_fit = v; e.UPDATE = true; return e; }
+            if (v !== null) { e._image_fit = v; e.UPDATE = true; return e }
             return e._image_fit
         },
 
@@ -259,24 +274,34 @@ export function element(context, view, bounds, id) {
         },
 
         // PADDING
-        padding(v) {
-            if (v[0] !== e._padding_l) { e._padding_l = v[0]; e.UPDATE = true; }
-            if (v[1] !== e._padding_t) { e._padding_t = v[1]; e.UPDATE = true; }
-            if (v[2] !== e._padding_r) { e._padding_r = v[2]; e.UPDATE = true; }
-            if (v[3] !== e._padding_b) { e._padding_b = v[3]; e.UPDATE = true; }
+        padding(v=null) {
+            if (v === null) { return e }
+            if (v[0] !== e._padding_left) { e._padding_left = v[0]; e.UPDATE = true }
+            if (v[1] !== e._padding_top) { e._padding_top = v[1]; e.UPDATE = true }
+            if (v[2] !== e._padding_right) { e._padding_right = v[2]; e.UPDATE = true }
+            if (v[3] !== e._padding_bottom) { e._padding_bottom = v[3]; e.UPDATE = true }
             return e
         },
 
         // BORDER
         border(v=null) {
-            if (v === e._border) { return e }
-            if (v !== null) { e._border = v; e.UPDATE = true; return e; }
-            return e._border
+            if (v === null) { return e }
+            if (v !== e._border_left) { e._border_left = v; e.UPDATE = true }
+            if (v !== e._border_top) { e._border_top = v; e.UPDATE = true }
+            if (v !== e._border_right) { e._border_right = v; e.UPDATE = true }
+            if (v !== e._border_bottom) { e._border_bottom = v; e.UPDATE = true }
+            return e
+        },
+
+        border_bottom(v=null) {
+            if (v === e._border_bottom) { return e }
+            if (v !== null) { e._border_bottom = v; e.UPDATE = true; return e }
+            return e._border_bottom
         },
 
         border_size(v=null, min=null, max=null) { return _number(e, "_border_size", v, min, max) },
 
-        border_color(rgba) {
+        border_color(rgba) { // @HERE this needs to handle all borders
             if (rgba[0] !== e._border_r) { e._border_r = rgba[0]; e.UPDATE = true }
             if (rgba[1] !== e._border_g) { e._border_g = rgba[1]; e.UPDATE = true }
             if (rgba[2] !== e._border_b) { e._border_b = rgba[2]; e.UPDATE = true }
@@ -284,7 +309,8 @@ export function element(context, view, bounds, id) {
             return e
         },
 
-        border_radius(v) {
+        border_radius(v=null) { // v = []
+            if (v === null) { return e }
             if (v[0] !== e._border_lt) { e._border_lt = v[0]; e.UPDATE = true; }
             if (v[1] !== e._border_rt) { e._border_rt = v[1]; e.UPDATE = true; }
             if (v[2] !== e._border_rb) { e._border_rb = v[2]; e.UPDATE = true; }
@@ -297,7 +323,7 @@ export function element(context, view, bounds, id) {
         shadow(v) {
             if (v[0] !== e._shadow_x) { e._shadow_x = v[0]; e.UPDATE = true; }
             if (v[1] !== e._shadow_y) { e._shadow_y = v[1]; e.UPDATE = true; }
-            if (v[2] !== e._shadow_blur) { e._shadow_blur = v[2]; e.UPDATE = true; }
+            if (v[2] !== e._shadow_blur) { e._shadow_blur = v[2]; e.UPDATE = true }
             return e
         },
         shadow_color(rgba) {
@@ -308,7 +334,7 @@ export function element(context, view, bounds, id) {
             return e
         },
 
-        // visibility
+        // VISIBILITY
         opacity(v=null, min=null, max=null) { return _number(e, "_opacity", v, min, max); },
 
         show() { 
@@ -322,6 +348,18 @@ export function element(context, view, bounds, id) {
             e._visible = false; 
             e.UPDATE = true; 
             return e; 
+        },
+
+        // OVERFLOW
+        overflow_x(v=null) { 
+            if (v === e._overflow_x) { return e }
+            if (v !== null) { e._overflow_x = v; e.UPDATE = true; return e; }
+            return e._overflow_x
+        },
+        overflow_y(v=null) {
+            if (v === e._overflow_y) { return e }
+            if (v !== null) { e._overflow_y = v; e.UPDATE = true; return e; }
+            return e._overflow_y
         }
 
     }

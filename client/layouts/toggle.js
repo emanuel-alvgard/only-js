@@ -5,17 +5,17 @@ export default (bounds, callback) => {
     const button = bounds.view().element("test")
 
     button
-        .t(bounds.t())
-        .w(bounds.w() / 2)
-        .h(bounds.h())
+        .top(bounds.top())
+        .width(bounds.width() / 2)
+        .height(bounds.height())
         .color([255,255,255,1])
         .border("solid")
         .border_size(1)
         .border_color([225,225,225,1])
         .z(bounds.z() + 1)
 
-    if (ON) { button.r(bounds.r()) }
-    else { button.l(bounds.l()) }
+    if (ON) { button.right(bounds.right()) }
+    else { button.left(bounds.left()) }
 
     const click = () => {
         if (ON) { ON = false}

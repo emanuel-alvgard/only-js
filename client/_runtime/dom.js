@@ -4,18 +4,18 @@ import * as virtual from "./virtual.js"
 function _collect(view) {
 
     // AUTO WIDTH / HEIGHT
-    view.bounds.w(document.documentElement.clientWidth)
-    view.bounds.h(document.documentElement.clientHeight)
+    view.bounds.width(document.documentElement.clientWidth)
+    view.bounds.height(document.documentElement.clientHeight)
 
     for (const id in view._virtual) {
         if (id === "bounds") { continue }
         let virtual = view._virtual[id]
         let real = view._real[id]
-        if (virtual._auto_w) {
-            if (real.clientWidth !== virtual._w) { virtual._w = real.clientWidth; virtual.UPDATE = true } 
+        if (virtual._auto_width) {
+            if (real.clientWidth !== virtual._width) { virtual._width = real.clientWidth; virtual.UPDATE = true } 
         }
-        if (virtual._auto_h) { 
-            if (real.clientHeight !== virtual._h) { virtual._h = real.clientHeight; virtual.UPDATE = true }
+        if (virtual._auto_height) { 
+            if (real.clientHeight !== virtual._height) { virtual._height = real.clientHeight; virtual.UPDATE = true }
         }
     }
 }
@@ -56,18 +56,18 @@ function _update(view) {
             }
             */
         
-            if (virtual._auto_w) { real.style.width = "auto" }
-            else { real.style.width = virtual._w + "px" }
+            if (virtual._auto_width) { real.style.width = "auto" }
+            else { real.style.width = virtual._width + "px" }
             
-            if (virtual._auto_h) { real.style.height = "auto" }
-            else { real.style.height = virtual._h + "px" }
+            if (virtual._auto_height) { real.style.height = "auto" }
+            else { real.style.height = virtual._height + "px" }
 
-            let left = virtual._l
-            let top = virtual._t
+            let left = virtual._left
+            let top = virtual._top
 
             if (virtual._bounds !== null) {
-                left -= virtual._bounds._l
-                top -= virtual._bounds._t
+                left -= virtual._bounds._left
+                top -= virtual._bounds._top
             }
             
             real.style.transform = "translate(" + left + "px," + top + "px)" // this gets affected by .view.port transform
@@ -105,13 +105,17 @@ function _update(view) {
                 virtual._text_b + "," +  
                 virtual._text_a + ")"
 
-            real.style.paddingLeft = virtual._padding_l + "px "
-            real.style.paddingTop = virtual._padding_t + "px "
-            real.style.paddingRight = virtual._padding_r + "px "
-            real.style.paddingBottom = virtual._padding_b + "px "
+            real.style.paddingLeft = virtual._padding_left + "px "
+            real.style.paddingTop = virtual._padding_top + "px "
+            real.style.paddingRight = virtual._padding_right + "px "
+            real.style.paddingBottom = virtual._padding_bottom + "px "
 
             // BORDER
-            real.style.border = virtual._border
+            real.style.borderLeft = virtual._border_left
+            real.style.borderTop = virtual._border_top
+            real.style.borderRight = virtual._border_right
+            real.style.borderBottom = virtual._border_bottom
+            
             real.style.borderWidth = virtual._border_size + "px"
             real.style.borderColor = "rgba(" + 
                 virtual._border_r + "," +
@@ -139,10 +143,14 @@ function _update(view) {
             if (virtual._text_size !== null) { real.style.fontSize = virtual._text_size + "px" }
             if (virtual._text_font !== null) { real.style.fontFamily = virtual._text_font }
 
-            // visibility
+            // VISIBILITY
             real.style.opacity = virtual._opacity + ""
             if (virtual._visible) { real.style.display = "block" }
             else { real.style.display = "none" }
+
+            // OVERFLOW
+            real.style.overflowX = virtual._overflow_x
+            real.style.overflowY = virtual._overflow_y
         }
 
         // RESET EVENTS

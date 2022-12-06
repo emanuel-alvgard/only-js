@@ -1,17 +1,17 @@
 // @DONE
 export default (bounds, elements, row_gap, column_gap, row_h=null, column_w=null) => {
 
-    // @ADD set bounds.overflow_y("scroll")
+    bounds.overflow_y("scroll")
 
-    let top = bounds.t()
+    let top = bounds.top()
 
     elements.forEach(array => {
         array.forEach(item => {
             item
-            .w(bounds.w())
-            .h(100)
-            .l(bounds.l())
-            .t(top)
+            .width(bounds.width())
+            .height(100)
+            .left(bounds.left())
+            .top(top)
             .z(bounds.z() + 1)
 
             top += 100 + row_gap
@@ -27,16 +27,16 @@ export default (bounds, elements, row_gap, column_gap, row_h=null, column_w=null
     let bounds_width = 0
     let bounds_height = 0
 
-    let row_pos = bounds.t() + border
+    let row_pos = bounds.top() + border
     for (let i=0; i < elements.length; i++) {
 
-        let column_pos = bounds.l() + border
+        let column_pos = bounds.left() + border
         for (let j=0; j < elements[i].length; j++) {
 
-            elements[i][j].t(row_pos)
-            elements[i][j].l(column_pos)
-            elements[i][j].h(row_h[i])
-            elements[i][j].w(column_w[j])
+            elements[i][j].top(row_pos)
+            elements[i][j].left(column_pos)
+            elements[i][j].height(row_h[i])
+            elements[i][j].width(column_w[j])
             elements[i][j].z(bounds.z() + 1)
             
             if (i === 0) { 
@@ -55,12 +55,12 @@ export default (bounds, elements, row_gap, column_gap, row_h=null, column_w=null
         row_pos += row_h[i] + row_gap
     }
 
-    bounds.w(
+    bounds.width(
         bounds_width + 
         (column_gap * (column_w.length - 1)) +
         (border * 2)
     )
-    bounds.h(
+    bounds.height(
         bounds_height + 
         (row_gap * (row_h.length - 1)) +
         (border * 2)
