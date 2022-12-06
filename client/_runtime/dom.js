@@ -151,6 +151,9 @@ function _update(view) {
             // OVERFLOW
             real.style.overflowX = virtual._overflow_x
             real.style.overflowY = virtual._overflow_y
+
+            // FILTER
+            real.style.filter = "brightness(" + virtual._brightness + ")"
         }
 
         // RESET EVENTS

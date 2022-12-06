@@ -122,8 +122,13 @@ export function element(context, view, bounds, id) {
         _overflow_x: "hidden",
         _overflow_y: "hidden",
 
+        _brightness: 1.0,
+
         // INTERFACE
+        context() { return e._context },
         view() { return e._view },
+        bounds() { return e._bounds },
+        id() { return e._id },
         real() {
             if (id in view._real) { return view._real[id] }
         },
@@ -199,13 +204,13 @@ export function element(context, view, bounds, id) {
 
         extend_right(r=null, min=null, max=null) {
             if (r === e.width() + e.left()) { return e }
-            if (r !== null) { e.width(r - e.left(), min, max); e.UPDATE = true; return e; }
+            if (r !== null) { e.width(r - e.left(), min, max); e.UPDATE = true; return e }
             return e.right();
         },
 
         extend_bottom(b=null, min=null, max=null) {
             if (b === e.height() + e.top()) { return e }
-            if (b !== null) { e.height(b - e.top(), min, max); e._auto_height = false; e.UPDATE = true; return e; }
+            if (b !== null) { e.height(b - e.top(), min, max); e._auto_height = false; e.UPDATE = true; return e }
             return e.bottom();
         },
 
@@ -255,13 +260,13 @@ export function element(context, view, bounds, id) {
         // TEXT
         text(v=null) {
             if (v === e._text) { return e }
-            if (v !== null) { e._text = v; e.UPDATE = true; return e; }
+            if (v !== null) { e._text = v; e.UPDATE = true; return e }
             return e._text
         },
 
         text_font(v=null) {
             if (v === e._text_font) { return e }
-            if (v !== null) { e._text_font = v; e.UPDATE = true; return e; }
+            if (v !== null) { e._text_font = v; e.UPDATE = true; return e }
             return e._text_font
         },
         text_size() {},
@@ -335,7 +340,7 @@ export function element(context, view, bounds, id) {
         },
 
         // VISIBILITY
-        opacity(v=null, min=null, max=null) { return _number(e, "_opacity", v, min, max); },
+        opacity(v=null, min=null, max=null) { return _number(e, "_opacity", v, min, max) },
 
         show() { 
             if (e._visible) { return e; }
@@ -360,8 +365,12 @@ export function element(context, view, bounds, id) {
             if (v === e._overflow_y) { return e }
             if (v !== null) { e._overflow_y = v; e.UPDATE = true; return e; }
             return e._overflow_y
-        }
+        },
+
+        // FILTER
+        brightness(v=null, min=null, max=null) { return _number(e, "_brightness", v, min, max) }
 
     }
-    return e;
+    
+    return e
 }

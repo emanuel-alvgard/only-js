@@ -216,7 +216,7 @@ export default (context) => {
         .extend_bottom(card.bottom() - 50)
         .x(card.x())
         .z(card.z() + 1)
-        .color(background)
+        .color(second)
         .border("solid") //
         .border_size(1)
         .border_color(background)
@@ -230,8 +230,6 @@ export default (context) => {
         for (const key in i) {
             let customer = e(i[key], "div", customer_table)
             customer.text(i[key])
-            hover(customer)
-
             row.push(customer)
         }
         items.push(row)
