@@ -11,7 +11,7 @@ let second = [250, 250, 250, 1]
 let shadow = [220,220,220,1]
 let transparent = [255,255,255,0]
 
-
+let location = "main_card"
 
 
 // @TEST
@@ -97,14 +97,17 @@ export default (context) => {
     const img_logout = e("img_logout")
     const version = e("version")
 
-    const card = e("card")
+    const main_card = e("main_card")
     const img_search = e("img_search")
     const mode_toggle = e("mode_toggle")
     const search = e("search", "input")
     const customer_table = e("customer_table")
 
-    const all = [side_nav, card, search]
+    const customer_card = e("customer_card")
 
+    const all = [side_nav, main_card, search]
+
+    const cards = [main_card, customer_card]
 
 
     if (context.SETUP) { 
@@ -156,25 +159,26 @@ export default (context) => {
 
 
 
+    cards.forEach(card => {
+        card
+            .left(side_nav.right() + 10)
+            .extend_right(dashboard.bounds.right() - 10)
+            .top(dashboard.bounds.top() + 10)
+            .extend_bottom(dashboard.bounds.bottom() - 10)
+            .color(main)
+            .border_size(1) //
+            .border_color(background)
+            .border_radius([3,3,3,3])
+            .shadow([0,3,7])
+            .shadow_color(shadow)
+            .z(1)
+    })
 
-    card
-        .left(side_nav.right() + 10)
-        .extend_right(dashboard.bounds.right() - 10)
-        .top(dashboard.bounds.top() + 10)
-        .extend_bottom(dashboard.bounds.bottom() - 10)
-        .color(main)
-        //.border("solid") //
-        .border_size(1) //
-        .border_color(background)
-        .border_radius([3,3,3,3])
-        .shadow([0,3,7])
-        .shadow_color(shadow) // shadow_color()
-        .z(1)
-
+    
 
     /*mode_toggle
-        .left(card.left() + 10)
-        .top(card.top() + 10)
+        .left(main_card.left() + 10)
+        .top(main_card.top() + 10)
         .width(50)
         .height(25)
         .z(2)
@@ -182,9 +186,9 @@ export default (context) => {
         toggle(mode_toggle, color_mode)*/
 
     search
-        .x(card.x())
-        .top(card.top() + 50)
-        .width(card.width() / 3, 300, 1000)
+        .x(main_card.x())
+        .top(main_card.top() + 50)
+        .width(main_card.width() / 3, 300, 1000)
         .height(50)
         .color(second)
         .border("solid")
@@ -211,11 +215,11 @@ export default (context) => {
 
 
     customer_table
-        .width(card.width() - 100)
+        .width(main_card.width() - 100)
         .top(search.bottom() + 25)
-        .extend_bottom(card.bottom() - 50)
-        .x(card.x())
-        .z(card.z() + 1)
+        .extend_bottom(main_card.bottom() - 50)
+        .x(main_card.x())
+        .z(main_card.z() + 1)
         .color(second)
         .border("solid") //
         .border_size(1)

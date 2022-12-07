@@ -27,9 +27,15 @@ export default (bounds, items) => {
             .border_bottom("solid")
             .border_color([220, 220, 220, 1])
 
-        if (bounds.context().SETUP) { 
+        if (bounds.context().SETUP) {
+            bg.real().style.cursor = "pointer"  
             bg.real().onmouseover = () => { bg.brightness(0.95) }
             bg.real().onmouseleave = () => { bg.brightness(1.0) }
+            bg.real().onclick = () => { 
+                bounds.context().location.path = "customer"
+                bounds.context().location.customer_index = i //@NOT
+                console.log(bounds.context().location.customer_index) // @NOT
+            }
         }
 
         let margin = 25
@@ -45,9 +51,14 @@ export default (bounds, items) => {
                 .y(row_y)
                 .z(bg.z() + 1)
 
-            if (bounds.context().SETUP) { 
+            if (bounds.context().SETUP) {
+                item.real().style.cursor = "pointer" 
                 item.real().onmouseover = () => { bg.brightness(0.95) }
                 item.real().onmouseleave = () => { bg.brightness(1.0) }
+                item.real().onclick = () => { 
+                    bounds.context().location.path = "customer"
+                    bounds.context().location.customer_index = i 
+                }
             }
 
             column_l += column_width

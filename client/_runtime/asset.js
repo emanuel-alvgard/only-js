@@ -26,7 +26,7 @@ async function _asset(path, result) {
 }
 
 // @DONE
-export async function font(id, path, callback) {
+export async function font(id, path, callback) { // @ADD reload as the last parameter (bool)
 
     let result = { data: null }
 

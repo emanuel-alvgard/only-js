@@ -51,9 +51,9 @@ export function element(context, view, bounds, id) {
         
         // EVENTS
         UPDATE: true,
-        MOUSE_HOVER: false,
-        MOUSE_DOWN: false,
-        MOUSE_UP: false,
+        HOVER: false,
+        LEAVE: false,
+        CLICK: false,
 
         // DATA
         _context: context,

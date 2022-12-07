@@ -157,15 +157,15 @@ function _update(view) {
         }
 
         // RESET EVENTS
-        virtual.MOUSE_DOWN = false
-        virtual.MOUSE_UP = false
         virtual.UPDATE = false
+        virtual.HOVER = false
+        virtual.LEAVE = false
+        virtual.CLICK = false
     }
 
-    // RESET EVENTS
-    view.SETUP = false
-    view.FORMAT_SWITCH = false
-    view.ORIENTATION_SWITCH = false
+    if (view.SETUP) { view.SETUP = false }
+
+    return
 }
 
 
@@ -209,6 +209,8 @@ export function setup(context) {
             element.style.boxSizing = "border-box"
             element.style.overflow = "hidden"
             element.style.outline = "rgba(0,0,0,0)"
+
+            // remove default selection behavior
     
             view._real[id] = element
             if (id !== "bounds") { bounds.real().append(element) }

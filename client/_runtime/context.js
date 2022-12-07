@@ -51,6 +51,7 @@ export function setup() {
         RUN: false,
 
         // DATA
+        location: { path: "" },
         time: performance.now(),
         delta: 0.0,
 
