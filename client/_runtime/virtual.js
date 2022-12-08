@@ -1,37 +1,19 @@
 import * as animation from "./animation.js";
 
 // @DONE
-function _min(object, property, value=null) {
-    if (value !== null) {
-        if (object[property] < value) {
-            object[property] = value; 
-        }
-    }
-}
-
-// @DONE
-function _max(object, property, value=null) {
-    if (value !== null) {
-        if (object[property] > value) {
-            object[property] = value; 
-        }
-    }
-}
-
-
-// @
 function _number(e, p, v=null, min=null, max=null, v_offset=0) {
-    
-    if (v === e[p]) { return e; }
-    if (v !== null) {
-        e[p] = v + v_offset; 
-        _min(e, p, min);
-        _max(e, p, max);
-        e.UPDATE = true;
-        return e;
-    } 
-    else { return e[p]; }
 
+    if (v === null) { return e[p] }
+    let new_v
+    if (v < min && min !== null) { new_v = min }
+    else if (v > max && max !== null) { new_v = max }
+    else { new_v = v + v_offset}
+
+    if (new_v !== e[p]) { 
+        e[p] = new_v 
+        e.UPDATE = true
+    }
+    return e
 }
 
 // @
@@ -152,8 +134,8 @@ export function element(context, view, bounds, id) {
 
         // DIMENSION
         width(v=null, min=null, max=null) {
-            if (v !== null) { e._auto_width = false; } 
-            return _number(e, "_width", v, min, max);
+            if (v !== null) { e._auto_width = false } 
+            return _number(e, "_width", v, min, max)
         },
 
         height(v=null, min=null, max=null) {
@@ -343,16 +325,16 @@ export function element(context, view, bounds, id) {
         opacity(v=null, min=null, max=null) { return _number(e, "_opacity", v, min, max) },
 
         show() { 
-            if (e._visible) { return e; }
-            e._visible = true; 
-            e.UPDATE = true; 
-            return e; 
+            if (e._visible === true) { return e }
+            e._visible = true 
+            e.UPDATE = true 
+            return e 
         },
         hide() {
-            if (!e._visible) { return e; }
-            e._visible = false; 
-            e.UPDATE = true; 
-            return e; 
+            if (e._visible === false) { return e }
+            e._visible = false 
+            e.UPDATE = true 
+            return e 
         },
 
         // OVERFLOW

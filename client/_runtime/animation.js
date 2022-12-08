@@ -4,11 +4,6 @@ const l = function(string) { console.log(string) }
 const _clamp = (num, min, max) => Math.min(Math.max(num, min), max)
 
 // @DONE
-function _round(n) {
-    return n + (n>0?0.5:-0.5) << 0
-}
-
-// @DONE
 function _line(p0, p1, i) {
     return ((p1 - p0) * i) + p0
 }

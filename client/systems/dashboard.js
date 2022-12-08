@@ -1,5 +1,5 @@
-import table from "../layouts/table.js"
-import toggle from "../layouts/toggle.js"
+import table from "../components/table.js"
+import toggle from "../components/toggle.js"
 
 let CONTEXT
 let DASHBOARD
@@ -21,8 +21,9 @@ let mock_data = {
 
 for (let i=0; i < 100; i++) {
     mock_data.customers.push({
-        name: "Customer " + (i + 1),
-        number: "000"+ (i + 1)
+        name: "CUSTOMER " + (i + 1),
+        number: "000"+ (i + 1),
+        test: "test " + (i + 1)
     })
 }
 
@@ -79,8 +80,7 @@ let img_loaded = false
 
 export default (context) => {
 
-    let _oswald_bold = context.font("oswald_bold", "oswald_bold.woff2", () => { loaded = true })
-    let _roboto_300 = context.font("roboto_300", "roboto_300.woff2", () => { loaded = true })
+    let alexandria_400 = context.font("alexandria_400", "alexandria_400.woff2", () => { loaded = true })
     let _img_logo = context.image("img_logo", "logo_white.svg", () => { img_loaded = true })
     let _img_logout = context.image("img_logout", "logout_white.svg", () => { img_loaded = true })
     let _img_search = context.image("img_search", "search_black.svg", () => { img_loaded = true })
@@ -140,9 +140,10 @@ export default (context) => {
     version
         .x(side_nav.x())
         .bottom(side_nav.bottom() - 10)
-        .text("v.0.1")
+        .text("V.0.1")
         .text_color([240,240,240,1])
         .z(side_nav.z() + 1)
+        .text_font(alexandria_400)
 
 
     img_logout
@@ -184,7 +185,7 @@ export default (context) => {
         .z(2)
 
         toggle(mode_toggle, color_mode)*/
-
+    
     search
         .x(main_card.x())
         .top(main_card.top() + 50)
@@ -197,6 +198,8 @@ export default (context) => {
         .border_radius([3,3,3,3])
         .z(2)
         .padding([10,0,45,0])
+        .text_font(alexandria_400)
+    
 
     if (dashboard.SETUP) {
         search.real().placeholder = "Sök kund"
@@ -226,19 +229,6 @@ export default (context) => {
         .border_color(background)
         .border_radius([3,3,3,3])
     
-
-    let items = []
-
-    mock_data.customers.forEach(i => {
-        let row = []
-        for (const key in i) {
-            let customer = e(i[key], "div", customer_table)
-            customer.text(i[key])
-            row.push(customer)
-        }
-        items.push(row)
-    })
       
-    table(customer_table, items)
-
+    table(customer_table, mock_data.customers, search)
 }

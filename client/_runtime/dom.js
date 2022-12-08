@@ -28,9 +28,8 @@ function _collect(view) {
 //let debounce = 3
 //let count = 0
 
+// @
 function _update(view) {
-
-
 
     for (const id in view._virtual) {
 

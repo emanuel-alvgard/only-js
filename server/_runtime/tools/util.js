@@ -105,6 +105,10 @@ function match(input, strings, delimiter) {
 
 
 
+// @DONE
+function _round(n) {
+    return n + (n>0?0.5:-0.5) << 0
+}
 
 
 
