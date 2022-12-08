@@ -101,6 +101,7 @@ export default (context) => {
     const img_search = e("img_search")
     const mode_toggle = e("mode_toggle")
     const search = e("search", "input")
+    const customer_filter = e("customer_filter")
     const customer_table = e("customer_table")
 
     const customer_card = e("customer_card")
@@ -205,8 +206,6 @@ export default (context) => {
         search.real().placeholder = "Sök kund"
     }
 
-    //hover(search)
-
     img_search
         .width(25)
         .height(25)
@@ -217,11 +216,26 @@ export default (context) => {
         .y(search.y())
 
 
-    customer_table
-        .width(main_card.width() - 100)
+
+    customer_filter
+        .left(main_card.left() + 50)
+        .width(300)
         .top(search.bottom() + 25)
         .extend_bottom(main_card.bottom() - 50)
-        .x(main_card.x())
+        .color(second)
+        .color(second)
+        .border("solid") //
+        .border_size(1)
+        .border_color(background)
+        .border_radius([3,3,3,3])
+        .z(main_card.z() + 1)
+
+
+    customer_table
+        .extend_right(main_card.right() - 50)
+        .top(search.bottom() + 25)
+        .left(customer_filter.right() + 10)
+        .extend_bottom(main_card.bottom() - 50)
         .z(main_card.z() + 1)
         .color(second)
         .border("solid") //
