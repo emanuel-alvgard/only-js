@@ -114,9 +114,8 @@ export default (context) => {
     if (context.SETUP) { 
         CONTEXT = context 
         DASHBOARD = dashboard
+        context.location.path = "main"
     }
-
-
 
 
     side_nav
@@ -124,7 +123,7 @@ export default (context) => {
         .left(dashboard.bounds.left())
         .extend_bottom(dashboard.bounds.bottom())
         .width(75)
-        .z(1)
+        .z(2)
         .color([55,60,65,1])
         .shadow([0,3,7]) 
         .shadow_color([50,50,50,1])
@@ -163,8 +162,6 @@ export default (context) => {
 
     cards.forEach(card => {
         card
-            .left(side_nav.right() + 10)
-            .extend_right(dashboard.bounds.right() - 10)
             .top(dashboard.bounds.top() + 10)
             .extend_bottom(dashboard.bounds.bottom() - 10)
             .color(main)
@@ -173,8 +170,24 @@ export default (context) => {
             .border_radius([3,3,3,3])
             .shadow([0,3,7])
             .shadow_color(shadow)
-            .z(1)
+            .z(side_nav.z() - 1)
     })
+
+    if (context.location.path === "main") {
+        main_card
+            .left(side_nav.right() + 10)
+            .extend_right(dashboard.bounds.right() - 10)
+    }
+    if (context.location.path === "customer" && context.location.SWITCH) {
+
+        let slide = main_card.anim("slide", main_card.right, main_card.right(), dashboard.bounds.left() - 100, 300, [0,0,0,4])
+        let fade = main_card.anim("fade", main_card.opacity, 1.0, 0.0, 500, [0,0,3])
+        slide.run()
+        fade.run() 
+
+    }
+
+    //console.log(context.location.path);
 
     
 
@@ -245,4 +258,11 @@ export default (context) => {
     
       
     table(customer_table, mock_data.customers, search)
+
+
+
+    
+
+
+
 }

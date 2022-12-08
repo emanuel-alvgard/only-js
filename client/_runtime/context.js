@@ -37,6 +37,7 @@ function _run(context) {
     for (const id in context._views) { context._views[id].update() }
 
     context.SETUP = false
+    context.location.SWITCH = false
 
     window.requestAnimationFrame(() => { _run(context) })
 }
@@ -51,7 +52,16 @@ export function setup() {
         RUN: false,
 
         // DATA
-        location: { path: "" },
+        location: { 
+            path: "",
+            SWITCH: false,
+            switch(p) { 
+                if (p !== context.location.path) { 
+                context.location.path = p; 
+                context.location.SWITCH = true
+                return
+            }} 
+        },
         time: performance.now(),
         delta: 0.0,
 

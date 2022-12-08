@@ -72,7 +72,7 @@ export default (bounds, data, search) => { // bounds = element(), data = { [ {} 
                     customers[i][j].real().onmouseover = () => { rows[i].brightness(0.95) }
                     customers[i][j].real().onmouseleave = () => { rows[i].brightness(1.0) }
                     customers[i][j].real().onclick = () => { 
-                        //bounds.context().location.path = "customer"
+                        bounds.context().location.switch("customer")
                         //bounds.context().location.customer_index = i 
                     }
                 }
@@ -100,7 +100,7 @@ export default (bounds, data, search) => { // bounds = element(), data = { [ {} 
                 rows[i].real().onmouseover = () => { rows[i].brightness(0.95) }
                 rows[i].real().onmouseleave = () => { rows[i].brightness(1.0) }
                 rows[i].real().onclick = () => { 
-                    bounds.context().location.path = "customer"
+                    bounds.context().location.switch("customer")
                     //bounds.context().location.customer_index = i //@NOT
                     //console.log(bounds.context().location.customer_index) // @NOT
                 }
