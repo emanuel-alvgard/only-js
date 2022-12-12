@@ -1,3 +1,5 @@
+// @ADD pagination
+
 // @DONE
 export default (bounds, data, search) => { // bounds = element(), data = { [ {} ] }, search = element()
 
@@ -6,6 +8,7 @@ export default (bounds, data, search) => { // bounds = element(), data = { [ {} 
     bounds.overflow_y("scroll")
     let view = bounds.view()
     let input = search.real().value.toUpperCase()
+
 
     let visible = []
     let rows = []
@@ -56,6 +59,8 @@ export default (bounds, data, search) => { // bounds = element(), data = { [ {} 
         for (let j=0; j < customers[i].length; j++) {
             
             column_l += margin
+
+            customers[i][j].anim("fade", customers[i][j].opacity, 0.0, 1.0, 200)
                 
             if (visible[i]) {
             
@@ -66,6 +71,7 @@ export default (bounds, data, search) => { // bounds = element(), data = { [ {} 
                     .text(data[i][keys[j]])
                     .text_font(bounds.context().font("alexandria_400"))
                     .show()
+                    //.anim("fade").run()
                 
                 if (bounds.context().SETUP) {
                     customers[i][j].real().style.cursor = "pointer" 

@@ -216,8 +216,10 @@ export function element(context, view, bounds, id) {
 
         // BACKGROUND
         image(v=null) {
-            if (v === e._image) { return e }
-            if (v !== null) { e._image = v; e.UPDATE = true; return e }
+            if (v !== null && "data" in v) {
+                if (v.data === e._image) { return e } 
+                e._image = v.data; e.UPDATE = true; return e 
+            }
             return e._image
         },
         image_position() {},
@@ -247,8 +249,10 @@ export function element(context, view, bounds, id) {
         },
 
         text_font(v=null) {
-            if (v === e._text_font) { return e }
-            if (v !== null) { e._text_font = v; e.UPDATE = true; return e }
+            if (v !== null && "data" in v) {
+                if (v.data === e._text_font) { return e } 
+                e._text_font = v.data; e.UPDATE = true; return e 
+            }
             return e._text_font
         },
         text_size() {},

@@ -11,9 +11,6 @@ let second = [250, 250, 250, 1]
 let shadow = [220,220,220,1]
 let transparent = [255,255,255,0]
 
-let location = "main_card"
-
-
 // @TEST
 let mock_data = {
     customers: []
@@ -75,18 +72,12 @@ function hover(element) {
 }
 
 
-let loaded = false
-let img_loaded = false
-
 export default (context) => {
 
-    let alexandria_400 = context.font("alexandria_400", "alexandria_400.woff2", () => { loaded = true })
-    let _img_logo = context.image("img_logo", "logo_white.svg", () => { img_loaded = true })
-    let _img_logout = context.image("img_logout", "logout_white.svg", () => { img_loaded = true })
-    let _img_search = context.image("img_search", "search_black.svg", () => { img_loaded = true })
-
-    if (loaded) { loaded = false }
-    if (img_loaded) { img_loaded = false }
+    let alexandria_400 = context.font("alexandria_400", "alexandria_400.woff2")
+    let _img_logo = context.image("img_logo", "logo_white.svg")
+    let _img_logout = context.image("img_logout", "logout_white.svg")
+    let _img_search = context.image("img_search", "search_black.svg")
 
     const dashboard = context.view("dashboard")
     dashboard.bounds.color(second)
@@ -123,7 +114,7 @@ export default (context) => {
         .left(dashboard.bounds.left())
         .extend_bottom(dashboard.bounds.bottom())
         .width(75)
-        .z(2)
+        .z(10)
         .color([55,60,65,1])
         .shadow([0,3,7]) 
         .shadow_color([50,50,50,1])
@@ -170,7 +161,7 @@ export default (context) => {
             .border_radius([3,3,3,3])
             .shadow([0,3,7])
             .shadow_color(shadow)
-            .z(side_nav.z() - 1)
+            .z(1)
     })
 
     if (context.location.path === "main") {
@@ -180,8 +171,24 @@ export default (context) => {
     }
     if (context.location.path === "customer" && context.location.SWITCH) {
 
-        let slide = main_card.anim("slide", main_card.right, main_card.right(), dashboard.bounds.left() - 100, 300, [0,0,0,4])
-        let fade = main_card.anim("fade", main_card.opacity, 1.0, 0.0, 500, [0,0,3])
+        let slide = main_card.anim(
+            "slide", 
+            main_card.right, 
+            main_card.right(), 
+            dashboard.bounds.left() - 100, 
+            500, 
+            [0,0,0,4]
+        )
+
+        let fade = main_card.anim(
+            "fade", 
+            main_card.opacity, 
+            1.0, 
+            0.0, 
+            300, 
+            [0,0,3]
+        )
+
         slide.run()
         fade.run() 
 
@@ -213,10 +220,12 @@ export default (context) => {
         .z(2)
         .padding([10,0,45,0])
         .text_font(alexandria_400)
+        .opacity(main_card.opacity())
     
 
     if (dashboard.SETUP) {
         search.real().placeholder = "Sök kund"
+        // @TEST search.real().onclick = () => { context.image("img_logo").reload("search_black.svg") }
     }
 
     img_search
@@ -227,6 +236,7 @@ export default (context) => {
         .color(transparent)
         .right(search.right() - 10)
         .y(search.y())
+        .opacity(main_card.opacity())
 
 
 
@@ -242,6 +252,7 @@ export default (context) => {
         .border_color(background)
         .border_radius([3,3,3,3])
         .z(main_card.z() + 1)
+        .opacity(main_card.opacity())
 
 
     customer_table
@@ -255,6 +266,7 @@ export default (context) => {
         .border_size(1)
         .border_color(background)
         .border_radius([3,3,3,3])
+        .opacity(main_card.opacity())
     
       
     table(customer_table, mock_data.customers, search)

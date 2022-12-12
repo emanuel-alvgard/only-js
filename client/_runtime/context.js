@@ -1,28 +1,6 @@
 import * as dom from "./dom.js"
 import * as asset from "./asset.js"
 
-/* @DONE
-function _collect(context) {
-    for (id in context._views) {
-        context._views[id].collect()
-    }
-}
-
-// @DONE
-function _update(context) {
-    for (id in context._views) {
-        context.[id](context)
-    }
-}
-
-// @DONE
-function _render(context) {
-    for (id in context._views) {
-        context._views[id].update()
-    }
-}
-*/
-
 // @DONE
 function _run(context) {
 
@@ -33,8 +11,14 @@ function _run(context) {
     context.time = time
 
     for (const id in context._views) { context._views[id].collect() }
+    //let s = performance.now()
     for (const id in context._systems) { context._systems[id](context) }
+    //console.log(performance.now() - s)
     for (const id in context._views) { context._views[id].update() }
+
+    // RESET EVENTS
+    for (const id in context._fonts) { context._fonts[id].DONE = false }
+    for (const id in context._images) { context._images[id].DONE = false }
 
     context.SETUP = false
     context.location.SWITCH = false
@@ -86,21 +70,43 @@ export function setup() {
         },
 
         // @DONE
-        font(id, path="", callback=()=>{}) {
+        font(id, path="") {
             if (id in context._fonts) { return context._fonts[id] }
-            if (path === null) { return ""}
-            context._fonts[id] = null
-            asset.font(id, path, (f) => { context._fonts[id] = f; callback() })
+            context._fonts[id] = {
+                DONE: false,
+                data: null
+            }
+            asset.font(id, path, (f) => { 
+                context._fonts[id].data = f
+                context._fonts[id].DONE = true    
+            })
+            return context._fonts[id]
         },
-        image(id, path="", callback=()=>{}) {
+
+        // @DONE
+        image(id, path="") {
             if (id in context._images) { return context._images[id] }
-            if (path === null) { return ""}
-            context._images[id] = null
-            asset.image(path, (i) => { context._images[id] = i; callback() })
+            context._images[id] = {
+                DONE: false,
+                path: path,
+                data: null,
+                reload(path="") {
+                    if (path !== "") { context._images[id].path = path }
+                    asset.image(path, (i) => { 
+                        context._images[id].data = i
+                        context._images[id].DONE = true    
+                    })
+                    return context._images[id]
+                }
+            }
+            asset.image(path, (i) => { 
+                context._images[id].data = i
+                context._images[id].DONE = true    
+            })
+            return context._images[id]
         },
-        json(id, path, callback=()=>{}) {
-            if (path === null) { return ""}
-        },
+
+        json(id, path) {},
 
         // @DONE
         system(id, func) {

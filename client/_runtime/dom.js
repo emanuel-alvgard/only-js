@@ -22,8 +22,11 @@ function _collect(view) {
 
 
 
-// @ EDIT rewrite whole function to create 1 string and set body.innerHTML?
-// maybe solves the problem with rendering out of sync 
+// @EDIT rewrite whole function to create 1 string and set body.innerHTML?
+// maybe solves the problem with rendering out of sync
+
+// @EDIT rewrite so that the previous frame data is kept for update comparison
+// this makes it so that every check i made in update() 
 
 //let debounce = 3
 //let count = 0
