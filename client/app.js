@@ -1,5 +1,5 @@
 import { setup } from "./_runtime/context.js"
-import view from "./systems/view.js"
+import view from "./views/view.js"
 
 const context = setup()
 

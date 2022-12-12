@@ -141,8 +141,6 @@ export default (context) => {
     dashboard(context)
     customer(context)
 
-    context.view("dashboard").element("filter")
-
     if (view.SETUP) {
         console.log(view._real)
     }

@@ -1,6 +1,8 @@
 export default (app) => {
 
-    const customer = app.view("customer")
+    const win = app.view("window")
+    const side_nav = win.element("side_nav")
+    const customer = win.element("customer").hide()
 
     /*
     const dashboard = app.view("dashboard")

@@ -2,7 +2,22 @@ import table from "../components/table.js"
 
 export default (app) => {
 
-    const dashboard = app.view("dashboard")
+    const win = app.view("window")
+    const side_nav = win.element("side_nav")
+    const dashboard = win.element("dashboard")
+
+    dashboard
+        .left(side_nav.right() + 10)
+        .top(win.bounds().top() + 10)
+        .extend_bottom(win.bounds().bottom() - 10)
+        .extend_right(win.bounds().right() - 10)
+        .color([255,255,255,1])
+        .border_size(1) //
+        //.border_color(background)
+        .border_radius([3,3,3,3])
+        .shadow([0,3,7])
+        //.shadow_color(shadow)
+        .z(win.bounds().z() + 1)
      
     /*
     const panel = e("dashboard_panel")

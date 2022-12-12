@@ -175,7 +175,7 @@ function _update(view) {
 // @
 export function setup(context, id) {
 
-    const view = {
+    const view = { // @RENAME TO  target or something
 
         SETUP: true,
 
@@ -190,6 +190,9 @@ export function setup(context, id) {
 
         // @DONE
         virtual(id, bounds=view._bounds) {
+
+            // @ADD check that id is unique
+
             let _id = id
             if (bounds !== null) { _id = bounds.id() + "_" + id }
 
@@ -200,6 +203,8 @@ export function setup(context, id) {
         
         // @DONE
         real(id, type="div", bounds=view._bounds) {
+
+            // @ADD check that id is unique
 
             let _id = id
             if (bounds !== null) { _id = bounds.id() + "_" + id }
