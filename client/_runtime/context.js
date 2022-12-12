@@ -61,7 +61,7 @@ export function setup() {
             if (id in context._views) { return context._views[id] }
 
             // RENDERING API
-            if (api === "dom") { context._views[id] = dom.setup(context) }
+            if (api === "dom") { context._views[id] = dom.setup(context, id) }
             else if (api === "canvas") {}
             else if (api === "webgl") {}
             else if (api === "webgpu") {}
@@ -106,6 +106,7 @@ export function setup() {
             return context._images[id]
         },
 
+        // @
         json(id, path) {},
 
         // @DONE

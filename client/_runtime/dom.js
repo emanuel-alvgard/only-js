@@ -4,11 +4,11 @@ import * as virtual from "./virtual.js"
 function _collect(view) {
 
     // AUTO WIDTH / HEIGHT
-    view.bounds.width(document.documentElement.clientWidth)
-    view.bounds.height(document.documentElement.clientHeight)
+    view.bounds().width(document.documentElement.clientWidth)
+    view.bounds().height(document.documentElement.clientHeight)
 
     for (const id in view._virtual) {
-        if (id === "bounds") { continue }
+        if (view._virtual[id].bounds() === null) { continue }
         let virtual = view._virtual[id]
         let real = view._real[id]
         if (virtual._auto_width) {
@@ -173,35 +173,44 @@ function _update(view) {
 
 
 // @
-export function setup(context) {
+export function setup(context, id) {
 
     const view = {
 
         SETUP: true,
 
-        bounds: null,
-        port: null,
+        _id: id,
+        _bounds: null,
+        _port: null,
         _virtual: {},
         _real: {},
 
         // @DONE
-        virtual(id, bounds) {
-            if (id in view._virtual) { return view._virtual[id] }
-            view._virtual[id] = virtual.element(context, view, bounds, id)
-            return view._virtual[id]
+        bounds() { return view._bounds },
+
+        // @DONE
+        virtual(id, bounds=view._bounds) {
+            let _id = id
+            if (bounds !== null) { _id = bounds.id() + "_" + id }
+
+            if (_id in view._virtual) { return view._virtual[_id] }
+            view._virtual[_id] = virtual.element(context, view, bounds, _id)
+            return view._virtual[_id]
         },
         
         // @DONE
-        real(id, type, bounds) {
+        real(id, type="div", bounds=view._bounds) {
 
-            if (id in view._real) { return view._real[id] }
+            let _id = id
+            if (bounds !== null) { _id = bounds.id() + "_" + id }
 
+            if (_id in view._real) { return view._real[_id] }
             let element
-            let ssr = document.getElementById(id)
+            let ssr = document.getElementById(_id)
             if (ssr !== undefined && ssr !== null) { element = ssr }
             else { element = document.createElement(type) }
     
-            element.id = id
+            element.id = _id
             element.style.display = "block"
             element.style.position = "absolute"
             element.style.margin = "0px"
@@ -214,12 +223,13 @@ export function setup(context) {
 
             // remove default selection behavior
     
-            view._real[id] = element
-            if (id !== "bounds") { bounds.real().append(element) }
+            view._real[_id] = element
+            if (bounds !== null) { bounds.real().append(element) }
+            else { document.body.append(element) }
         },
 
         // @DONE
-        element(id, type="div", bounds=view.bounds) {
+        element(id, type="div", bounds=view._bounds) {
             view.real(id, type, bounds)
             return view.virtual(id, bounds)
         },
@@ -234,9 +244,7 @@ export function setup(context) {
         hide() {}
     }
 
-    view.bounds = view.element("bounds", "div", null)
-    document.body.append(view.real("bounds"))
-
+    view._bounds = view.element(id, "div", null)
     return view
 }
 

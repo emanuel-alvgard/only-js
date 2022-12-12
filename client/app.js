@@ -1,8 +1,11 @@
 import { setup } from "./_runtime/context.js"
-import dashboard from "./systems/dashboard.js"
+import view from "./systems/view.js"
 
 const context = setup()
 
-context.system("dashboard", dashboard)
+context.system("view", view)
+
+// add views here instead
+// rename systems to views
 
 context.start()
