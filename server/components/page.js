@@ -3,7 +3,7 @@ const util = require("../_runtime/tools/util.js");
 const fs_builtin = require("fs");
 
 // @DONE
-exports.system = async (context, incoming) => {
+exports.component = async (context, incoming) => {
 
     // make explicit else 404 page
     incoming.result = await fs_builtin.promises.readFile("../public/app.html");

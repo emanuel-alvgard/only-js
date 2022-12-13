@@ -12,7 +12,7 @@ function _run(context) {
 
     for (const id in context._views) { context._views[id].collect() }
     //let s = performance.now()
-    for (const id in context._systems) { context._systems[id](context) }
+    for (const id in context._components) { context._components[id](context) }
     //console.log(performance.now() - s)
     for (const id in context._views) { context._views[id].update() }
 
@@ -52,7 +52,7 @@ export function setup() {
         _images: {},
         _fonts: {},
         _views: {},
-        _systems: {},
+        _components: {},
 
         // INTERFACE
         // @DONE
@@ -70,8 +70,9 @@ export function setup() {
         },
 
         // @DONE
-        font(id, path="") {
+        font(id, path=null) {
             if (id in context._fonts) { return context._fonts[id] }
+            if (path === null) { return null }
             context._fonts[id] = {
                 DONE: false,
                 data: null
@@ -84,21 +85,25 @@ export function setup() {
         },
 
         // @DONE
-        image(id, path="") {
+        image(id, path=null) {
+
             if (id in context._images) { return context._images[id] }
+            if (path === null) { return null }
+            
             context._images[id] = {
                 DONE: false,
                 path: path,
                 data: null,
-                reload(path="") {
-                    if (path !== "") { context._images[id].path = path }
-                    asset.image(path, (i) => { 
+                reload(path=null) {
+                    if (path !== null) { context._images[id].path = path }
+                    asset.image(context._images[id].path, (i) => { 
                         context._images[id].data = i
                         context._images[id].DONE = true    
                     })
                     return context._images[id]
                 }
             }
+
             asset.image(path, (i) => { 
                 context._images[id].data = i
                 context._images[id].DONE = true    
@@ -110,10 +115,10 @@ export function setup() {
         json(id, path) {},
 
         // @DONE
-        system(id, func) {
+        component(id, func) {
             
-            if (id in context._systems) { return context._systems[id] }
-            context._systems[id] = func
+            if (id in context._components) { return context._components[id] }
+            context._components[id] = func
             return
         },
 

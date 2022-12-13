@@ -1,11 +1,14 @@
 import { setup } from "./_runtime/context.js"
-import view from "./views/view.js"
+import side_nav from "./components/side_nav.js"
+import dashboard from "./components/dashboard.js"
+import customer from "./components/customer.js"
 
 const context = setup()
 
-context.system("view", view)
+context.component("side_nav", side_nav)
+context.component("dashboard", dashboard)
+context.component("customer", customer)
 
-// add views here instead
-// rename systems to views
+context.view("window", "dom")
 
 context.start()

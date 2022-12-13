@@ -8,9 +8,9 @@ const util = require("./_runtime/tools/util.js");
 const dir = require("./_runtime/tools/dir.js");
 
 // ROUTE
-const file = require("./systems/file.js");
-const api = require("./systems/api.js");
-const page = require("./systems/page.js");
+const file = require("./components/file.js");
+const api = require("./components/api.js");
+const page = require("./components/page.js");
 
 // NPM
 const esbuild = require("./_runtime/node_modules/esbuild");
@@ -39,11 +39,11 @@ if (mode === "dev") {
 }
 
 let routes = [
-    file.system,
-    file.system,
-    file.system, 
-    api.system,
-    page.system
+    file.component,
+    file.component,
+    file.component, 
+    api.component,
+    page.component
 ]
 
 let triggers = [

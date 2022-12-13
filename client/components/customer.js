@@ -1,14 +1,14 @@
 export default (app) => {
 
-    const win = app.view("window")
-    const side_nav = win.element("side_nav")
-    const customer = win.element("customer").hide()
+    const _window = app.view("window")
+    const side_nav = _window.element("side_nav")
+    const customer = _window.element("customer").hide()
 
     /*
     const dashboard = app.view("dashboard")
     const panel = dashboard.element("customer_panel")
 
-    panel
+    customer
         .top(dashboard.bounds().top() + 10)
         .extend_bottom(dashboard.bounds().bottom() - 10)
         .color(main)
