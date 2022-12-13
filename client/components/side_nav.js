@@ -2,16 +2,13 @@ import table from "../tools/table.js"
 import toggle from "../tools/toggle.js"
 import * as color from "../tools/color.js"
 
-let APP
-let _WINDOW
 
-let mode = "light"
 
 
 // @DONE
 function hover(element) {
     
-    if (_WINDOW.SETUP) {
+    if (element.SETUP) {
 
         let hover = element.anim(
             "hover", 
@@ -43,19 +40,12 @@ export default (app) => {
     app.image("logout", "logout.svg")
 
     const _window = app.view("window")
-    _window.bounds().color(color.second)
-    const e = _window.element
+    _window.bounds().color(color.second) // @MOVE into window.js
 
-    const side_nav = e("side_nav")
-    const logo = e("logo")
-    const logout = e("logout")
-    const version = e("version")
-
-    if (app.SETUP) { 
-        APP = app 
-        _WINDOW = _window
-        app.location.path = "main"
-    }
+    const side_nav = _window.element("side_nav")
+    const logo = _window.element("logo")
+    const logout = _window.element("logout")
+    const version = _window.element("version")
 
 
     side_nav

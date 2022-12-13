@@ -28,6 +28,11 @@ export function anim(context, id, property, start, end, time, curve, delay) {
 
     let a = {
 
+        RUN: false,
+        PAUSE: false,
+        STOP: false,
+        DONE: false,
+
         _id: id,
 
         // STATIC
@@ -46,7 +51,7 @@ export function anim(context, id, property, start, end, time, curve, delay) {
         _delay_timer: 0.0,
         _run_timer: 0.0,
         _progress: 0.0,
-        _status: "stop",
+        _status: "stop", // @EDIT so that each status is an EVENT that set and reset each frame
 
         run() {
             if (a._status === "run") { return }

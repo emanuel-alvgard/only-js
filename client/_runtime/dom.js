@@ -159,6 +159,7 @@ function _update(view) {
         }
 
         // RESET EVENTS
+        virtual.SETUP = false
         virtual.UPDATE = false
         virtual.HOVER = false
         virtual.LEAVE = false
@@ -201,7 +202,7 @@ export function setup(context, id) {
             return view._virtual[_id]
         },
         
-        // @DONE
+        // @HERE
         real(id, type="div", bounds=view._bounds) {
 
             // @ADD check that id is unique
@@ -210,10 +211,13 @@ export function setup(context, id) {
             if (bounds !== null) { _id = bounds.id() + "_" + id }
 
             if (_id in view._real) { return view._real[_id] }
+
             let element
             let ssr = document.getElementById(_id)
             if (ssr !== undefined && ssr !== null) { element = ssr }
             else { element = document.createElement(type) }
+
+            //if (bounds !== null) { console.log(bounds.real()) }
     
             element.id = _id
             element.style.display = "block"
@@ -227,6 +231,8 @@ export function setup(context, id) {
             element.style.outline = "rgba(0,0,0,0)"
 
             // remove default selection behavior
+
+            //console.log(element)
     
             view._real[_id] = element
             if (bounds !== null) { bounds.real().append(element) }

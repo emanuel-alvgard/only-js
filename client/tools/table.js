@@ -18,7 +18,7 @@ export default (bounds, data, search) => { // bounds = element(), data = { [ {} 
     for (let i=0; i < data.length; i++) {
 
         rows.push(view.element(
-            bounds.id() + "_row_" + i,
+            "row_" + i,
             "div",
             bounds
         ))
@@ -31,7 +31,7 @@ export default (bounds, data, search) => { // bounds = element(), data = { [ {} 
             if (input === "" || data[i][key].toUpperCase().includes(input)) { show = true }
             
             items.push(view.element(
-                data[i][key] + "_" + i + "_" + j, 
+                data[i][key] + "_" + i + "_" + j, // @HERE
                 "div", 
                 bounds
             ))

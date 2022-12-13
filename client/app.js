@@ -9,6 +9,9 @@ context.component("side_nav", side_nav)
 context.component("dashboard", dashboard)
 context.component("customer", customer)
 
+context.font("alexandria_400", "alexandria_400.woff2")
+
 context.view("window", "dom")
+context.location.switch("dashboard")
 
 context.start()

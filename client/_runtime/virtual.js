@@ -32,6 +32,7 @@ export function element(context, view, bounds, id) {
     let e = {
         
         // EVENTS
+        SETUP: true,
         UPDATE: true,
         HOVER: false,
         LEAVE: false,

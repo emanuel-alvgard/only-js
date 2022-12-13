@@ -1,5 +1,6 @@
 import table from "../tools/table.js"
 import * as color from "../tools/color.js"
+import customer from "./customer.js"
 
 
 // @TEST
@@ -16,23 +17,31 @@ for (let i=0; i < 100; i++) {
 }
 
 
+
+// @HERE
+// @EDIT location and location.switch to location() as getter and setter
+// @EDIT add element() as a function to virtual.element through the view parameter
+// (this is to avoid needing to pass bounds as an argumet to element(), it also makes the "type" parameter truly optional)
+
+
 export default (app) => {
 
     app.image("search", "search.svg")
-    app.font("alexandria_400", "alexandria_400.woff2")
 
     const _window = app.view("window")
     const side_nav = _window.element("side_nav")
     const dashboard = _window.element("dashboard")
     const e = _window.element
-    const toggle = e("mode_toggle")
-    const input = e("input", "input")
-    const search = e("search")
-    const filter = e("filter")
-    const _table = e("table")
+    const toggle = e("mode_toggle", "div", dashboard)
+    const input = e("input", "input", dashboard)
+    const search = e("search", "div", dashboard)
+    const filter = e("filter", "div", dashboard)
+    const _table = e("table", "div", dashboard)
 
     dashboard
         .top(_window.bounds().top() + 10)
+        .left(side_nav.right() + 10)
+        .extend_right(_window.bounds().right() - 10)
         .extend_bottom(_window.bounds().bottom() - 10)
         .color([255,255,255,1])
         .border_size(1) //
@@ -41,17 +50,6 @@ export default (app) => {
         .shadow([0,3,7])
         .shadow_color(color.shadow)
         .z(_window.bounds().z() + 1)
-     
-    /*
-    mode_toggle
-        .left(main_card.left() + 10)
-        .top(main_card.top() + 10)
-        .width(50)
-        .height(25)
-        .z(2)
-
-    toggle(mode_toggle, color_mode)
-   */
 
     input
         .x(dashboard.x())
@@ -66,8 +64,6 @@ export default (app) => {
         .z(dashboard.z() + 1)
         .padding([10,0,45,0])
         .text_font(app.font("alexandria_400"))
-        .opacity(dashboard.opacity())
-    
 
     if (dashboard.SETUP) {
         search.real().placeholder = "Sök kund"
@@ -81,8 +77,6 @@ export default (app) => {
         .color(color.transparent)
         .right(input.right() - 10)
         .y(input.y())
-        .opacity(dashboard.opacity())
-
 
 
     filter
@@ -97,7 +91,6 @@ export default (app) => {
         .border_color(color.background)
         .border_radius([3,3,3,3])
         .z(dashboard.z() + 1)
-        .opacity(dashboard.opacity())
 
 
     _table
@@ -117,34 +110,37 @@ export default (app) => {
     table(_table, mock_data.customers, input)
 
 
-    if (app.location.path === "main") {
-        dashboard
-            .left(side_nav.right() + 10)
-            .extend_right(_window.bounds().right() - 10)
+    let fade_in = dashboard.anim(
+        "fade_in", 
+        dashboard.opacity, 
+        0.0, 
+        1.0, 
+        100, 
+        [0,0,0,4]
+    )
+
+    let fade_out = dashboard.anim(
+        "fade_out", 
+        dashboard.opacity, 
+        1.0, 
+        0.0, 
+        100, 
+        [0,0,0,4]
+    )
+
+
+    //if (fade_out.status() === "done") { dashboard.hide() }
+    
+    if (app.location.SWITCH) {
+        
+        if (app.location.path === "dashboard") {
+            console.log("dash")
+            fade_in.run()
+            dashboard.show()
+        }
+        else {
+            if (app.SETUP) { dashboard.hide() }
+            else { /*fade_out.run()*/ dashboard.hide() }
+        }
     }
-    if (app.location.path === "customer" && app.location.SWITCH) {
-
-        let slide = dashboard.anim(
-            "slide", 
-            dashboard.right, 
-            dashboard.right(), 
-            _window.bounds().left() - 100, 
-            500, 
-            [0,0,0,4]
-        )
-
-        let fade = dashboard.anim(
-            "fade", 
-            dashboard.opacity, 
-            1.0, 
-            0.0, 
-            300, 
-            [0,0,3]
-        )
-
-        slide.run()
-        fade.run() 
-
-    }
-
 }
