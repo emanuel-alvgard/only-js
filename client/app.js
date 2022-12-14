@@ -12,6 +12,6 @@ context.component("customer", customer)
 context.font("alexandria_400", "alexandria_400.woff2")
 
 context.view("window", "dom")
-context.location.switch("dashboard")
+context.location("dashboard")
 
 context.start()

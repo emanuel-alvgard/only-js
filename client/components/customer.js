@@ -6,8 +6,6 @@ function hover(element) {
     
     if (element.SETUP) {
 
-        console.log("setup")
-
         let hover = element.anim(
             "hover", 
             element.opacity,
@@ -24,6 +22,7 @@ function hover(element) {
             100
         )
 
+        element.real().style.cursor = "pointer"
         element.real().onmouseover = () => { hover.run() }
         element.real().onmouseleave = () => { leave.run() }
     }
@@ -37,8 +36,8 @@ export default (app) => {
     const _window = app.view("window")
     const side_nav = _window.element("side_nav")
     const customer = _window.element("customer")
-    const back = _window.element("back", "div", customer)
-    const title = _window.element("title", "h1", customer) // customer.element("title")
+    const back = customer.element("back")
+    const title = customer.element("title", "h1")
 
     customer
         .top(_window.bounds().top() + 10)
@@ -61,7 +60,7 @@ export default (app) => {
         .top(customer.top() + 25)
         .left(customer.left() + 25)
         .z(customer.z() + 1)
-        .real().onclick = () => { app.location.switch("dashboard") }
+        .real().onclick = () => { app.location("dashboard") }
 
     hover(back)
 
@@ -69,7 +68,6 @@ export default (app) => {
     title
         .x(customer.x())
         .top(customer.top() + 50)
-        .text("CUSTOMER")
         .text_font(app.font("alexandria_400"))
 
 
@@ -92,12 +90,12 @@ export default (app) => {
     )
 
 
-    //if (fade_out.status() === "done") { customer.hide() }
+    //if (fade_out.DONE) { customer.hide() }
     
-    if (app.location.SWITCH) { // @CHECK if this can be a tool "location" with a export function fade() ??
+    if (app.location().SWITCH) { // @CHECK if this can be a tool "location" with a export function fade() ??
         
-        if (app.location.path === "customer") {
-            console.log("customer")
+        if (app.location().path === "customer") {
+            title.text(app.location().data.name)
             fade_in.run()
             customer.show()
         }

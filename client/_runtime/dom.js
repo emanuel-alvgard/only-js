@@ -37,6 +37,7 @@ function _update(view) {
     for (const id in view._virtual) {
 
         let virtual = view._virtual[id]
+        let prev = view._virtual_prev[id]
         let real = view._real[id]
 
         for (const id in virtual._anims) {
@@ -145,18 +146,21 @@ function _update(view) {
             if (virtual._text_size !== null) { real.style.fontSize = virtual._text_size + "px" }
             if (virtual._text_font !== null) { real.style.fontFamily = virtual._text_font }
 
-            // VISIBILITY
-            real.style.opacity = virtual._opacity + ""
-            if (virtual._visible) { real.style.display = "block" }
-            else { real.style.display = "none" }
-
             // OVERFLOW
             real.style.overflowX = virtual._overflow_x
             real.style.overflowY = virtual._overflow_y
 
+            // VISIBILITY
+            if (virtual._visible) { real.style.display = "block" }
+            else { real.style.display = "none" }
+
             // FILTER
             real.style.filter = "brightness(" + virtual._brightness + ")"
         }
+
+        // VISIBILITY
+        // @TEST
+        if (virtual._opacity !== prev._opacity) { real.style.opacity = virtual._opacity + ""; prev._opacity = virtual._opacity }
 
         // RESET EVENTS
         virtual.SETUP = false
@@ -183,6 +187,7 @@ export function setup(context, id) {
         _id: id,
         _bounds: null,
         _port: null,
+        _virtual_prev: {},
         _virtual: {},
         _real: {},
 
@@ -199,6 +204,7 @@ export function setup(context, id) {
 
             if (_id in view._virtual) { return view._virtual[_id] }
             view._virtual[_id] = virtual.element(context, view, bounds, _id)
+            view._virtual_prev[_id] = virtual.element(context, view, bounds, _id)
             return view._virtual[_id]
         },
         

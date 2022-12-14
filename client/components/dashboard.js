@@ -1,6 +1,5 @@
 import table from "../tools/table.js"
 import * as color from "../tools/color.js"
-import customer from "./customer.js"
 
 
 // @TEST
@@ -18,12 +17,6 @@ for (let i=0; i < 100; i++) {
 
 
 
-// @HERE
-// @EDIT location and location.switch to location() as getter and setter
-// @EDIT add element() as a function to virtual.element through the view parameter
-// (this is to avoid needing to pass bounds as an argumet to element(), it also makes the "type" parameter truly optional)
-
-
 export default (app) => {
 
     app.image("search", "search.svg")
@@ -31,12 +24,11 @@ export default (app) => {
     const _window = app.view("window")
     const side_nav = _window.element("side_nav")
     const dashboard = _window.element("dashboard")
-    const e = _window.element
-    const toggle = e("mode_toggle", "div", dashboard)
-    const input = e("input", "input", dashboard)
-    const search = e("search", "div", dashboard)
-    const filter = e("filter", "div", dashboard)
-    const _table = e("table", "div", dashboard)
+
+    const input = dashboard.element("input", "input")
+    const search = dashboard.element("search")
+    const filter = dashboard.element("filter")
+    const _table = dashboard.element("table")
 
     dashboard
         .top(_window.bounds().top() + 10)
@@ -66,7 +58,7 @@ export default (app) => {
         .text_font(app.font("alexandria_400"))
 
     if (dashboard.SETUP) {
-        search.real().placeholder = "Sök kund"
+        input.real().placeholder = "Sök kund"
     }
 
     search
@@ -129,12 +121,11 @@ export default (app) => {
     )
 
 
-    //if (fade_out.status() === "done") { dashboard.hide() }
+    //if (fade_out.DONE) { dashboard.hide() }
     
-    if (app.location.SWITCH) {
+    if (app.location().SWITCH) {
         
-        if (app.location.path === "dashboard") {
-            console.log("dash")
+        if (app.location().path === "dashboard") {
             fade_in.run()
             dashboard.show()
         }

@@ -30,11 +30,14 @@ export default (bounds, data, search) => { // bounds = element(), data = { [ {} 
 
             if (input === "" || data[i][key].toUpperCase().includes(input)) { show = true }
             
-            items.push(view.element(
+            let item = view.element(
                 data[i][key] + "_" + i + "_" + j, // @HERE
                 "div", 
                 bounds
-            ))
+            )
+            item.overflow_y("visible")
+
+            items.push(item)
         }
         if (show) { visible.push(true) }
         else { visible.push(false) }
@@ -78,8 +81,7 @@ export default (bounds, data, search) => { // bounds = element(), data = { [ {} 
                     customers[i][j].real().onmouseover = () => { rows[i].brightness(0.95) }
                     customers[i][j].real().onmouseleave = () => { rows[i].brightness(1.0) }
                     customers[i][j].real().onclick = () => { 
-                        bounds.context().location.switch("customer")
-                        //bounds.context().location.customer_index = i 
+                        bounds.context().location("customer", { name: data[i].name })
                     }
                 }
             }
@@ -106,9 +108,7 @@ export default (bounds, data, search) => { // bounds = element(), data = { [ {} 
                 rows[i].real().onmouseover = () => { rows[i].brightness(0.95) }
                 rows[i].real().onmouseleave = () => { rows[i].brightness(1.0) }
                 rows[i].real().onclick = () => { 
-                    bounds.context().location.switch("customer")
-                    //bounds.context().location.customer_index = i //@NOT
-                    //console.log(bounds.context().location.customer_index) // @NOT
+                    bounds.context().location("customer", { name: data[i].name })
                 }
             }
             row_top += row_height

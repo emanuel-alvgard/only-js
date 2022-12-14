@@ -21,7 +21,7 @@ function _run(context) {
     for (const id in context._images) { context._images[id].DONE = false }
 
     context.SETUP = false
-    context.location.SWITCH = false
+    context._location.SWITCH = false
 
     window.requestAnimationFrame(() => { _run(context) })
 }
@@ -36,15 +36,10 @@ export function setup() {
         RUN: false,
 
         // DATA
-        location: { 
-            path: "",
+        _location: { 
+            path: null,
+            data: null,
             SWITCH: false,
-            switch(p) { 
-                if (p !== context.location.path) { 
-                context.location.path = p; 
-                context.location.SWITCH = true
-                return
-            }} 
         },
         time: performance.now(),
         delta: 0.0,
@@ -55,6 +50,17 @@ export function setup() {
         _components: {},
 
         // INTERFACE
+        location(path=null, data=null) {
+            if (path === null) { return context._location }
+            if (path !== context._location.path) {
+                context._location.path = path
+                context._location.data = data
+                context._location.SWITCH = true
+                return context._location
+            }
+
+        },
+
         // @DONE
         view(id, api="dom") {
 

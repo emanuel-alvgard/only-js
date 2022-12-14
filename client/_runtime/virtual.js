@@ -110,6 +110,7 @@ export function element(context, view, bounds, id) {
         // INTERFACE
         context() { return e._context },
         view() { return e._view },
+        element(id, type="div") { return view.element(id, type, e) },
         bounds() { return e._bounds },
         id() { return e._id },
         real() {
@@ -119,6 +120,7 @@ export function element(context, view, bounds, id) {
             try {
                 e.real().remove()
                 delete view._virtual[id]
+                delete view._virtual_prev[id]
             }
             catch (error) {}
         },
@@ -355,7 +357,12 @@ export function element(context, view, bounds, id) {
         },
 
         // FILTER
-        brightness(v=null, min=null, max=null) { return _number(e, "_brightness", v, min, max) }
+        brightness(v=null, min=null, max=null) { return _number(e, "_brightness", v, min, max) },
+
+        // MOUSE
+        click() {},
+        hover() {},
+        cursor() {},
 
     }
     

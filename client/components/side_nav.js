@@ -25,7 +25,8 @@ function hover(element) {
             1.0,
             100
         )
-
+        
+        element.real().style.cursor = "pointer"
         element.real().onmouseover = () => { hover.run() }
         element.real().onmouseleave = () => { leave.run() }
     }
@@ -46,6 +47,11 @@ export default (app) => {
     const logo = _window.element("logo")
     const logout = _window.element("logout")
     const version = _window.element("version")
+
+    if (app.SETUP) {
+        logo.real().style.cursor = "pointer"
+        logo.real().onclick = () => { app.location("dashboard") }
+    }
 
 
     side_nav
