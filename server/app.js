@@ -148,12 +148,11 @@ http.server(context.config.app.port, router);
 // REBUILD / RELOAD
 let cache;
 
-// @FIX dir.watch method to work more reliably
 // @FIX reloading should always make a safe swap where in the case of a invalid reload 
 // the server keeps the old data
 // @ADD proper error handling for zero down time
 
-dir.watch("../client", [".js"], ["node_modules"], () => {
+dir.watch("../client", [".js"], ["node_modules"], 10, () => {
 
     // REBUILD
     let build = ["../client/app.js"]

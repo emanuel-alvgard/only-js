@@ -29,6 +29,20 @@ function hover(element) {
 }
 
 
+// @ TEST
+
+let mock_data = {
+    services: {
+        pe: {
+            title: "PE Accounting"
+        },
+        office_365: {
+            title: "Office 365"
+        }
+    }
+}
+
+
 export default (app) => {
 
     app.image("back", "back.svg")
@@ -70,6 +84,20 @@ export default (app) => {
         .top(customer.top() + 50)
         .text_font(app.font("alexandria_400"))
 
+    let top = title.bottom() + 100
+    for (const service in mock_data.services) {
+        
+        customer.element(service + "title", "h2")
+            .text(mock_data.services[service].title)
+            .text_font(app.font("alexandria_400"))
+            .border_bottom("solid")
+            .border_size(2)
+            .left(customer.left() + 50)
+            .top(top)
+            .z(customer.z() + 1)
+        
+            top += 100
+    }    
 
     let fade_in = customer.anim(
         "fade_in", 

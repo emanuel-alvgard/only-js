@@ -22,16 +22,16 @@ exports.collect = (target_dir, extension, excluded, files=[], ino=[], mod=[], tr
         if (excluded.includes(dir[i])) { continue; }
         if (dir[i].includes(".") === false) { exports.collect(target_dir + "/" + dir[i], extension, excluded, files, ino, mod, _trail); }
         else if (dir[i].includes(extension)) { // optimize to look at extension from end of string
-            let stats = fs.statSync(target_dir + "/" + dir[i]);
+            let stats = fs.statSync(target_dir + "/" + dir[i])
             files.push(_trail + dir[i]);
             ino.push(stats.ino);
-            mod.push("" + stats.mtime);
+            mod.push("" + stats.mtimeMs);
         }
     }
 }
 
 // @NOT @HERE
-exports.watch = (start_path, extension, excluded, func) => {
+exports.watch = (start_path, extension, excluded, interval, func) => {
 
     execute = 0;
 
@@ -43,8 +43,8 @@ exports.watch = (start_path, extension, excluded, func) => {
 
     setInterval(function() {
 
-        exports.collect(start_path, extension, excluded, [], ino, mod);
-        
+        exports.collect(start_path, extension, excluded, [], ino, mod)
+
         // COMPARE
         for (let i = 0; i < ino.length; i++) {
             let index = prev_ino.indexOf(ino[i]);
@@ -63,5 +63,5 @@ exports.watch = (start_path, extension, excluded, func) => {
 
         execute = 0;
     
-    }, 10);
+    }, interval);
 }

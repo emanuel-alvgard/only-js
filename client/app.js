@@ -5,6 +5,11 @@ import customer from "./components/customer.js"
 
 const context = setup()
 
+context.services = {
+    pe: "PEClient/",
+    office_365: ""
+}
+
 context.component("side_nav", side_nav)
 context.component("dashboard", dashboard)
 context.component("customer", customer)
