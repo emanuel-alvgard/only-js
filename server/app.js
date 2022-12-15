@@ -160,6 +160,7 @@ dir.watch("../client", [".js"], ["node_modules"], 10, () => {
     
     let start = performance.now()
 
+    /*
     let minified = esbuild.buildSync({
         loader: { ".js": "js" },
         entryPoints: build,
@@ -168,6 +169,7 @@ dir.watch("../client", [".js"], ["node_modules"], 10, () => {
         write: false,
         allowOverwrite: true,
     })
+    */
 
     //console.log(minified)
 
@@ -186,6 +188,7 @@ dir.watch("../client", [".js"], ["node_modules"], 10, () => {
     let gzipped = []
     let size = 0
     
+    /*
     minified.outputFiles.forEach(file => {
         let result = zlib_builtin.gzipSync(file.text)
         size += result.byteLength
@@ -193,7 +196,7 @@ dir.watch("../client", [".js"], ["node_modules"], 10, () => {
     })
 
     console.log(size)
-    
+    */
 
     // switch cache
 

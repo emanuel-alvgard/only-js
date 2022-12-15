@@ -1,4 +1,25 @@
 import * as color from "../tools/color.js"
+import Chart from "../node_modules/chart.js/auto/auto.js"
+
+
+
+const data = {
+    labels: ["Ruben", "Emanuel", "Christian"],
+    datasets: [{
+        label: 'My First Dataset',
+        data: [65, 59, 80, 81, 56, 55, 40],
+        fill: true,
+        borderColor: 'rgb(75, 192, 192)',
+        tension: 0.1
+    }]
+}
+
+const config = {
+    type: 'line',
+    data: data,
+}
+
+
 
 
 // @DONE
@@ -50,6 +71,7 @@ export default (app) => {
     const _window = app.view("window")
     const side_nav = _window.element("side_nav")
     const customer = _window.element("customer")
+    const chart = customer.element("chart")
     const back = customer.element("back")
     const title = customer.element("title", "h1")
 
@@ -84,10 +106,25 @@ export default (app) => {
         .top(customer.top() + 50)
         .text_font(app.font("alexandria_400"))
 
-    let top = title.bottom() + 100
+
+    chart
+        .width(500)
+        .height(250)
+        .top(title.bottom() + 100)
+        .left(customer.left() + 50)
+        .z(customer.z() + 1)
+
+
+    if(app.SETUP) {
+        let canvas = document.createElement("canvas")
+        chart.real().append(canvas)
+        new Chart(canvas, config)
+    }
+
+    let top = chart.bottom() + 50
     for (const service in mock_data.services) {
         
-        customer.element(service + "title", "h2")
+        customer.element(service + "_title", "h2")
             .text(mock_data.services[service].title)
             .text_font(app.font("alexandria_400"))
             .border_bottom("solid")
@@ -97,7 +134,10 @@ export default (app) => {
             .z(customer.z() + 1)
         
             top += 100
-    }    
+    } 
+    
+
+
 
     let fade_in = customer.anim(
         "fade_in", 
