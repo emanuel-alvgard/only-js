@@ -74,7 +74,7 @@ function _update(view) {
             }
             
             real.style.transform = "translate(" + left + "px," + top + "px)" // this gets affected by .view.port transform
-            real.style.zIndex = virtual._z_index + ""
+            real.style.zIndex = Math.round(virtual._z_index) + ""
 
             // BACKGROUND
             if (virtual._image !== null) { 
