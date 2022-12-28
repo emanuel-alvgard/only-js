@@ -4,26 +4,33 @@ import * as asset from "./asset.js"
 // @DONE
 function _run(context) {
 
-    if (context.RUN === false) { return }
+    let tick = setInterval(() => {
 
-    let time = performance.now()
-    context.delta = (time - context.time) / 1000
-    context.time = time
+        //let test = performance.now()
 
-    for (const id in context._views) { context._views[id].collect() }
-    //let s = performance.now()
-    for (const id in context._components) { context._components[id](context) }
-    //console.log(performance.now() - s)
-    for (const id in context._views) { context._views[id].update() }
+        if (context.RUN === false) { clearInterval(tick) }
 
-    // RESET EVENTS
-    for (const id in context._fonts) { context._fonts[id].DONE = false }
-    for (const id in context._images) { context._images[id].DONE = false }
+        let time = performance.now()
+        context.delta = (time - context.time) / 1000
+        context.time = time
 
-    context.SETUP = false
-    context._location.SWITCH = false
+        for (const id in context._views) { context._views[id].collect() }
+        //let s = performance.now()
+        for (const id in context._components) { context._components[id](context) }
+        //console.log(performance.now() - s)
+        for (const id in context._views) { context._views[id].update() }
 
-    window.requestAnimationFrame(() => { _run(context) })
+        // RESET EVENTS
+        for (const id in context._fonts) { context._fonts[id].DONE = false }
+        for (const id in context._images) { context._images[id].DONE = false }
+
+        context.SETUP = false
+        context._location.SWITCH = false
+
+        //console.log(performance.now() - test)
+    })
+
+    //window.requestAnimationFrame(() => { _run(context) })
 }
 
 // @DONE
