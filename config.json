@@ -1,10 +1,4 @@
 {
-    "db": {
-        "path": "/db",
-        "port": 3001,
-        "domain": "",
-        "token": ""
-    },
     "app": {
         "path": "/server",
         "port": 3000,
