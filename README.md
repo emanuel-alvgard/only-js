@@ -42,10 +42,10 @@ export default (runtime) => {
     let loaded = home.root.anim("load", "opacity", 0, 1, 100, quad_curve(0.0, 0.0, 1.0, 3.0))
 
     // SHOW VIEW WHEN ASSETS LOADED
-    if (home.SETUP) { root.hide() }
+    if (home.SETUP) { root.visible(false) }
     
     if (ASSETS > 1) {
-        root.show()
+        root..visible(true)
         loaded.start()
         ASSETS = 0
     }

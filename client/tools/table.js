@@ -73,7 +73,7 @@ export default (bounds, data, search) => { // bounds = element(), data = { [ {} 
                     .z(rows[i].z() + 1)
                     .text(data[i][keys[j]])
                     .text_font(bounds.context().font("alexandria_400"))
-                    .show()
+                    .visible(true)
                     //.anim("fade").run()
                 
                 if (bounds.context().SETUP) {
@@ -85,7 +85,7 @@ export default (bounds, data, search) => { // bounds = element(), data = { [ {} 
                     }
                 }
             }
-            else { customers[i][j].hide() }
+            else { customers[i][j].visible(false) }
             column_l += column_width    
         }
 
@@ -101,7 +101,7 @@ export default (bounds, data, search) => { // bounds = element(), data = { [ {} 
                 .color([250, 250, 250, 1])
                 .border_bottom("solid")
                 .border_color([220, 220, 220, 1])
-                .show()
+                .visible(true)
 
             if (bounds.context().SETUP) {
                 rows[i].real().style.cursor = "pointer"  
@@ -114,7 +114,7 @@ export default (bounds, data, search) => { // bounds = element(), data = { [ {} 
             row_top += row_height
             row_y += row_height
         }
-        else { rows[i].hide() }
+        else { rows[i].visible(false) }
     }
 }
 

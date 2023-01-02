@@ -70,9 +70,9 @@ export default (app) => {
 
     const _window = app.view("window")
     const side_nav = _window.element("side_nav")
-    const customer = _window.element("customer")
-    const chart = customer.element("chart")
-    const back = customer.element("back")
+    const customer = _window.element("customer", "div")
+    const chart = customer.element("chart", "div")
+    const back = customer.element("back", "div")
     const title = customer.element("title", "h1")
 
     customer
@@ -158,18 +158,19 @@ export default (app) => {
     )
 
 
-    //if (fade_out.DONE) { customer.hide() }
+    //if (fade_out.DONE) { customer.visible(false) }
     
     if (app.location().SWITCH) { // @CHECK if this can be a tool "location" with a export function fade() ??
         
         if (app.location().path === "customer") {
             title.text(app.location().data.name)
+            fade_in.stop()
             fade_in.run()
-            customer.show()
+            customer.visible(true)
         }
         else {
-            if (app.SETUP) { customer.hide() }
-            else { /*fade_out.run()*/ customer.hide() }
+            if (app.SETUP) { customer.visible(false) }
+            else { /*fade_out.run()*/ customer.visible(false) }
         }
         
     }

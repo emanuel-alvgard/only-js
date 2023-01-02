@@ -110,7 +110,7 @@ export function element(context, view, bounds, id) {
         // INTERFACE
         context() { return e._context },
         view() { return e._view },
-        element(id, type="div") { return view.element(id, type, e) },
+        element(id, type=null) { return view.element(id, type, e) },
         bounds() { return e._bounds },
         id() { return e._id },
         real() {
@@ -126,7 +126,7 @@ export function element(context, view, bounds, id) {
         },
 
         // @DONE
-        anim(id, property, start, end, time, curve=[1.0,1.0], delay=0.0) {
+        anim(id, property=()=>{}, start=0, end=0, time=0, curve=[1.0,1.0], delay=0.0) {
             if (id in e._anims) { 
                 // check if any of the arguments diff and update object accordingly
                 return e._anims[id]
@@ -181,10 +181,11 @@ export function element(context, view, bounds, id) {
             if (t !== null) { 
                 e.height(t - e.bottom(), min, max); 
                 e.top(t);
+                e._auto_height = false;
                 e.UPDATE = true;
                 return e; 
             }
-            return e.bottom();
+            return e.bottom()
         },
 
         extend_right(r=null, min=null, max=null) {
@@ -331,15 +332,10 @@ export function element(context, view, bounds, id) {
         // VISIBILITY
         opacity(v=null, min=null, max=null) { return _number(e, "_opacity", v, min, max) },
 
-        show() { 
-            if (e._visible === true) { return e }
-            e._visible = true 
-            e.UPDATE = true 
-            return e 
-        },
-        hide() {
-            if (e._visible === false) { return e }
-            e._visible = false 
+        visible(v=null) {
+            if (v === null) { return e._visible } 
+            if (v === e._visible) { return e }
+            e._visible = v 
             e.UPDATE = true 
             return e 
         },

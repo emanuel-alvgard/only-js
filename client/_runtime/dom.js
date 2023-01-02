@@ -8,9 +8,15 @@ function _collect(view) {
     view.bounds().height(document.documentElement.clientHeight)
 
     for (const id in view._virtual) {
+        
         if (view._virtual[id].bounds() === null) { continue }
+        
         let virtual = view._virtual[id]
-        let real = view._real[id]
+        let real
+        
+        if (id in view._real) { real = view._real[id] }
+        else { continue }
+        
         if (virtual._auto_width) {
             if (real.clientWidth !== virtual._width) { virtual._width = real.clientWidth; virtual.UPDATE = true } 
         }
@@ -38,7 +44,9 @@ function _update(view) {
 
         let virtual = view._virtual[id]
         let prev = view._virtual_prev[id]
-        let real = view._real[id]
+        let real
+        if (id in view._real) { real = view._real[id] }
+        else { continue }
 
         for (const id in virtual._anims) {
             virtual._anims[id].update()
@@ -180,7 +188,7 @@ function _update(view) {
 // @
 export function setup(context, id) {
 
-    const view = { // @RENAME TO  target or something
+    const view = {
 
         SETUP: true,
 
@@ -197,21 +205,23 @@ export function setup(context, id) {
         // @DONE
         virtual(id, bounds=view._bounds) {
 
-            // @ADD check that id is unique
-
             let _id = id
             if (bounds !== null) { _id = bounds.id() + "_" + id }
 
-            if (_id in view._virtual) { return view._virtual[_id] }
+            if (_id in view._virtual) {
+                if (bounds.id !== view._virtual[_id].bounds().id) {
+                    console.log("Invalid bounding element (" + bounds.id() + ") for (" + _id + ")")
+                    return
+                } 
+                return view._virtual[_id]
+            }
             view._virtual[_id] = virtual.element(context, view, bounds, _id)
             view._virtual_prev[_id] = virtual.element(context, view, bounds, _id)
             return view._virtual[_id]
         },
         
         // @HERE
-        real(id, type="div", bounds=view._bounds) {
-
-            // @ADD check that id is unique
+        real(id, type, bounds=view._bounds) {
 
             let _id = id
             if (bounds !== null) { _id = bounds.id() + "_" + id }
@@ -246,7 +256,8 @@ export function setup(context, id) {
         },
 
         // @DONE
-        element(id, type="div", bounds=view._bounds) {
+        element(id, type=null, bounds=view._bounds) {
+            if (type === null) { return view.virtual(id, bounds) }
             view.real(id, type, bounds)
             return view.virtual(id, bounds)
         },
@@ -256,9 +267,6 @@ export function setup(context, id) {
 
         // @DONE
         update() { _update(view) },
-
-        show() {},
-        hide() {}
     }
 
     view._bounds = view.element(id, "div", null)

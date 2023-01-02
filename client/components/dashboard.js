@@ -23,12 +23,12 @@ export default (app) => {
 
     const _window = app.view("window")
     const side_nav = _window.element("side_nav")
-    const dashboard = _window.element("dashboard")
+    const dashboard = _window.element("dashboard", "div")
 
     const input = dashboard.element("input", "input")
-    const search = dashboard.element("search")
-    const filter = dashboard.element("filter")
-    const _table = dashboard.element("table")
+    const search = dashboard.element("search", "div")
+    const filter = dashboard.element("filter", "div")
+    const _table = dashboard.element("table", "div")
 
     dashboard
         .top(_window.bounds().top() + 10)
@@ -121,17 +121,18 @@ export default (app) => {
     )
 
 
-    //if (fade_out.DONE) { dashboard.hide() }
+    //if (fade_out.DONE) { dashboard.visible(false) }
     
     if (app.location().SWITCH) {
         
         if (app.location().path === "dashboard") {
+            fade_in.stop()
             fade_in.run()
-            dashboard.show()
+            dashboard.visible(true)
         }
         else {
-            if (app.SETUP) { dashboard.hide() }
-            else { /*fade_out.run()*/ dashboard.hide() }
+            if (app.SETUP) { dashboard.visible(false) }
+            else { /*fade_out.run()*/ dashboard.visible(false) }
         }
     }
 }

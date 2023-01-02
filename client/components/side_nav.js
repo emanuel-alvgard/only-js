@@ -43,10 +43,10 @@ export default (app) => {
     const _window = app.view("window")
     _window.bounds().color(color.second) // @MOVE into window.js
 
-    const side_nav = _window.element("side_nav")
-    const logo = _window.element("logo")
-    const logout = _window.element("logout")
-    const version = _window.element("version")
+    const side_nav = _window.element("side_nav", "div")
+    const logo = _window.element("logo", "div")
+    const logout = _window.element("logout", "div")
+    const version = _window.element("version", "div")
 
     if (app.SETUP) {
         logo.real().style.cursor = "pointer"

@@ -6,8 +6,6 @@ function _run(context) {
 
     let tick = setInterval(() => {
 
-        //let test = performance.now()
-
         if (context.RUN === false) { clearInterval(tick) }
 
         let time = performance.now()
@@ -27,10 +25,7 @@ function _run(context) {
         context.SETUP = false
         context._location.SWITCH = false
 
-        //console.log(performance.now() - test)
     })
-
-    //window.requestAnimationFrame(() => { _run(context) })
 }
 
 // @DONE

@@ -55,11 +55,6 @@ export function anim(context, id, property, start, end, time, curve, delay) {
 
         run() {
             if (a._status === "run") { return }
-            if (a._status === "done") {
-                a._delay_timer = 0.0
-                a._run_timer = 0.0
-                a._progress = 0.0
-            }
             a._status = "run"
             return a
         },
