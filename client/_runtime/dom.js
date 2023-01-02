@@ -52,26 +52,47 @@ function _update(view) {
             virtual._anims[id].update()
         }
 
-        if (virtual.UPDATE) {
-
-            /*
-            if (virtual._bounds !== null) {
-                //if (count === debounce) {
-                    if ((virtual._l + virtual._w) < virtual._bounds._l) { continue } // @HERE this recks scrolling
-                    if ((virtual._t + virtual._h) < virtual._bounds._t) { continue }
-                    if (virtual._l > (virtual._bounds._l + virtual._bounds._w)) { continue }
-                    if (virtual._t > (virtual._bounds._t + virtual._bounds._h)) { continue }
-                    //count = 0
-                //}
-                //count ++
-            }
-            */
         
-            if (virtual._auto_width) { real.style.width = "auto" }
-            else { real.style.width = virtual._width + "px" }
-            
-            if (virtual._auto_height) { real.style.height = "auto" }
-            else { real.style.height = virtual._height + "px" }
+
+        /*
+        if (virtual._bounds !== null) {
+            //if (count === debounce) {
+                if ((virtual._l + virtual._w) < virtual._bounds._l) { continue } // @HERE this recks scrolling
+                if ((virtual._t + virtual._h) < virtual._bounds._t) { continue }
+                if (virtual._l > (virtual._bounds._l + virtual._bounds._w)) { continue }
+                if (virtual._t > (virtual._bounds._t + virtual._bounds._h)) { continue }
+                //count = 0
+            //}
+            //count ++
+        }
+        */
+    
+        // AUTO WIDTH / HEIGHT
+        if (virtual._auto_width !== prev._auto_width) {
+            if (virtual._auto_width) { real.style.width = "auto"; prev._auto_width = virtual._auto_width }
+            else { real.style.width = virtual._width + "px"; prev._width = virtual._width }
+        }
+     
+        if (virtual._auto_height !== prev._auto_height) {
+            if (virtual._auto_height) { real.style.height = "auto"; prev._auto_height = virtual._auto_height }
+            else { real.style.height = virtual._height + "px"; prev._height = virtual._height }
+        }
+
+        // WIDTH / HEIGHT
+        if (!virtual._auto_width) { 
+            if (virtual._width !== prev._width) { real.style.width = virtual._width + "px"; prev._width = virtual._width }
+        }
+
+        if (!virtual._auto_height) { 
+            if (virtual._height !== prev._height) { real.style.height = virtual._height + "px"; prev._height = virtual._height }
+        }
+
+
+        // TRANSFORM
+        if (
+            virtual._left !== prev._left ||
+            virtual._top !== prev._top
+        ) {
 
             let left = virtual._left
             let top = virtual._top
@@ -80,91 +101,153 @@ function _update(view) {
                 left -= virtual._bounds._left
                 top -= virtual._bounds._top
             }
-            
+
+            if (id === "window_dashboard") { console.log("update") }
+
             real.style.transform = "translate(" + left + "px," + top + "px)" // this gets affected by .view.port transform
+
+            prev._left = virtual._left
+            prev._top = virtual._top
+        }
+
+        // Z-INDEX
+        if (virtual._z_index !== prev._z_index) { 
             real.style.zIndex = Math.round(virtual._z_index) + ""
+            prev._z_index = virtual._z_index
+        }
 
-            // BACKGROUND
-            if (virtual._image !== null) { 
-                if (real.tagName === "IMG") { 
-                    real.src = "data:image/jpg;base64," + virtual._image
-                    real.style.objectPosition = virtual._image_position
-                    real.style.objectFit = virtual._image_fit
-                }
-                else { 
-                    real.style.backgroundImage = 'url("data:image/svg+xml;base64,' + virtual._image + '")' // @ADD image/svg+xml for svg files
-                    real.style.backgroundPosition = virtual._image_position
-                    real.style.backgroundSize = virtual._image_fit 
-                } 
+
+        // BACKGROUND
+        if (virtual._image !== null) {
+
+            if (virtual._image !== prev._image) { 
+
+                if (real.tagName === "IMG") { real.src = "data:image/svg+xml;base64," + virtual._image }
+                else { real.style.backgroundImage = 'url("data:image/svg+xml;base64,' + virtual._image + '")' }
+                
+                prev._image = virtual._image 
             }
+        }
 
+        if (virtual._image_position !== prev._image_position || view.SETUP) {
             real.style.objectPosition = virtual._image_position
+            real.style.backgroundPosition = virtual._image_position  
+            prev._image_position = virtual._image_position 
+        }
+        if (virtual._image_fit !== prev._image_fit || view.SETUP) {
             real.style.objectFit = virtual._image_fit
+            real.style.backgroundSize = virtual._image_fit
+            prev._image_fit = virtual._image_fit 
+        }
 
+
+        if (
+            virtual._color_r !== prev._color_r ||
+            virtual._color_g !== prev._color_g ||
+            virtual._color_b !== prev._color_b ||
+            virtual._color_a !== prev._color_a
+        ) {
             real.style.backgroundColor = "rgba(" + 
                 virtual._color_r + "," +
                 virtual._color_g + "," +
                 virtual._color_b + "," +  
-                virtual._color_a + ")" 
-            
-            // TEXT
-            if (virtual._text !== null) { real.textContent = virtual._text }
+                virtual._color_a + ")"
 
+            prev._color_r = virtual._color_r
+            prev._color_g = virtual._color_g
+            prev._color_b = virtual._color_b
+            prev._color_a = virtual._color_a
+        }
+        
+
+
+        // TEXT
+        if (virtual._text !== null) { 
+            if (virtual._text !== prev._text) {
+                real.textContent = virtual._text
+                prev._text = virtual._text
+            } 
+        }
+
+        if (
+            virtual._text_r !== prev._text_r ||
+            virtual._text_g !== prev._text_g ||
+            virtual._text_b !== prev._text_b ||
+            virtual._text_a !== prev._text_a
+        ) {
             real.style.color = "rgba(" + 
                 virtual._text_r + "," +
                 virtual._text_g + "," +
                 virtual._text_b + "," +  
                 virtual._text_a + ")"
 
-            real.style.paddingLeft = virtual._padding_left + "px "
-            real.style.paddingTop = virtual._padding_top + "px "
-            real.style.paddingRight = virtual._padding_right + "px "
-            real.style.paddingBottom = virtual._padding_bottom + "px "
-
-            // BORDER
-            real.style.borderLeft = virtual._border_left
-            real.style.borderTop = virtual._border_top
-            real.style.borderRight = virtual._border_right
-            real.style.borderBottom = virtual._border_bottom
-            
-            real.style.borderWidth = virtual._border_size + "px"
-            real.style.borderColor = "rgba(" + 
-                virtual._border_r + "," +
-                virtual._border_g + "," +
-                virtual._border_b + "," +  
-                virtual._border_a + ")"
-
-            real.style.borderRadius = 
-                virtual._border_lt + "px " +
-                virtual._border_rt + "px " +
-                virtual._border_rb + "px " +
-                virtual._border_lb + "px"
-
-            // SHADOW
-            real.style.boxShadow =
-                virtual._shadow_x + "px " +
-                virtual._shadow_y + "px " +
-                virtual._shadow_blur + "px rgba(" +
-                virtual._shadow_r + "," +
-                virtual._shadow_g + "," +
-                virtual._shadow_b + "," +  
-                virtual._shadow_a + ")"
-
-
-            if (virtual._text_size !== null) { real.style.fontSize = virtual._text_size + "px" }
-            if (virtual._text_font !== null) { real.style.fontFamily = virtual._text_font }
-
-            // OVERFLOW
-            real.style.overflowX = virtual._overflow_x
-            real.style.overflowY = virtual._overflow_y
-
-            // VISIBILITY
-            if (virtual._visible) { real.style.display = "block" }
-            else { real.style.display = "none" }
-
-            // FILTER
-            real.style.filter = "brightness(" + virtual._brightness + ")"
+            prev._text_r = virtual._text_r
+            prev._text_g = virtual._text_g
+            prev._text_b = virtual._text_b
+            prev._text_a = virtual._text_a
         }
+
+        /*
+        real.style.paddingLeft = virtual._padding_left + "px "
+        real.style.paddingTop = virtual._padding_top + "px "
+        real.style.paddingRight = virtual._padding_right + "px "
+        real.style.paddingBottom = virtual._padding_bottom + "px "
+
+
+
+        // BORDER
+        real.style.borderLeft = virtual._border_left
+        real.style.borderTop = virtual._border_top
+        real.style.borderRight = virtual._border_right
+        real.style.borderBottom = virtual._border_bottom
+        
+        real.style.borderWidth = virtual._border_size + "px"
+        real.style.borderColor = "rgba(" + 
+            virtual._border_r + "," +
+            virtual._border_g + "," +
+            virtual._border_b + "," +  
+            virtual._border_a + ")"
+
+        real.style.borderRadius = 
+            virtual._border_lt + "px " +
+            virtual._border_rt + "px " +
+            virtual._border_rb + "px " +
+            virtual._border_lb + "px"
+
+
+
+        // SHADOW
+        real.style.boxShadow =
+            virtual._shadow_x + "px " +
+            virtual._shadow_y + "px " +
+            virtual._shadow_blur + "px rgba(" +
+            virtual._shadow_r + "," +
+            virtual._shadow_g + "," +
+            virtual._shadow_b + "," +  
+            virtual._shadow_a + ")"
+
+
+        if (virtual._text_size !== null) { real.style.fontSize = virtual._text_size + "px" }
+        if (virtual._text_font !== null) { real.style.fontFamily = virtual._text_font }
+
+
+
+        // OVERFLOW
+        real.style.overflowX = virtual._overflow_x
+        real.style.overflowY = virtual._overflow_y
+
+
+
+        // VISIBILITY
+        if (virtual._visible) { real.style.display = "block" }
+        else { real.style.display = "none" }
+
+
+
+        // FILTER
+        real.style.filter = "brightness(" + virtual._brightness + ")"
+
+*/
 
         // VISIBILITY
         // @TEST
@@ -178,7 +261,7 @@ function _update(view) {
         virtual.CLICK = false
     }
 
-    if (view.SETUP) { view.SETUP = false }
+    view.SETUP = false
 
     return
 }

@@ -13,18 +13,16 @@ function _run(context) {
         context.time = time
 
         for (const id in context._views) { context._views[id].collect() }
-        //let s = performance.now()
         for (const id in context._components) { context._components[id](context) }
-        //console.log(performance.now() - s)
+        //let s = performance.now()
         for (const id in context._views) { context._views[id].update() }
-
+        //console.log(performance.now() - s)
         // RESET EVENTS
         for (const id in context._fonts) { context._fonts[id].DONE = false }
         for (const id in context._images) { context._images[id].DONE = false }
 
         context.SETUP = false
         context._location.SWITCH = false
-
     })
 }
 
