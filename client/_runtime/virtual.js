@@ -51,6 +51,7 @@ export function element(context, view, bounds, id) {
         _width: 0,
         _height: 0,
         _z_index: 0,
+        _scroll: 0,
         _auto_width: true,
         _auto_height: true,
 
@@ -158,6 +159,7 @@ export function element(context, view, bounds, id) {
 
 
         // POSITION
+        scroll() { return e._scroll },
         left(v=null, min=null, max=null) { return _number(e, "_left", v, min, max) },
         top(v=null, min=null, max=null) { return _number(e, "_top", v, min, max) },
 

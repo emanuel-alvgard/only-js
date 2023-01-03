@@ -9,20 +9,21 @@ function _collect(view) {
 
     for (const id in view._virtual) {
         
-        if (view._virtual[id].bounds() === null) { continue }
-        
+        if (view._virtual[id]._bounds === null) { continue }
+
         let virtual = view._virtual[id]
         let real
         
         if (id in view._real) { real = view._real[id] }
         else { continue }
         
-        if (virtual._auto_width) {
-            if (real.clientWidth !== virtual._width) { virtual._width = real.clientWidth; virtual.UPDATE = true } 
-        }
-        if (virtual._auto_height) { 
-            if (real.clientHeight !== virtual._height) { virtual._height = real.clientHeight; virtual.UPDATE = true }
-        }
+        // AUTO WIDTH / HEIGHT
+        if (virtual._auto_width) { virtual._width = real.clientWidth } 
+        if (virtual._auto_height) { virtual._height = real.clientHeight }
+
+        // SCROLL POSITION
+        if (virtual._overflow_y === "scroll") { virtual._scroll = real.scrollTop }
+        
     }
 }
 
@@ -48,24 +49,20 @@ function _update(view) {
         if (id in view._real) { real = view._real[id] }
         else { continue }
 
+
         for (const id in virtual._anims) {
             virtual._anims[id].update()
         }
 
-        
-
-        /*
+    
         if (virtual._bounds !== null) {
-            //if (count === debounce) {
-                if ((virtual._l + virtual._w) < virtual._bounds._l) { continue } // @HERE this recks scrolling
-                if ((virtual._t + virtual._h) < virtual._bounds._t) { continue }
-                if (virtual._l > (virtual._bounds._l + virtual._bounds._w)) { continue }
-                if (virtual._t > (virtual._bounds._t + virtual._bounds._h)) { continue }
-                //count = 0
-            //}
-            //count ++
+            if (!view.SETUP) {
+                if ((virtual._left + virtual._width) < virtual._bounds._left) { continue }
+                if ((virtual._top + virtual._height) < virtual._bounds._top - (virtual._bounds._height * 2) + virtual._bounds._scroll) { continue }
+                if (virtual._left > (virtual._bounds._left + virtual._bounds._width)) { continue }
+                if (virtual._top > (virtual._bounds._top + (virtual._bounds._height * 2) + virtual._bounds._scroll)) { continue }
+            }
         }
-        */
     
         // AUTO WIDTH / HEIGHT
         if (virtual._auto_width !== prev._auto_width) {
@@ -101,8 +98,6 @@ function _update(view) {
                 left -= virtual._bounds._left
                 top -= virtual._bounds._top
             }
-
-            if (id === "window_dashboard") { console.log("update") }
 
             real.style.transform = "translate(" + left + "px," + top + "px)" // this gets affected by .view.port transform
 

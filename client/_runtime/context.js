@@ -12,11 +12,12 @@ function _run(context) {
         context.delta = (time - context.time) / 1000
         context.time = time
 
+        //let s = performance.now()
         for (const id in context._views) { context._views[id].collect() }
         for (const id in context._components) { context._components[id](context) }
-        //let s = performance.now()
         for (const id in context._views) { context._views[id].update() }
         //console.log(performance.now() - s)
+
         // RESET EVENTS
         for (const id in context._fonts) { context._fonts[id].DONE = false }
         for (const id in context._images) { context._images[id].DONE = false }
