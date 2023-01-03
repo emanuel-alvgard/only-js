@@ -187,71 +187,168 @@ function _update(view) {
             prev._text_a = virtual._text_a
         }
 
-        /*
-        real.style.paddingLeft = virtual._padding_left + "px "
-        real.style.paddingTop = virtual._padding_top + "px "
-        real.style.paddingRight = virtual._padding_right + "px "
-        real.style.paddingBottom = virtual._padding_bottom + "px "
+        // TEXT PADDING
+        if (virtual._padding_left !== prev._padding_left) { 
+            real.style.paddingLeft = virtual._padding_left + "px" 
+            prev._padding_left = virtual._padding_left
+        }
+        if (virtual._padding_top !== prev._padding_top) { 
+            real.style.paddingTop = virtual._padding_top + "px" 
+            prev._padding_top = virtual._padding_top
+        }
+        if (virtual._padding_right !== prev._padding_right) { 
+            real.style.paddingRight = virtual._padding_right + "px" 
+            prev._padding_right = virtual._padding_right
+        }
+        if (virtual._padding_bottom !== prev._padding_bottom) { 
+            real.style.paddingBottom = virtual._padding_bottom + "px" 
+            prev._padding_bottom = virtual._padding_bottom
+        }
 
+        // TEXT SIZE
+        if (virtual._text_size !== null) { 
+            if (virtual._text_size !== prev._text_size) {
+                real.style.fontSize = virtual._text_size + "px"
+                prev._text_size = virtual._text_size
+            } 
+        }
+
+        // TEXT FONT
+        if (virtual._text_font !== null) { 
+            if (virtual._text_font !== prev._text_font) {
+                real.style.fontFamily = virtual._text_font
+                prev._text_font = virtual._text_font
+            }
+        }
 
 
         // BORDER
-        real.style.borderLeft = virtual._border_left
-        real.style.borderTop = virtual._border_top
-        real.style.borderRight = virtual._border_right
-        real.style.borderBottom = virtual._border_bottom
+        if (virtual._border_left !== prev._border_left || view.SETUP) { 
+            real.style.borderLeft = virtual._border_left
+            prev._border_left = virtual._border_left
+        }
+        if (virtual._border_top !== prev._border_top || view.SETUP) { 
+            real.style.borderTop = virtual._border_top
+            prev._border_top = virtual._border_top
+        }
+        if (virtual._border_right !== prev._border_right || view.SETUP) { 
+            real.style.borderRight = virtual._border_right
+            prev._border_right = virtual._border_right
+        }
+        if (virtual._border_bottom !== prev._border_bottom || view.SETUP) { 
+            real.style.borderBottom = virtual._border_bottom
+            prev._border_bottom = virtual._border_bottom
+        }
         
-        real.style.borderWidth = virtual._border_size + "px"
-        real.style.borderColor = "rgba(" + 
-            virtual._border_r + "," +
-            virtual._border_g + "," +
-            virtual._border_b + "," +  
-            virtual._border_a + ")"
+        // BORDER SIZE
+        if (virtual._border_size !== prev._border_size || view.SETUP) {
+            real.style.borderWidth = virtual._border_size + "px" 
+            prev._border_size = virtual._border_size
+        }
+        
+        // BORDER COLOR
+        if (
+            virtual._border_r !== prev._border_r ||
+            virtual._border_g !== prev._border_g ||
+            virtual._border_b !== prev._border_b ||
+            virtual._border_a !== prev._border_a
+        ) {
+            real.style.borderColor = "rgba(" + 
+                virtual._border_r + "," +
+                virtual._border_g + "," +
+                virtual._border_b + "," +  
+                virtual._border_a + ")"
 
-        real.style.borderRadius = 
-            virtual._border_lt + "px " +
-            virtual._border_rt + "px " +
-            virtual._border_rb + "px " +
-            virtual._border_lb + "px"
+            prev._border_r = virtual._border_r
+            prev._border_g = virtual._border_g
+            prev._border_b = virtual._border_b
+            prev._border_a = virtual._border_a
+        }
 
+        // BORDER RADIUS
+        if (
+            virtual._border_lt !== prev._border_lt ||
+            virtual._border_rt !== prev._border_rt ||
+            virtual._border_rb !== prev._border_rb ||
+            virtual._border_lb !== prev._border_lb
+        ) {
 
+            real.style.borderRadius = 
+                virtual._border_lt + "px " +
+                virtual._border_rt + "px " +
+                virtual._border_rb + "px " +
+                virtual._border_lb + "px"
+                
+            prev._border_lt = virtual._border_lt
+            prev._border_rt = virtual._border_rt
+            prev._border_rb = virtual._border_rb
+            prev._border_lb = virtual._border_lb
+        }
+
+        
 
         // SHADOW
-        real.style.boxShadow =
-            virtual._shadow_x + "px " +
-            virtual._shadow_y + "px " +
-            virtual._shadow_blur + "px rgba(" +
-            virtual._shadow_r + "," +
-            virtual._shadow_g + "," +
-            virtual._shadow_b + "," +  
-            virtual._shadow_a + ")"
+        if (
+            virtual._shadow_x !== prev._shadow_x ||
+            virtual._shadow_y !== prev._shadow_y ||
+            virtual._shadow_blur !== prev._shadow_blur ||
+            virtual._shadow_r !== prev._shadow_r ||
+            virtual._shadow_g !== prev._shadow_g ||
+            virtual._shadow_b !== prev._shadow_b ||
+            virtual._shadow_a !== prev._shadow_a
+        ) {
+            real.style.boxShadow =
+                virtual._shadow_x + "px " +
+                virtual._shadow_y + "px " +
+                virtual._shadow_blur + "px rgba(" +
+                virtual._shadow_r + "," +
+                virtual._shadow_g + "," +
+                virtual._shadow_b + "," +  
+                virtual._shadow_a + ")"
 
-
-        if (virtual._text_size !== null) { real.style.fontSize = virtual._text_size + "px" }
-        if (virtual._text_font !== null) { real.style.fontFamily = virtual._text_font }
+            prev._shadow_x = virtual._shadow_x
+            prev._shadow_y = virtual._shadow_y
+            prev._shadow_blur = virtual._shadow_blur
+            prev._shadow_r = virtual._shadow_r
+            prev._shadow_g = virtual._shadow_g
+            prev._shadow_b = virtual._shadow_b
+            prev._shadow_a = virtual._shadow_a
+        }
 
 
 
         // OVERFLOW
-        real.style.overflowX = virtual._overflow_x
-        real.style.overflowY = virtual._overflow_y
-
+        if (virtual._overflow_x !== prev._overflow_x || view.SETUP) { 
+            real.style.overflowX = virtual._overflow_x 
+            prev._overflow_x = virtual._overflow_x
+        }
+        if (virtual._overflow_y !== prev._overflow_y || view.SETUP) { 
+            real.style.overflowY = virtual._overflow_y 
+            prev._overflow_y = virtual._overflow_y
+        }
 
 
         // VISIBILITY
-        if (virtual._visible) { real.style.display = "block" }
-        else { real.style.display = "none" }
+        if (virtual._visible !== prev._visible) {
+            if (virtual._visible) { real.style.display = "block" }
+            else { real.style.display = "none" }
+            prev._visible = virtual._visible
+        }
 
 
 
         // FILTER
-        real.style.filter = "brightness(" + virtual._brightness + ")"
+        if (virtual._brightness !== prev._brightness) { 
+            real.style.filter = "brightness(" + virtual._brightness + ")"
+            prev._brightness = virtual._brightness
+        }
 
-*/
 
-        // VISIBILITY
-        // @TEST
-        if (virtual._opacity !== prev._opacity) { real.style.opacity = virtual._opacity + ""; prev._opacity = virtual._opacity }
+        // OPACITY
+        if (virtual._opacity !== prev._opacity) { 
+            real.style.opacity = virtual._opacity + ""; 
+            prev._opacity = virtual._opacity 
+        }
 
         // RESET EVENTS
         virtual.SETUP = false
