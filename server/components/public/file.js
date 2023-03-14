@@ -1,5 +1,5 @@
-const fs_builtin = require("fs");
-const util = require("../_runtime/tools/util.js");
+const fs_builtin = require("fs")
+const util = require("../lib/util.js")
 
 const types = {
     js: "text/javascript",
@@ -20,9 +20,9 @@ exports.component = async (context, incoming) => { // @ADD config
     if (file_type in types) { content_type = types[file_type]; }
 
     switch (incoming.url) {
-        case "/robots.txt": path += "/build/search/robots.txt"; break;
-        case "/sitemap.xml": path += "/build/search/sitemap.xml"; break;
-        default: path += incoming.url;
+        case "/robots.txt": path += "../../client/robots.txt"; break;
+        case "/sitemap.xml": path += "../../client/sitemap.xml"; break;
+        default: path += incoming.url
     }
 
 
@@ -30,7 +30,6 @@ exports.component = async (context, incoming) => { // @ADD config
 
     try { incoming.result = await fs_builtin.promises.readFile(path); } catch(e) {}
     incoming.response.writeHead(200, {
-        'Access-Control-Allow-Origin': '*',
         'Content-Length': Buffer.from(incoming.result).length,
         'Content-Type': content_type
     });

@@ -3,17 +3,18 @@ const fs_builtin = require("fs");
 const zlib_builtin = require("node:zlib");
 
 // TOOLS
-const http = require("./_runtime/tools/http.js");
-const util = require("./_runtime/tools/util.js");
-const dir = require("./_runtime/tools/dir.js");
+const http = require("./components/lib/http.js")
+const util = require("./components/lib/util.js")
+const dir = require("./components/lib/dir.js")
+const database = require("./components/lib/database.js")
 
 // ROUTE
-const file = require("./components/file.js");
-const api = require("./components/api.js");
-const page = require("./components/page.js");
+const file = require("./components/public/file.js")
+const api = require("./components/public/api.js")
+const page = require("./components/public/page.js")
 
 // NPM
-const esbuild = require("./_runtime/node_modules/esbuild");
+const esbuild = require("./_runtime/node_modules/esbuild")
 
 const mode = process.argv[2];
 const platform = process.platform;
@@ -25,24 +26,31 @@ console.log("Server v.1.0.0 (" + platform + ") (" + mode + ")");
 console.log("Type 'help' for avalible commands.");
 
 
-
-
 let context = {
-    client_reload: false,
+    time: performance.now(),
+    delta: 0.0,
+    db: database("./db", 1000),
+
+    // ACTIVE USERS
+    token_timeout: 3_600_000, // 1h
+    active_tokens: [],
+    active_users: [],
+    active_timers: [],
+
     protocol: "https://",
     config: JSON.parse(fs_builtin.readFileSync("../config.json")),
-};
+}
 
 if (mode === "dev") {
     context.protocol = "http://";
-    context.config.app.domain = "localhost:" + context.config.app.port;
+    context.config.domain = "localhost:" + context.config.port;
 }
 
 let routes = [
     file.component,
     file.component,
     file.component, 
-    api.component,
+    api,
     page.component
 ]
 
@@ -50,29 +58,45 @@ let triggers = [
     "/client/",
     "/robots.txt",
     "/sitemap.xml",
-    "/api",
+    "/api/",
     "/",
 ]
 
+// TIMERS
+const _interval = 1000
+setInterval(()=>{
+
+    let time = performance.now()
+    context.delta = (time - context.time) / 1000
+    context.time = time
+
+    // ACTIVE USERS
+    for (let i=0; i < context.active_timers.length; i++) {
+        context.active_timers[i] += context.delta * _interval
+        if (context.active_timers[i] >= context.token_timeout) {
+            context.active_timers.splice(i, 1)
+            context.active_tokens.splice(i, 1)
+            context.active_users.splice(i, 1)
+            i --
+        }
+    }
+
+}, _interval)
 
 
-// RUNTIME SUPPORT FOR API AUTH
 
-
-// DATABASE (key:value store a bit like redis)
-// JSON based and directory structured.
-// always caches index.json from all directories
-// always caches database structure and fills
-// the cache with as many files as possible within the set cache limit
-// on a write to a certain file that file is flushed from the cache
-
-
-// SIMPLE SOLUTION FOR SETTING UP WEBSOCKETS
 
 // IF DEV MODE
 // HOT RELOADING SETUP
-let html_index = fs_builtin.readFileSync("../index.html").toString()
-let reload_script = fs_builtin.readFileSync("./_runtime/client_reload.js").toString()
+
+let html_index = fs_builtin.readFileSync("../client/app.html").toString()
+let reload_script = ""
+let export_script = ""
+
+if (mode === "dev") {
+    reload_script = fs_builtin.readFileSync("./_runtime/client_reload.js").toString()
+    export_script = fs_builtin.readFileSync("./_runtime/client_export.js").toString()
+}
 
 let pointer = { position:0, previous:0 }
 while (pointer.position < html_index.length) {
@@ -83,17 +107,20 @@ while (pointer.position < html_index.length) {
 let html_start = html_index.substring(0, pointer.previous)
 let html_end = html_index.substring(pointer.previous, html_index.length)
 
-let new_html = 
+_html = 
     html_start +
     "<script>" + 
     reload_script + 
+    "</script>" +
+    "<script>" + 
+    export_script + 
     "</script>" +
     html_end
 
 let index_route = triggers.indexOf("/")
 if (index_route > -1) { 
     routes[index_route] = async (context, incoming) => {
-        incoming.result = new_html
+        incoming.result = _html
         incoming.response.writeHead(200, {
             'Content-Length': Buffer.from(incoming.result).length,
             'Content-Type': "text/html"
@@ -101,31 +128,30 @@ if (index_route > -1) {
     }
 }
 
-triggers.unshift("/client_reload")
-routes.unshift(async (context, incoming) => {
-
-    let result = { done: false, fail: false }
+if (mode === "dev") {
     
-    let i = setInterval(() => {
-        if (context.client_reload) { 
-            context.client_reload = false
-            result.done = true
-            clearInterval(i)
-        }
-        // @ADD check if sockets destroyed and clear interval
-    }, 10);
+    context.client_reload = false
+    triggers.unshift("/client_reload")
+    routes.unshift(async (context, incoming) => {
 
-    await util.wait(result)
-    
-    incoming.response.writeHead(200, {
-        'Content-Length': Buffer.from(incoming.result).length,
-        'Content-Type': "text/html"
+        let result = { done: false, fail: false }
+        
+        let i = setInterval(() => {
+            if (context.client_reload) { 
+                context.client_reload = false
+                result.done = true
+                clearInterval(i)
+            }
+        }, 50)
+
+        await util.wait(result)
+
+        incoming.response.writeHead(200, {
+            'Content-Length': Buffer.from(incoming.result).length,
+            'Content-Type': "text/html"
+        })
     })
-})
-
-let router = http.router(context, routes, triggers);
-http.server(context.config.app.port, router);
-
+}
 
 // inject script tag in index.html that send xhr request every 100ms 
 // when build step is completed server responds with a reload on where
@@ -152,24 +178,28 @@ let cache;
 // the server keeps the old data
 // @ADD proper error handling for zero down time
 
-dir.watch("../client", [".js"], ["node_modules"], 10, () => {
+dir.watch("../client", [".js"], ["node_modules"], 50, () => {
 
     // REBUILD
     let build = ["../client/app.js"]
     //dir.collect("../client", [".js"], ["node_modules"], build);
     
+    /*
     let start = performance.now()
+    let minified
 
-    
-    let minified = esbuild.buildSync({
-        loader: { ".js": "js" },
-        entryPoints: build,
-        bundle: true,
-        minify: true,
-        write: false,
-        allowOverwrite: true,
-    })
-    
+    try {
+        minified = esbuild.buildSync({
+            loader: { ".js": "js" },
+            entryPoints: build,
+            bundle: true,
+            minify: true,
+            write: false,
+            allowOverwrite: true,
+        })
+    }
+    catch (e) {}
+    */
 
     //console.log(minified)
 
@@ -185,18 +215,23 @@ dir.watch("../client", [".js"], ["node_modules"], 10, () => {
     })
     */
 
+    /*
+
     let gzipped = []
     let size = 0
     
-    
-    minified.outputFiles.forEach(file => {
-        let result = zlib_builtin.gzipSync(file.text)
-        size += result.byteLength
-        gzipped.push(result)
-    })
+    try {
+        minified.outputFiles.forEach(file => {
+            let result = zlib_builtin.gzipSync(file.text)
+            size += result.byteLength
+            gzipped.push(result)
+        })
+    }
+    catch (e) {}
 
     console.log(size)
     
+    */
 
     // switch cache
 
@@ -205,4 +240,10 @@ dir.watch("../client", [".js"], ["node_modules"], 10, () => {
     // RELOAD
     context.client_reload = true
 
-});
+})
+
+let router = http.router(context, routes, triggers)
+http.server(context.config.port, router)
+
+
+// @ADD interval that backsup /db

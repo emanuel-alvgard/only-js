@@ -48,16 +48,21 @@ export function element(context, view, bounds, id) {
         _opacity: 1.0,
         _left: 0,
         _top: 0,
+        _rotate: 0,
         _width: 0,
         _height: 0,
         _z_index: 0,
-        _scroll: 0,
+        _scroll_top: 0,
         _auto_width: true,
         _auto_height: true,
 
         _image: null,
         _image_position: "center",
         _image_fit: "cover",
+        _image_color_r: 0,
+        _image_color_g: 0,
+        _image_color_b: 0,
+        _image_color_a: 1,
 
         _color_r: 0,
         _color_g: 0,
@@ -67,6 +72,7 @@ export function element(context, view, bounds, id) {
         _text: null,
         _text_font: null,
         _text_size: null,
+        _text_spacing: 0,
         _text_r: 0,
         _text_g: 0,
         _text_b: 0,
@@ -122,6 +128,7 @@ export function element(context, view, bounds, id) {
         remove() {
             try {
                 e.real().remove()
+                delete view._real[id]
                 delete view._virtual[id]
                 delete view._virtual_prev[id]
             }
@@ -131,13 +138,9 @@ export function element(context, view, bounds, id) {
 
 
         // @DONE
-        anim(id, property=()=>{}, start=0, end=0, time=0, curve=[1.0,1.0], delay=0.0) {
-            if (id in e._anims) { 
-                // check if any of the arguments diff and update object accordingly
-                return e._anims[id]
-            }
-            e._anims[id] = animation.anim(context, id, property, start, end, time, curve, delay);
-            return e._anims[id];
+        anim(id, property=null, start=null, end=null, time=null, curve=null, delay=null) {
+            e._anims[id] = animation.anim(e, id, property, start, end, time, curve, delay)
+            return e._anims[id]
         },
 
 
@@ -159,9 +162,10 @@ export function element(context, view, bounds, id) {
 
 
         // POSITION
-        scroll() { return e._scroll },
+        scroll_top(v=null, min=null, max=null) { return _number(e, "_scroll_top", v, min, max) },
         left(v=null, min=null, max=null) { return _number(e, "_left", v, min, max) },
         top(v=null, min=null, max=null) { return _number(e, "_top", v, min, max) },
+        rotate(v=null, min=null, max=null) { return _number(e, "_rotate", v, min, max) },
 
         right(v=null, min=null, max=null) {
             if (v === e._left + e.width()) { return e } 
@@ -246,6 +250,14 @@ export function element(context, view, bounds, id) {
             return e._image_fit
         },
 
+        image_color(rgba) {
+            if (rgba[0] !== e._image_color_r) { e._image_color_r = rgba[0]; }
+            if (rgba[1] !== e._image_color_g) { e._image_color_g = rgba[1]; }
+            if (rgba[2] !== e._image_color_b) { e._image_color_b = rgba[2]; }
+            if (rgba[3] !== e._image_color_a) { e._image_color_a = rgba[3]; }
+            return e
+        },
+
         color(rgba) { 
             if (rgba[0] !== e._color_r) { e._color_r = rgba[0]; }
             if (rgba[1] !== e._color_g) { e._color_g = rgba[1]; }
@@ -274,7 +286,7 @@ export function element(context, view, bounds, id) {
             }
             return e._text_font
         },
-        text_size() {},
+        text_size(v=null, min=null, max=null) { return _number(e, "_text_size", v, min, max) },
         text_color(rgba) {
             if (rgba[0] !== e._text_r) { e._text_r = rgba[0]; }
             if (rgba[1] !== e._text_g) { e._text_g = rgba[1]; }
@@ -282,6 +294,7 @@ export function element(context, view, bounds, id) {
             if (rgba[3] !== e._text_a) { e._text_a = rgba[3]; }
             return e
         },
+        text_spacing(v=null, min=null, max=null) { return _number(e, "_text_spacing", v, min, max) },
 
 
 
@@ -300,18 +313,20 @@ export function element(context, view, bounds, id) {
         // BORDER
         border(v=null) {
             if (v === null) { return e }
-            if (v !== e._border_left) { e._border_left = v; }
-            if (v !== e._border_top) { e._border_top = v; }
-            if (v !== e._border_right) { e._border_right = v; }
-            if (v !== e._border_bottom) { e._border_bottom = v; }
+            if (v[0] !== e._border_left) { e._border_left = v[0] }
+            if (v[1] !== e._border_top) { e._border_top = v[1] }
+            if (v[2] !== e._border_right) { e._border_right = v[2] }
+            if (v[3] !== e._border_bottom) { e._border_bottom = v[3] }
             return e
         },
 
+        /*
         border_bottom(v=null) {
             if (v === e._border_bottom) { return e }
             if (v !== null) { e._border_bottom = v; return e }
             return e._border_bottom
         },
+        */
 
         border_size(v=null, min=null, max=null) { return _number(e, "_border_size", v, min, max) },
 
@@ -355,7 +370,7 @@ export function element(context, view, bounds, id) {
         opacity(v=null, min=null, max=null) { return _number(e, "_opacity", v, min, max) },
 
         visible(v=null) {
-            if (v === null) { return e._visible } 
+            if (v === null) { return e._visible }
             if (v === e._visible) { return e }
             e._visible = v 
             

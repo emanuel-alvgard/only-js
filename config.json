@@ -1,7 +1,4 @@
 {
-    "app": {
-        "path": "/server",
-        "port": 3000,
-        "domain": ""
-    }
+    "port": 3000,
+    "domain": ""
 }

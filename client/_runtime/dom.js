@@ -4,8 +4,8 @@ import * as virtual from "./virtual.js"
 function _collect(view) {
 
     // AUTO WIDTH / HEIGHT
-    view.bounds().width(document.documentElement.clientWidth)
-    view.bounds().height(document.documentElement.clientHeight)
+    view._bounds.width(document.documentElement.clientWidth)
+    view._bounds.height(document.documentElement.clientHeight)
 
     for (const id in view._virtual) {
         
@@ -55,15 +55,6 @@ function _update(view) {
         }
 
     
-        if (virtual._bounds !== null) {
-            if (!view.SETUP) {
-                if ((virtual._left + virtual._width) < virtual._bounds._left) { continue }
-                if ((virtual._top + virtual._height) < virtual._bounds._top - (virtual._bounds._height * 2) + virtual._bounds._scroll) { continue }
-                if (virtual._left > (virtual._bounds._left + virtual._bounds._width)) { continue }
-                if (virtual._top > (virtual._bounds._top + (virtual._bounds._height * 2) + virtual._bounds._scroll)) { continue }
-            }
-        }
-    
         // AUTO WIDTH / HEIGHT
         if (virtual._auto_width !== prev._auto_width) {
             if (virtual._auto_width) { real.style.width = "auto"; prev._auto_width = virtual._auto_width }
@@ -88,7 +79,8 @@ function _update(view) {
         // TRANSFORM
         if (
             virtual._left !== prev._left ||
-            virtual._top !== prev._top
+            virtual._top !== prev._top ||
+            virtual._rotate !== prev._rotate
         ) {
 
             let left = virtual._left
@@ -99,10 +91,24 @@ function _update(view) {
                 top -= virtual._bounds._top
             }
 
-            real.style.transform = "translate(" + left + "px," + top + "px)" // this gets affected by .view.port transform
+            real.style.transform = 
+                "translate(" + left + "px," + top + "px) " + // this gets affected by .view.port transform
+                "rotate(" + virtual._rotate + ")"
 
             prev._left = virtual._left
             prev._top = virtual._top
+            prev._rotate = virtual._rotate
+        }
+
+        else {
+            if (virtual._bounds !== null) {
+                if (!view.SETUP) {
+                    if ((virtual._left + virtual._width) < virtual._bounds._left) { continue }
+                    if ((virtual._top + virtual._height) < virtual._bounds._top - virtual._bounds._height + virtual._bounds._scroll) { continue }
+                    if (virtual._left > (virtual._bounds._left + virtual._bounds._width)) { continue }
+                    if (virtual._top > (virtual._bounds._top + virtual._bounds._height + virtual._bounds._scroll)) { continue }
+                }
+            }
         }
 
         // Z-INDEX
@@ -111,16 +117,72 @@ function _update(view) {
             prev._z_index = virtual._z_index
         }
 
+        // SCROLL
+        if (virtual._scroll_top !== prev._scroll_top) { 
+            real.scrollTop = virtual._scroll_top + ""
+            prev._scroll_top = virtual._scroll_top
+        }
 
-        // BACKGROUND
+
+        // BACKGROUND IMAGE
         if (virtual._image !== null) {
 
-            if (virtual._image !== prev._image) { 
-
-                if (real.tagName === "IMG") { real.src = "data:image/svg+xml;base64," + virtual._image }
-                else { real.style.backgroundImage = 'url("data:image/svg+xml;base64,' + virtual._image + '")' }
+            if (virtual._image !== prev._image) {
+           
+                if (real.tagName === "IMG") {
+                    if (virtual._image.substring(0, 5) === "<svg ") { real.src = "data:image/svg+xml;base64," + btoa(virtual._image) }
+                    else { real.src = "data:application/octetstream;base64," + btoa(virtual._image) } 
+                }
+                else {
+                    if (virtual._image.substring(0, 5) === "<svg ") { real.style.backgroundImage = 'url("data:image/svg+xml;base64,' + btoa(virtual._image) + '")' } 
+                    else { real.style.backgroundImage = 'url("data:application/octetstream;base64,' + btoa(virtual._image) + '")' }
+                }
                 
-                prev._image = virtual._image 
+                prev._image = virtual._image
+            }
+
+            // IMAGE COLOR
+            if (
+                virtual._image_color_r !== prev._image_color_r ||
+                virtual._image_color_g !== prev._image_color_g ||
+                virtual._image_color_b !== prev._image_color_b ||
+                virtual._image_color_a !== prev._image_color_a
+            ) {
+                
+                let color = "rgba(" +
+                    virtual._image_color_r + "," +
+                    virtual._image_color_g + "," +
+                    virtual._image_color_b + "," +
+                    virtual._image_color_a + ")"
+
+                let result = ""
+                let checkpoint = 0
+
+                for (let i=0; i < virtual._image.length; i++) {
+                    if (virtual._image.substring(i, i+6) === 'fill="') { 
+                        result += virtual._image.substring(checkpoint, i+6)
+                        result += color + '"'
+                        i += 6
+                        while (true) {
+                            if (virtual._image[i] === '"') { 
+                                i++
+                                checkpoint = i
+                                break 
+                            }
+                            else {
+                                i ++
+                            }
+                        }
+                    }
+                }
+
+                result += virtual._image.substring(checkpoint, virtual._image.length)
+                real.style.backgroundImage = 'url("data:image/svg+xml;base64,' + btoa(result) + '")'
+
+                prev._image_color_r = virtual._image_color_r
+                prev._image_color_g = virtual._image_color_g
+                prev._image_color_b = virtual._image_color_b
+                prev._image_color_a = virtual._image_color_a
             }
         }
 
@@ -136,11 +198,13 @@ function _update(view) {
         }
 
 
+        // BACKGROUND COLOR
         if (
             virtual._color_r !== prev._color_r ||
             virtual._color_g !== prev._color_g ||
             virtual._color_b !== prev._color_b ||
-            virtual._color_a !== prev._color_a
+            virtual._color_a !== prev._color_a ||
+            view.SETUP
         ) {
             real.style.backgroundColor = "rgba(" + 
                 virtual._color_r + "," +
@@ -154,7 +218,6 @@ function _update(view) {
             prev._color_a = virtual._color_a
         }
         
-
 
         // TEXT
         if (virtual._text !== null) { 
@@ -180,6 +243,11 @@ function _update(view) {
             prev._text_g = virtual._text_g
             prev._text_b = virtual._text_b
             prev._text_a = virtual._text_a
+        }
+
+        if (virtual._text_spacing !== prev._text_spacing) {
+            real.style.letterSpacing = virtual._text_spacing + "px"
+            prev._text_spacing = virtual._text_spacing
         }
 
         // TEXT PADDING
@@ -324,13 +392,11 @@ function _update(view) {
 
 
         // VISIBILITY
-        if (virtual._visible !== prev._visible) {
-            if (virtual._visible) { real.style.display = "block" }
-            else { real.style.display = "none" }
+        if (virtual._visible !== prev._visible || view.SETUP) {
+            if (virtual._visible) {  real.style.visibility = "inherit" }
+            else { real.style.visibility = "hidden" }
             prev._visible = virtual._visible
         }
-
-
 
         // FILTER
         if (virtual._brightness !== prev._brightness) { 
@@ -373,6 +439,8 @@ export function setup(context, id) {
         _virtual_prev: {},
         _virtual: {},
         _real: {},
+
+        context() { return context },
 
         // @DONE
         bounds() { return view._bounds },
@@ -421,9 +489,10 @@ export function setup(context, id) {
             element.style.overflow = "hidden"
             element.style.outline = "rgba(0,0,0,0)"
 
-            // remove default selection behavior
-
-            //console.log(element)
+            if (type === "button") {
+                element.onselectstart = (event) => { event.preventDefault() }
+                element.style.cursor = "pointer"
+            }
     
             view._real[_id] = element
             if (bounds !== null) { bounds.real().append(element) }
@@ -445,6 +514,7 @@ export function setup(context, id) {
     }
 
     view._bounds = view.element(id, "div", null)
+
     return view
 }
 
