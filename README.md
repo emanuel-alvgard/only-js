@@ -21,7 +21,7 @@ automated testing, documentation etc. will probably be needed in the near future
 ------
 ```javascript
 
-// COUNTER EXAMPLE WITH CUSTOM FONT
+// COUNTER WITH CUSTOM FONT
 let counter = 0
 
 // GETS CALLED EVERY FRAME
@@ -55,6 +55,32 @@ export default (app) => {
     if (app.font("roboto").DONE) { 
         _window.visible(true) 
     }
+}
+
+```
+
+```javascript
+
+// GETS CALLED EVERY FRAME
+export default (app) => {
+    
+    // CREATING VIEW & ELEMENTS
+    const _window = app.view("window", "dom")
+    const location = _window.element("ocation", "button")
+
+    // CHANGE LOCATION
+    if (location.CLICK) {
+        app.location("/other-component")
+    }
+
+    // ROUTING
+    app.router("/this-component",
+    () => { // INCOMING
+        _window.visible(false)
+    },
+    () => { // OUTGOING
+        _window.visible(true)
+    }) 
 }
 
 ```
