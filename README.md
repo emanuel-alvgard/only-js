@@ -41,7 +41,6 @@ export default (app) => {
         title.real().onclick = () => {
             console.log("Title got clicked!")
         }
-
     }
 
     // SHOW VIEW WHEN ASSETS LOADED
