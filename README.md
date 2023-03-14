@@ -10,7 +10,6 @@ automated testing, documentation etc. will probably be needed in the near future
 
 **Features**
 ------
-+ NO BUILD STEP
 + Small runtime (~5KB minified & gzipped)
 + Only (1) external dependency (ESBuild)
 + Low amount of garbage collection
