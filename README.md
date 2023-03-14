@@ -10,77 +10,45 @@ automated testing, documentation etc. will probably be needed in the near future
 
 **Features**
 ------
-+ NO BUILD STEP!
-+ Small runtime! 10KB (minify & gzip)
-+ Only (2) dependencies: Node.js & ESBuild
-+ Very low amount of garbage collection
-+ Builtin animations
-+ No HTML or CSS, only JS structure & styling
-+ Simple progressive hydration
++ NO BUILD STEP
++ Small runtime (~5KB minified & gzipped)
++ Only (1) external dependency (ESBuild)
++ Low amount of garbage collection
++ Builtin animation system
 + Convenient asset loading
++ Hot reload / rebuild
 
 **Examples**
 ------
 ```javascript
 
-// COMPONENT
-let ASSETS = 0
-
-export default (runtime) => {
+// GETS CALLED EVERY FRAME
+export default (app) => {
     
     // CREATING VIEW & ELEMENTS
-    let home = runtime.view("home")
-    let root = home.root
-    let hero = home.element("hero", "img")
-    let b1 = home.element("b1", "button")
-    let b2 = home.element("b2", "button")
-    let buttons = home.group("buttons")
-    
-    let buttons = [b1, b2]
-
-    home.root.opacity(0)
-    let loaded = home.root.anim("load", "opacity", 0, 1, 100, quad_curve(0.0, 0.0, 1.0, 3.0))
-
-    // SHOW VIEW WHEN ASSETS LOADED
-    if (home.SETUP) { root.visible(false) }
-    
-    if (ASSETS > 1) {
-        root..visible(true)
-        loaded.start()
-        ASSETS = 0
-    }
-
-    // LOADING ASSETS
-    let hero_img = runtime.image("hero", "/public/assets/hero.svg", (result) => { ASSETS ++ })
-    let font_std = runtime.font("standard", "/public/assets/font.woff2", (result) => { ASSETS ++ })
+    const _window = app.view("window", "dom").visible(false)
+    const title = _window.element("title", "h1")
 
     // STYLING
-    hero.
-        image(hero_img).
-        x(root.x())
+    title
+        .text("Hello World!")
+        .text_color([200,200,200,1])
 
-    b1.
-        w(100).
-        h(25).
-        r(root.width() - 100).
-        t(100)
+    // LOADING ASSETS AND SETTING EVENTS
+    if (app.SETUP) {
+        app.image("logo", "logo.svg")
+        app.image("social", "social.svg")
 
-    b2.
-        w(100).
-        h(25).
-        r(b1.left() - 10)
-        t(100)
+        title.real().onclick = () => {
+            console.log("Title got clicked!")
+        }
 
-    // SIMILAR TO CSS CLASS
-    buttons.forEach((button) => {
-        button.
-            text("click me").
-            font(font_std).
-            font_size(24).
-            font_color(50,50,50)
-    })
+    }
 
-    if (b1.MOUSE_DOWN || b2.MOUSE_DOWN) { console.log("A button was clicked!") }
+    // SHOW VIEW WHEN ASSETS LOADED
+    if (app.image("logo").DONE && app.image("social").DONE) {
+        _window.visible(true)
+    }
 }
 
 ```
