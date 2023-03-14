@@ -30,6 +30,7 @@ export default (app) => {
     // CREATING VIEW & ELEMENTS
     const _window = app.view("window", "dom")
     const title = _window.element("title", "h1")
+    const increment = _window.element("increment", "button")
 
     // LOADING ASSETS
     if (app.SETUP) {
@@ -43,8 +44,12 @@ export default (app) => {
         .text_color([200,200,200,1])
         .text_font(app.font("roboto"))
 
+    increment
+        .text("Increment")
+        .text_font(app.font("roboto"))
+
     // EVENTS
-    if (title.CLICK) { counter ++ }
+    if (increment.CLICK) { counter ++ }
 
     // SHOW VIEW WHEN ASSETS LOADED
     if (app.font("roboto").DONE) { 
