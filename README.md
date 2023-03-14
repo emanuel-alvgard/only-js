@@ -17,11 +17,10 @@ automated testing, documentation etc. will probably be needed in the near future
 + Convenient asset loading
 + Hot reload / rebuild
 
-**Examples**
+**Counter example**
 ------
 ```javascript
 
-// COUNTER WITH CUSTOM FONT
 let counter = 0
 
 // GETS CALLED EVERY FRAME
@@ -58,7 +57,8 @@ export default (app) => {
 }
 
 ```
-
+**Routing example**
+------
 ```javascript
 
 // GETS CALLED EVERY FRAME
@@ -66,7 +66,7 @@ export default (app) => {
     
     // CREATING VIEW & ELEMENTS
     const _window = app.view("window", "dom")
-    const location = _window.element("ocation", "button")
+    const location = _window.element("location", "button")
 
     // CHANGE LOCATION
     if (location.CLICK) {
@@ -75,12 +75,13 @@ export default (app) => {
 
     // ROUTING
     app.router("/this-component",
-    () => { // INCOMING
-        _window.visible(false)
-    },
-    () => { // OUTGOING
-        _window.visible(true)
-    }) 
+        () => { // INCOMING
+            _window.visible(false)
+        },
+        () => { // OUTGOING
+            _window.visible(true)
+        }
+    ) 
 }
 
 ```
