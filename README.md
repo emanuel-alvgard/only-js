@@ -21,6 +21,9 @@ automated testing, documentation etc. will probably be needed in the near future
 ------
 ```javascript
 
+// COUNTER EXAMPLE WITH CUSTOM FONT
+let counter = 0
+
 // GETS CALLED EVERY FRAME
 export default (app) => {
     
@@ -28,25 +31,20 @@ export default (app) => {
     const _window = app.view("window", "dom").visible(false)
     const title = _window.element("title", "h1")
 
+    // LOADING ASSETS
+    if (app.SETUP) { app.font("roboto", "roboto.woff2") }
+
     // STYLING
     title
-        .text("Hello World!")
+        .text("The count is: " + count)
         .text_color([200,200,200,1])
+        .text_font(app.font("roboto"))
 
-    // LOADING ASSETS AND SETTING EVENTS
-    if (app.SETUP) {
-        app.image("logo", "logo.svg")
-        app.image("social", "social.svg")
-
-        title.real().onclick = () => {
-            console.log("Title got clicked!")
-        }
-    }
+    // EVENTS
+    if (title.CLICK) { counter ++ }
 
     // SHOW VIEW WHEN ASSETS LOADED
-    if (app.image("logo").DONE && app.image("social").DONE) {
-        _window.visible(true)
-    }
+    if (app.font("roboto").DONE) { _window.visible(true) }
 }
 
 ```
