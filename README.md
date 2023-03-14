@@ -28,11 +28,14 @@ let counter = 0
 export default (app) => {
     
     // CREATING VIEW & ELEMENTS
-    const _window = app.view("window", "dom").visible(false)
+    const _window = app.view("window", "dom")
     const title = _window.element("title", "h1")
 
     // LOADING ASSETS
-    if (app.SETUP) { app.font("roboto", "roboto.woff2") }
+    if (app.SETUP) {
+        _window.visible(false) 
+        app.font("roboto", "roboto.woff2") 
+    }
 
     // STYLING
     title
@@ -44,7 +47,9 @@ export default (app) => {
     if (title.CLICK) { counter ++ }
 
     // SHOW VIEW WHEN ASSETS LOADED
-    if (app.font("roboto").DONE) { _window.visible(true) }
+    if (app.font("roboto").DONE) { 
+        _window.visible(true) 
+    }
 }
 
 ```
