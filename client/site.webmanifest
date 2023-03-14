@@ -1,23 +1,12 @@
 {
     "$schema": "https://json.schemastore.org/web-manifest-combined.json",
-    "name": "Monitor Roadshow",
-    "short_name": "Monitor Roadshow",
+    "name": "",
+    "short_name": "",
     "start_url": "/",
     "display": "standalone",
     "background_color": "#FFFFFF",
     "theme_color": "#FFFFFF",
-    "description": "Monitor Roadshow",
+    "description": "",
     "prefer_related_applications": false,
-    "icons": [
-        {
-            "src": "/client/assets/images/monitor_roadshow_192x192.png",
-            "sizes": "192x192",
-            "type": "image/png"
-        },
-        {
-            "src": "/client/assets/images/monitor_roadshow_512x512.png",
-            "sizes": "512x512",
-            "type": "image/png"
-        }
-    ]
+    "icons": []
 }
