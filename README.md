@@ -74,7 +74,7 @@ export default (app) => {
     }
 
     // ROUTING
-    app.router("/this-component",
+    app.route("/this-component",
         () => { // INCOMING
             _window.visible(false)
         },
