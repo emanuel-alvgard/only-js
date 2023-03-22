@@ -8,12 +8,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/emanuel-alvgard/onlyjs.git"
+    "url": "git+https://github.com/emanuel-alvgard/only-js.git"
   },
   "author": "Emanuel Alvgard",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/emanuel-alvgard/onlyjs/issues"
+    "url": "https://github.com/emanuel-alvgard/only-js/issues"
   },
-  "homepage": "https://github.com/emanuel-alvgard/onlyjs#readme"
+  "homepage": "https://github.com/emanuel-alvgard/only-js#readme"
 }
